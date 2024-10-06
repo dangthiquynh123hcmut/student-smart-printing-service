@@ -1,0 +1,21 @@
+.infodetail {
+  position: absolute;
+  margin-left: auto;
+  background-color: rgb(65, 157, 211);
+  border-radius: 10px;
+  border: solid 1px white;
+  /* box-shadow: ; */
+  margin-top: 60px;
+  margin-right: 10px;
+  padding: 5px 20px 10px 10px;
+  height: fit-content;
+  z-index: 1;
+  line-height: 1.5;
+}
+
+.infodetail p {
+  text-align: center;
+}
+.infodetail li {
+  font-size: 11px;
+}
