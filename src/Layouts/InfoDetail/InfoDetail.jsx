@@ -1,4 +1,5 @@
 import "./InfoDetail.css";
+import { NavLink } from "react-router-dom";
 
 function InfoDetail() {
   return (
@@ -13,7 +14,7 @@ function InfoDetail() {
         <li>Remainder</li>
         <button>Buy more</button>
         <br />
-        <button>Exit</button>
+        <button><NavLink to='/login'>Exit</NavLink></button>
       </ul>
     </div>
   );
