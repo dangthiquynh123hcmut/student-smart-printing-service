@@ -1,61 +1,82 @@
-import React, {useState}  from "react";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { notification } from "antd";
 import "./LoginForm.css";
 import { FaUser, FaClock } from "react-icons/fa";
+// import PropTypes from "prop-types";
+import { loginApi } from "../../api/API";
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const LoginForm = ({ setIsAuthenticated, setUserData }) => {
+  const navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = async (e) => {
+  // Function to handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const onFinish = async (e) => {
     e.preventDefault();
-    setError('');
-    
-    const response = await fetch('https://example.com/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    const { email, password } = formValues;
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      // Redirect to the dashboard or another protected page
-      window.location.href = '/dashboard';
+    const res = await loginApi(email, password);
+    debugger;
+    if (res && res.EC === 0) {
+      //depend on backend return res => will be set again
+      localStorage.setItem("access_token", res?.access_token);
+      notification.success({
+        message: "Login SUCCESS",
+        description: "Success",
+      });
+      setIsAuthenticated(true);
+      setUserData(email);
+      navigate("/");
     } else {
-      setError('Invalid login credentials');
+      notification.error({
+        message: "Login Failed",
+        description: res?.EM ?? "error",
+      });
     }
+    console.log(">>Success:", res);
   };
 
   return (
     <div className="login">
       <div className="wrapper">
-        <form action="">
+        <form action="" onSubmit={onFinish}>
+          {" "}
+          {/*onSubmit={handleSubmit} */}
           <h1>Login</h1>
           <div className="input-box">
-            <input type="email" 
+            <input
+              type="email"
               placeholder="Username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+              name="email"
+              value={formValues.email} // Bind value to state
+              onChange={handleChange} // Update state on change
+              required
             />
             <FaUser className="icon" />
           </div>
           <div className="input-box">
-            <input type="password" 
-              placeholder="Password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
-             />
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={formValues.password} // Bind value to state
+              onChange={handleChange} // Update state on change
+              required
+            />
             <FaClock className="icon" />
           </div>
-
           <div className="member-forgot">
             <label>
               <input type="checkbox" />
@@ -63,12 +84,10 @@ const LoginForm = () => {
             </label>
             <a href="#">Forgot password?</a>
           </div>
-
           <button type="submit">Login</button>
-
           <div className="register-link">
             <p>
-              Don't have an account? <a href="#">Register</a>
+              Don't have an account? <NavLink to="/register">Register</NavLink>
             </p>
           </div>
         </form>
@@ -76,5 +95,9 @@ const LoginForm = () => {
     </div>
   );
 };
+
+// LoginForm.prototype = {
+//   setToken: PropTypes.func.isRequired,
+// };
 
 export default LoginForm;
