@@ -4,6 +4,7 @@ import {
   HomeOutlined,
   ClockCircleOutlined,
   PrinterOutlined,
+  DollarOutlined,
 } from "@ant-design/icons";
 import "./MenuList.css";
 function MenuList() {
@@ -17,6 +18,9 @@ function MenuList() {
       </Menu.Item>
       <Menu.Item key="history" icon={<ClockCircleOutlined />}>
         <NavLink to="/history">History</NavLink>
+      </Menu.Item>
+      <Menu.Item key="payment" icon={<DollarOutlined />}>
+        <NavLink to="/payment">Payment</NavLink>
       </Menu.Item>
     </Menu>
   );

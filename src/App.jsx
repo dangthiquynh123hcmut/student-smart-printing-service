@@ -14,6 +14,7 @@ import Home from "./Components/Home";
 import Print from "./Components/PrintPage/Print";
 import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
+import Payment from "./Components/Payment/Payment";
 //authenticate
 // layouts
 import RootLayout from "./Layouts/RootLayout";
@@ -62,6 +63,14 @@ function App() {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="payment"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Payment />
               </PrivateRoute>
             }
           />
