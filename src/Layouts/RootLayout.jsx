@@ -16,7 +16,7 @@ import UserInfo from "./UserInfo.jsx";
 // import Sider from "antd/es/layout/Sider";
 
 const { Header, Sider } = Layout;
-function RootLayout() {
+function RootLayout({userData}) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -41,7 +41,7 @@ function RootLayout() {
           collapsible
           trigger={null}
         >
-          <MenuList />
+          <MenuList userData = {userData}/>
         </Sider>
 
         <main>
