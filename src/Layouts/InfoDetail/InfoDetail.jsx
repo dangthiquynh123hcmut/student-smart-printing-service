@@ -12,7 +12,7 @@ function InfoDetail() {
         <li>Class</li>
         <li>Remain Page</li>
         <li>Remainder</li>
-        <button>Buy more</button>
+        <button><NavLink to='/payment'>Buy more</NavLink></button>
         <br />
         <button><NavLink to='/login'>Exit</NavLink></button>
       </ul>
