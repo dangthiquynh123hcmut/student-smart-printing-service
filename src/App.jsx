@@ -10,7 +10,7 @@ import axios from "./api/axiosConfig";
 //
 import React, { useState, useEffect } from "react";
 // pages
-import Home from "./Components/Home";
+import Home from "./Components/HomePage/Home";
 import Print from "./Components/PrintPage/Print";
 import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";

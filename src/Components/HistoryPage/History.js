@@ -42,6 +42,7 @@ function History() {
         <NavLink to='/'>&larr; Tro ve trang chu</NavLink>
         <h1 >History</h1>
       </div>
+
       <table className="table-list-info">
         <thead>
           <tr>
@@ -71,6 +72,7 @@ function History() {
             </td>
           </tr>
         </thead>
+        
         
         <tbody>
           {fetchStatus ? 

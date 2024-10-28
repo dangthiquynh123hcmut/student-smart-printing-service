@@ -1,4 +1,5 @@
 // import { colors } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import React from "react";
 import { useState, useEffect } from 'react';
@@ -81,9 +82,10 @@ function Print() {
     <div id='wrapper'>
 
       <div id="header">
-        <a href="/" className="back-button">&larr; Trở về trang chủ</a>
+        <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
         <h1>In ấn</h1>
       </div>
+      
 
       <div className="file-upload-container">
         {/* Phần header phía trên */}
@@ -238,7 +240,6 @@ function Print() {
                 />
                 Toàn cảnh
               </label>
-
             </div>
             <div className="button-container">
               <button className="preview-button">Xem trước</button>
@@ -248,7 +249,6 @@ function Print() {
         </div>
 
       </div>
-
 
       <div className="file-upload-container">
         <div className="file-upload-header">
@@ -283,7 +283,6 @@ function Print() {
                     </div>
 
                   </div>
-
 
                   <table className="printer-table">
                     <thead>
@@ -327,10 +326,8 @@ function Print() {
                 </div>
               </div>
             )}
-
           </div>
         </div>
-
 
         <div id='wrapper1'>
           {/* Nhóm 2 */}
@@ -379,13 +376,4 @@ function Print() {
     </div>
   );
 }
-
 export default Print;
-
-
-
-
-
-
-
-
