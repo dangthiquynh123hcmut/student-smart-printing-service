@@ -6,18 +6,18 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import "./MenuList.css";
-function MenuList() {
+function MenuList({userData}) {
   return (
     <Menu mode="inline" className="menu-bar">
       <Menu.Item key="home" icon={<HomeOutlined />}>
         <NavLink to="/">Home</NavLink>
       </Menu.Item>
-      <Menu.Item key="print" icon={<PrinterOutlined />}>
+      {!userData?.admin && <Menu.Item key="print" icon={<PrinterOutlined />}>
         <NavLink to="/print">Print</NavLink>
-      </Menu.Item>
-      <Menu.Item key="history" icon={<ClockCircleOutlined />}>
+      </Menu.Item>}
+      {!userData?.admin && <Menu.Item key="history" icon={<ClockCircleOutlined />}>
         <NavLink to="/history">History</NavLink>
-      </Menu.Item>
+      </Menu.Item>}
     </Menu>
   );
 }

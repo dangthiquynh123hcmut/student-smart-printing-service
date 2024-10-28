@@ -28,7 +28,7 @@ const LoginForm = ({ setIsAuthenticated, setUserData }) => {
     const { email, password } = formValues;
 
     const res = await loginApi(email, password);
-    debugger;
+    // debugger;
     if (res && res.EC === 0) {
       //depend on backend return res => will be set again
       localStorage.setItem("access_token", res?.access_token);
