@@ -23,7 +23,7 @@ function MenuList({userData}) {
 
       </Menu.Item>}
 
-      {!userData?.admin && <Menu.Item key="payment" icon={<ClockCircleOutlined />}>
+      {!userData?.admin && <Menu.Item key="payment" icon={<DollarOutlined />}>
       <NavLink to="/payment">Payment</NavLink>
 
       </Menu.Item>}

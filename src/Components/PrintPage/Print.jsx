@@ -79,7 +79,7 @@ function Print() {
     setSelectedPrinterId(id); // Cập nhật máy in được chọn
   };
   return (
-    <div id='wrapper'>
+    <div id="wrapper">
 
       <div id="header">
         <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
