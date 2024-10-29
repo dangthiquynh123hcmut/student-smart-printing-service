@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import "./MenuList.css";
 function MenuList({userData}) {
+  // console.log(userData.admin)
   return (
     <Menu mode="inline" className="menu-bar">
       <Menu.Item key="home" icon={<HomeOutlined />}>

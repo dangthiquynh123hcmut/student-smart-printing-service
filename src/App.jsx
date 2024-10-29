@@ -27,7 +27,13 @@ function PrivateRoute({ children, isAuthenticated }) {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null); // State to store user data
-
+  // useEffect(() => {
+  //   // Chỉ chạy khi `userData` được cập nhật từ `null` sang một giá trị
+  //   if (userData !== null) {
+  //     console.log("userData đã được cập nhật:", userData);
+  //     // Thực hiện các hành động khác tại đây
+  //   }
+  // }, [userData]);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>

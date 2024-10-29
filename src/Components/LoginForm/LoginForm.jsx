@@ -37,7 +37,7 @@ const LoginForm = ({ setIsAuthenticated, setUserData }) => {
         description: "Success",
       });
       setIsAuthenticated(true);
-      setUserData(email);
+      setUserData(res.user);
       navigate("/");
     } else {
       notification.error({
