@@ -15,6 +15,7 @@ import Print from "./Components/PrintPage/Print";
 import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
+import Printers from "./Components/Admin/Printers/Printers"
 //authenticate
 // layouts
 import RootLayout from "./Layouts/RootLayout";
@@ -77,6 +78,14 @@ function App() {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <Payment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="printers"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Printers />
               </PrivateRoute>
             }
           />

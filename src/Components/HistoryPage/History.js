@@ -47,28 +47,28 @@ function History() {
         <thead>
           <tr>
             <td>
-              ID may in
+              ID máy in
             </td>
             <td>
-              Co so
+              Cơ sở
             </td>
             <td>
-              Toa nha
+              Tòa nhà
             </td>
             <td>
-              Tang
+              Tầng
             </td>
             <td>
-              Trang thai
+              Trạng thái
             </td>
             <td>
-              Ngay in
+              Ngày in
             </td>
             <td>
-              Ten file in
+              Tên file in
             </td>
             <td>
-              Bao cao
+              Báo cáo
             </td>
           </tr>
         </thead>
@@ -82,7 +82,7 @@ function History() {
                 <td>{job.name}</td> 
                 <td>{job.username}</td>
                 <td>{job.phone}</td>
-                <td>{getStatusBadge('Đang chời')}</td>
+                <td>{getStatusBadge('Đã xong')}</td>
                 <td>{job.email}</td>
                 <td>{job.company.name}</td>
                 <td>{getReportIcon(job.company.bs)}</td>
@@ -94,7 +94,7 @@ function History() {
                 <td>Loading</td> 
                 <td>Loading</td>
                 <td>Loading</td>
-                <td>{getStatusBadge('Loading')}</td>
+                <td>{getStatusBadge('Đang chờ')}</td>
                 <td>Loading</td>
                 <td>Loadin</td>
                 <td>{getReportIcon('s')}</td>

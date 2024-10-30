@@ -7,6 +7,7 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    padding-right: 20px;
 }
 
 .payment-container h3 {
@@ -32,7 +33,6 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: calc(50% - 10px);
-    /* 50% width minus gap */
     border: 1px solid #ccc;
 }
 
@@ -177,6 +177,13 @@
 
 .billing-history th {
     background-color: #f1f1f1;
+}
+@media (max-width: 768px) {
+    .payment-info,
+    .payment-method {
+        flex: 1 1 100%; 
+        margin-bottom: 20px; 
+    }
 }
 
 /* .billing-history .download-all,

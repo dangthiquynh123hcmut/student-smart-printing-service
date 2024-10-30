@@ -8,7 +8,7 @@ function Payment() {
     email: "",
     paperNumber: 1,
     paperSize: "A4",
-    paymentMethod: 'MOMO',
+    paymentMethod: '',
     date: new Date(),
   });
 
@@ -20,8 +20,14 @@ function Payment() {
   const handlePaymentMethodChange = (e) => {
     setFormData({ ...formData, paymentMethod: e.target.value });
   };
-
   const handleSubmit = () => {
+    if (!formData.email || !formData.paymentMethod) {
+      notification.error({
+        message: "Vui lòng điền đầy đủ thông tin",
+        description: "Error",
+      });
+      return;
+    }
     fetch('https://671d199b09103098807c4344.mockapi.io/api/bill', {
       method: 'POST',
       headers: {
@@ -38,8 +44,9 @@ function Payment() {
         setFormData({
           email: "",
           paperNumber: 1,
-          paperSize: "a4",
+          paperSize: "A4",
           paymentMethod: "",
+          date: new Date(),
         });
       })
       .catch(() => {
@@ -48,6 +55,7 @@ function Payment() {
           description: "Error",
         });
       });
+
   };
 
   useEffect(() => {
@@ -103,7 +111,7 @@ function Payment() {
             <div className="card-option">
               <label className="card momo">
                 <input type="radio" name="paymentMethod" value="MOMO" onChange={handlePaymentMethodChange} />
-                <img src="https://play-lh.googleusercontent.com/dQbjuW6Jrwzavx7UCwvGzA_sleZe3-Km1KISpMLGVf1Be5N6hN6-tdKxE5RDQvOiGRg" alt="Momo Icon" className="payment-img" />
+                <img src="https://play-lh.googleusercontent.com/dQbjuW6Jrwzavx7UCwvGzA_sleZe3-Km1KISpMLGVf1Be5N6hN6-tdKxE5RDQvOiGRg" alt="Momo img" className="payment-img" />
                 <p>Thanh toán qua MOMO</p>
               </label>
 
