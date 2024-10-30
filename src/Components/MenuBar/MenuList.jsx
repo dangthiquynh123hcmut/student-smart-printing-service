@@ -23,8 +23,15 @@ function MenuList({userData}) {
 
       </Menu.Item>}
 
+
+
       {!userData?.admin && <Menu.Item key="payment" icon={<DollarOutlined />}>
-      <NavLink to="/payment">Payment</NavLink>
+      <NavLink to="/payment">Thanh toán</NavLink>
+
+      </Menu.Item>}
+
+      {userData?.admin && <Menu.Item key="printers" icon={<PrinterOutlined />}>
+      <NavLink to="/printers">Quản lý máy in</NavLink>
 
       </Menu.Item>}
       

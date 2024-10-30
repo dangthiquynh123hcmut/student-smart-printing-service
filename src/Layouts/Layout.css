@@ -1,6 +1,8 @@
 .page-wrapper{
   width: fit-content;
-  min-width: 100vw;
+
+
+  min-width: 99vw;
 
 }
 .header {
