@@ -11,8 +11,13 @@
   padding: 10px;
 }
 
+.ant-layout-sider{
+  width: fit-content;
+}
+
 .ant-layout-sider-children {
   background-color: white;
+  width: fit-content;
 }
 
 .logobk {
@@ -67,3 +72,7 @@
   margin-left: 5px;
 }
 
+.layout-sidebar{
+  display: flex;
+  flex-direction: column;
+}
