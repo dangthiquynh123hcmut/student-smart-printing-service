@@ -1,12 +1,12 @@
 import "./InfoDetail.css";
 import { NavLink } from "react-router-dom";
 
-function InfoDetail() {
+function InfoDetail({userData}) {
   return (
     <div className="infodetail">
       <ul>
         <p>UserInfo</p>
-        <li>Full Name</li>
+        <li>{userData.name}</li>
         <li>ID number</li>
         <li>Faculty</li>
         <li>Class</li>

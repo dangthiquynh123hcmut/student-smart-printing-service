@@ -10,11 +10,12 @@ import axios from "./api/axiosConfig";
 //
 import React, { useState, useEffect } from "react";
 // pages
-import Home from "./Components/Home";
+import Home from "./Components/HomePage/Home";
 import Print from "./Components/PrintPage/Print";
 import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
+import Printers from "./Components/Admin/Printers/Printers"
 //authenticate
 // layouts
 import RootLayout from "./Layouts/RootLayout";
@@ -27,7 +28,13 @@ function PrivateRoute({ children, isAuthenticated }) {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null); // State to store user data
-
+  // useEffect(() => {
+  //   // Chỉ chạy khi `userData` được cập nhật từ `null` sang một giá trị
+  //   if (userData !== null) {
+  //     console.log("userData đã được cập nhật:", userData);
+  //     // Thực hiện các hành động khác tại đây
+  //   }
+  // }, [userData]);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -71,6 +78,14 @@ function App() {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <Payment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="printers"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Printers />
               </PrivateRoute>
             }
           />

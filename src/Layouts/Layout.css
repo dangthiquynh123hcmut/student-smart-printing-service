@@ -1,5 +1,6 @@
 .page-wrapper{
   width: fit-content;
+  min-width: 99vw;
 }
 .header {
   background-color: #367fa9;

@@ -31,7 +31,7 @@ function RootLayout({userData}) {
         />
         <div className="right-corner">
           <Button className="notification-button" icon={<BellOutlined />} />
-          <UserInfo />
+          <UserInfo userData={userData} />
         </div>
       </Header>
       <Layout className="layout-sidebar">
