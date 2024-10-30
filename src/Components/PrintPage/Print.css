@@ -1,6 +1,6 @@
-#wrapper {
-    padding: 20px 50px;
-    width: 100%;
+#wrapper0 {
+    padding: 1vw 2vw ;
+    width: 85vw;
    
 }
 
@@ -81,10 +81,12 @@
     background-color: #e9e9e9;
   }
   #wrapper1 {
-  padding: 10px;
+  padding: 2vw;
   position: relative; 
 }
-
+.chooseFile{
+  margin-bottom: 20px;
+}
 .input-group {
   display: flex;
   justify-content: space-between;
@@ -101,7 +103,7 @@
 
 .quantity-input-container {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 10vw;
   
 }
 
@@ -130,7 +132,7 @@
   align-items: center; 
 }
 
-.preview-button, .done-button {
+ .done-button {
   padding: 10px 20px;
   font-size: 12px;
   cursor: pointer;

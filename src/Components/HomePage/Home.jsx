@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import "./Home.css";
 import { UserOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 export default function Home() {
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    // Fetch notifications from MockAPI using Axios
+    axios.get("https://6720b2f898bbb4d93ca593f3.mockapi.io/api/adminnotices")
+      .then(response => {
+        setNotifications(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching notifications:", error);
+      });
+  }, []);
 
   return (
     <div className="homepage">
@@ -19,61 +33,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Phần thông báo chung */}
-      <div className="notification-section">
+     {/* Notification Section */}
+     <div className="notification-section">
         <h3>Thông báo chung</h3>
-
-        <div className="notification">
-          
-            <UserOutlined  className="notification-icon"/>
-          
-          <div className="notification-content">
-            <h4>Thông báo máy in H6211 tạm ngưng hoạt động</h4>
-            <p className="notification-date">Bởi SPSO - Thứ tư, 3/1/2024</p>
-            <p className="notification-text">
-              Kể từ ngày 03/01/2024, nhà trường sẽ thay thế hệ thống BKeL cũ bằng hệ thống BKeL mới.
-              Các bạn sinh viên sử dụng hệ thống mới cho các môn học kỳ 2 năm học 2023-2024.
-              Sinh viên cần cập nhật địa chỉ <a href="https://lms.hcmut.edu.vn">lms.hcmut.edu.vn</a> hệ thống BKeL mới.
-            </p>
+        {notifications.map((notification) => (
+          <div className="notification" key={notification.id}>
+            <img src={notification.avatar} alt="User Avatar" className="notification-icon" />
+            <div className="notification-content">
+              <h4>{notification.title}</h4>
+              <p className="notification-date">Bởi {notification.name} - {moment(notification.date).format('dddd, D/M/YYYY')}</p>
+              <p className="notification-text">{notification.content}</p>
+            </div>
           </div>
-        
-        </div>
-
-
-      {/* delete after test */}
-
-      <div className="notification">
-          
-            <UserOutlined  className="notification-icon"/>
-          
-          <div className="notification-content">
-            <h4>Thông báo máy in H6211 tạm ngưng hoạt động</h4>
-            <p className="notification-date">Bởi SPSO - Thứ tư, 3/1/2024</p>
-            <p className="notification-text">
-              Kể từ ngày 03/01/2024, nhà trường sẽ thay thế hệ thống BKeL cũ bằng hệ thống BKeL mới.
-              Các bạn sinh viên sử dụng hệ thống mới cho các môn học kỳ 2 năm học 2023-2024.
-              Sinh viên cần cập nhật địa chỉ <a href="https://lms.hcmut.edu.vn">lms.hcmut.edu.vn</a> hệ thống BKeL mới.
-            </p>
-          </div>
-        
-        </div>
-
-        <div className="notification">
-          
-            <UserOutlined  className="notification-icon"/>
-          
-          <div className="notification-content">
-            <h4>Thông báo máy in H6211 tạm ngưng hoạt động</h4>
-            <p className="notification-date">Bởi SPSO - Thứ tư, 3/1/2024</p>
-            <p className="notification-text">
-              Kể từ ngày 03/01/2024, nhà trường sẽ thay thế hệ thống BKeL cũ bằng hệ thống BKeL mới.
-              Các bạn sinh viên sử dụng hệ thống mới cho các môn học kỳ 2 năm học 2023-2024.
-              Sinh viên cần cập nhật địa chỉ <a href="https://lms.hcmut.edu.vn">lms.hcmut.edu.vn</a> hệ thống BKeL mới.
-            </p>
-          </div>
-        
-        </div>
-
+        ))}
       </div>
     </div>
   );
