@@ -1,5 +1,5 @@
 import React from 'react'
-import "../"
+
 function CreateReport() {
   return (
     <div className='wrap-report'>
