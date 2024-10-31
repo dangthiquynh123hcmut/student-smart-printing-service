@@ -1,9 +1,12 @@
-#wrapper {
-    padding: 5px 5px 10px 30px;
-    width: 93.7vw;
+#wrapper0 {
+    padding: 1vw 2vw ;
+    width: 85vw;
    
 }
 
+#header{
+  width: 100%;
+}
 .file-upload-container {
     width: 100%;
     margin: 20px auto;
@@ -78,10 +81,12 @@
     background-color: #e9e9e9;
   }
   #wrapper1 {
-  padding: 10px;
+  padding: 2vw;
   position: relative; 
 }
-
+.chooseFile{
+  margin-bottom: 20px;
+}
 .input-group {
   display: flex;
   justify-content: space-between;
@@ -98,7 +103,7 @@
 
 .quantity-input-container {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 10vw;
   
 }
 
@@ -127,7 +132,7 @@
   align-items: center; 
 }
 
-.preview-button, .done-button {
+ .done-button {
   padding: 10px 20px;
   font-size: 12px;
   cursor: pointer;

@@ -1,8 +1,7 @@
-// import { colors } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import { Outlet } from "react-router-dom";
 import React from "react";
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   FolderOutlined,
   UploadOutlined,
@@ -11,10 +10,23 @@ import {
   SearchOutlined
 } from "@ant-design/icons";
 import "./Print.css";
+
 function Print() {
-
-  const [files, setFiles] = useState([]); // Sử dụng mảng để lưu trữ các tệp
-
+  const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [uploadTriggered, setUploadTriggered] = useState(false);
+  const [formData, setFormData] = useState({
+    printCopies: 1,
+    scale: 100,
+    pagesPerSheet: 1,
+    paperSize: 'A4',
+    printType: 'In trắng đen',
+    orientation: 'In dọc',
+    layout: '1',
+    coSo: 'CS1',        // New field
+    toaNha: 'A1',       // New field
+    tang: 'Tầng 1'
+  });
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files); // Chuyển đổi đối tượng FileList thành mảng
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // Thêm tệp mới vào mảng
@@ -24,9 +36,67 @@ function Print() {
     setFiles((prevFiles) => prevFiles.filter((file) => file !== fileToRemove)); // Xóa tệp khỏi mảng
   };
 
-  const handleUpload = () => {
-    // Logic tải lên tệp
-    alert('upload thành công');
+  const handleUpload = async () => {
+    const uploadData = {
+      files: files.map(file => ({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      })),
+    };
+    try {
+      const response = await axios.post('https://671d178809103098807c3d9c.mockapi.io/api/uploadfiles', uploadData);
+      setUploadTriggered('true')
+      alert('Tải lên thành công: ' + JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Đã xảy ra lỗi khi tải lên: ", error);
+      alert('Tải lên thất bại');
+    }
+  };
+
+  useEffect(() => {
+    async function fetchFiles() {
+      if (uploadTriggered) {
+        try {
+          const response = await axios.get('https://671d178809103098807c3d9c.mockapi.io/api/uploadfiles');
+          const lastFile = response.data[response.data.length - 1]; // Get only the last element
+          setFiles([lastFile]);
+        } catch (error) {
+          console.error('Error fetching files:', error);
+        }
+      }
+
+    }
+    fetchFiles();
+  }, []);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+  // Submit configuration to MockAPI
+  const handleSubmit = async () => {
+    if (!selectedFile) {
+      alert('Please select a file to configure.');
+      return;
+    }
+
+    const configurationData = {
+      fileId: selectedFile,
+      ...formData,
+    };
+
+    try {
+      await axios.post('https://671d178809103098807c3d9c.mockapi.io/api/configureFiles', configurationData);
+      alert('Configuration saved successfully!');
+     
+    } catch (error) {
+      console.error('Error saving configuration:', error);
+      alert('Failed to save configuration.');
+    }
   };
 
   const handleDrop = (event) => {
@@ -38,54 +108,52 @@ function Print() {
   const handleDragOver = (event) => {
     event.preventDefault(); // Ngăn chặn hành vi mặc định
   };
-  const [myCar, setMyCar] = useState("Volvo");
-  const [selectedOption, setSelectedOption] = useState('1'); // Quản lý trạng thái của radio buttons
+  // const [myCar, setMyCar] = useState("Volvo");
+  // const [selectedOption, setSelectedOption] = useState('1'); // Quản lý trạng thái của radio buttons
 
-  const handleChange = (event) => {
-    setMyCar(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setMyCar(event.target.value);
+  // };
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value); // Cập nhật khi người dùng chọn radio button
-  };
+  // const handleOptionChange = (event) => {
+  //   setSelectedOption(event.target.value); // Cập nhật khi người dùng chọn radio button
+  // };
 
-  const [showTable, setShowTable] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedPrinterId, setSelectedPrinterId] = useState(null);
+  // const [showTable, setShowTable] = useState(false);
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [selectedPrinterId, setSelectedPrinterId] = useState(null);
 
-  // Danh sách máy in giả định
-  const printers = [
-    { id: 1, coSo: "Cơ sở 1", toaNha: "Tòa nhà A", tang: 1, trangThai: "Hoạt động", hangCho: 2 },
-    { id: 2, coSo: "Cơ sở 2", toaNha: "Tòa nhà B", tang: 3, trangThai: "Hoạt động", hangCho: 5 },
-    { id: 3, coSo: "Cơ sở 3", toaNha: "Tòa nhà C", tang: 2, trangThai: "Bảo trì", hangCho: 0 },
-    { id: 4, coSo: "Cơ sở 4", toaNha: "Tòa nhà D", tang: 2, trangThai: "Hoạt động", hangCho: 1 }
-  ];
+  // // Danh sách máy in giả định
+  // const printers = [
+  //   { id: 1, coSo: "Cơ sở 1", toaNha: "Tòa nhà A", tang: 1, trangThai: "Hoạt động", hangCho: 2 },
+  //   { id: 2, coSo: "Cơ sở 2", toaNha: "Tòa nhà B", tang: 3, trangThai: "Hoạt động", hangCho: 5 },
+  //   { id: 3, coSo: "Cơ sở 3", toaNha: "Tòa nhà C", tang: 2, trangThai: "Bảo trì", hangCho: 0 },
+  //   { id: 4, coSo: "Cơ sở 4", toaNha: "Tòa nhà D", tang: 2, trangThai: "Hoạt động", hangCho: 1 }
+  // ];
 
   // Hàm toggle hiển thị bảng
-  const toggleTable = () => {
-    setShowTable(!showTable);
-  };
-  // Hàm để lọc danh sách máy in theo tên tòa nhà
-  const filteredPrinters = printers.filter(printer =>
-    printer.toaNha.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const toggleTable = () => {
+  //   setShowTable(!showTable);
+  // };
+  // // Hàm để lọc danh sách máy in theo tên tòa nhà
+  // // const filteredPrinters = printers.filter(printer =>
+  // //   printer.toaNha.toLowerCase().includes(searchTerm.toLowerCase())
+  // // );
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Cập nhật giá trị tìm kiếm khi người dùng nhập
-  };
+  // const handleSearchChange = (event) => {
+  //   setSearchTerm(event.target.value); // Cập nhật giá trị tìm kiếm khi người dùng nhập
+  // };
 
-  // Hàm xử lý chọn máy in
-  const handleSelectPrinter = (id) => {
-    setSelectedPrinterId(id); // Cập nhật máy in được chọn
-  };
+  // // Hàm xử lý chọn máy in
+  // const handleSelectPrinter = (id) => {
+  //   setSelectedPrinterId(id); // Cập nhật máy in được chọn
+  // };
   return (
-    <div id='wrapper'>
-
+    <div id="wrapper0">
       <div id="header">
         <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
         <h1>In ấn</h1>
       </div>
-      
 
       <div className="file-upload-container">
         {/* Phần header phía trên */}
@@ -128,7 +196,7 @@ function Print() {
                   <span>{file.name}</span>
                   <button
                     onClick={() => handleRemoveFile(file)}
-                    style={{ marginLeft: '10px', color: 'red', cursor: 'pointer' }} 
+                    style={{ marginLeft: '10px', color: 'red', cursor: 'pointer' }}
                   >
                     Xóa
                   </button>
@@ -149,104 +217,119 @@ function Print() {
             <h2>Cấu hình in</h2>
           </div>
         </div>
-        <div id='wrapper1'>
-          {/* Nhóm 1: Số lượng bản in, Tỉ lệ, You have selected */}
+
+        <div id="wrapper1">
+          {/* Dropdown to select file */}
+          <div className="chooseFile">
+            <label >
+              Chọn file để in
+              <select className="node" value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)}>
+                <option value="">Select a file</option>
+                {files.map((file) => (
+                  <option key={file.id} value={file.id}>
+                    {file.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+
+          {/* Configuration form */}
           <div className="input-group">
             <div className="quantity-input-container">
-              <label htmlFor='input' className="quantity-input-label">Số lượng bản in</label>
+              <label className="quantity-input-label">Số lượng bản in</label>
               <input
-                id='input'
-                type='number'
+                type="number"
+                name="printCopies"
+                value={formData.printCopies}
+                onChange={handleInputChange}
                 className="quantity-input"
               />
             </div>
             <div className="quantity-input-container">
-              <label htmlFor='input' className="quantity-input-label">Tỉ lệ</label>
+              <label className="quantity-input-label">Tỉ lệ</label>
               <input
-                id='input'
-                type='number'
+                type="number"
+                name="scale"
+                value={formData.scale}
+                onChange={handleInputChange}
                 className="quantity-input"
               />
             </div>
             <div className="quantity-input-container">
-              <label htmlFor='input' className="quantity-input-label">Số trang mỗi tờ</label>
+              <label className="quantity-input-label">Số trang mỗi tờ</label>
               <input
-                id='input'
+                type="number"
+                name="pagesPerSheet"
+                value={formData.pagesPerSheet}
+                onChange={handleInputChange}
                 className="quantity-input"
               />
             </div>
           </div>
 
-          {/* Nhóm 2: Kích thước trang, Kiểu in */}
+          {/* Additional configuration fields */}
           <div className="input-group">
             <div className="quantity-input-container">
-              <form>
-                <label>Kích thước trang
-                  <select class="node" value={myCar} onChange={handleChange}>
-                    <option value="A4">A4</option>
-                    <option value="A3">A3</option>
-                    <option value="A2">A2</option>
-                  </select>
-                </label>
-              </form>
+              <label>Kích thước trang</label>
+              <select
+                name="paperSize"  // Add this attribute
+                className="node"
+                value={formData.paperSize}
+                onChange={handleInputChange}
+              >
+                <option value="A4">A4</option>
+                <option value="A3">A3</option>
+                <option value="A2">A2</option>
+              </select>
             </div>
-            <div className="quantity-input-container">
-              <form>
-                <label>Kiểu in
-                  <select class="node" value={myCar} onChange={handleChange}>
-                    <option value="In trắng đen">In trắng đen</option>
-                    <option value="In màu nhám">In màu nhám</option>
-                    <option value="In màu bóng">In màu bóng</option>
-                  </select>
-                </label>
-              </form>
-            </div>
-            <div className="quantity-input-container">
-              <form>
-                <label>Hướng giấy
 
-                  <select class="node" value={myCar} onChange={handleChange}>
-                    <option value="In dọc">In dọc</option>
-                    <option value="In ngang">In ngang</option>
-                  </select>
-                </label>
-              </form>
+            <div className="quantity-input-container">
+              <label>Kiểu in</label>
+              <select name="printType" className="node" value={formData.printType} onChange={handleInputChange}>
+                <option value="In trắng đen">In trắng đen</option>
+                <option value="In màu nhám">In màu nhám</option>
+                <option value="In màu bóng">In màu bóng</option>
+              </select>
+            </div>
+            <div className="quantity-input-container">
+              <label>Hướng giấy</label>
+              <select name="orientation" className="node" value={formData.orientation} onChange={handleInputChange}>
+                <option value="In dọc">In dọc</option>
+                <option value="In ngang">In ngang</option>
+              </select>
             </div>
           </div>
 
-          {/* Nhóm 3: Số trang mỗi tờ, Hướng giấy */}
-          <div>
-            <div className="input-group1">
-              {/* Thêm hai nút chọn */}
-
-              <p style={{ marginRight: '10px' }}>Bố cục</p>
-
-              <label>
-                <input
-                  type="radio"
-                  value="1"
-                  checked={selectedOption === '1'}
-                  onChange={handleOptionChange}
-                />
-                Chân dung
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  value="2"
-                  checked={selectedOption === '2'}
-                  onChange={handleOptionChange}
-                />
-                Toàn cảnh
-              </label>
-            </div>
-            <div className="button-container">
-              <button className="preview-button">Xem trước</button>
-              <button className="done-button">Xong</button>
-            </div>
+          {/* Layout selection */}
+          <div className="input-group1">
+            <p style={{ marginRight: '10px' }}>Bố cục</p>
+            <label>
+              <input
+                type="radio"
+                name="layout"
+                value="1"
+                checked={formData.layout === '1'}
+                onChange={handleInputChange}
+              />
+              Chân dung
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="layout"
+                value="2"
+                checked={formData.layout === '2'}
+                onChange={handleInputChange}
+              />
+              Toàn cảnh
+            </label>
           </div>
         </div>
+      </div>
+
+      <div>
 
       </div>
 
@@ -258,84 +341,22 @@ function Print() {
           </div>
           <div className="file-actions">
             <div className="file-image">
-              {/* Khi bấm vào icon, toggle hiển thị bảng */}
+              {/* Khi bấm vào icon, toggle hiển thị bảng
               <SearchOutlined
                 style={{ fontSize: '24px', color: '#000', cursor: 'pointer' }}
                 onClick={toggleTable}
-              />
+              /> */}
             </div>
 
-            {/* Hiển thị bảng nếu showTable là true */}
-            {showTable && (
-              <div className="overlay">
-                <div className="table-container">
-                  <div className="search-container">
-                    <h2>Danh sách máy in</h2>
-                    <div className="search-filter">
-                      <label htmlFor="search">Tìm kiếm theo tòa nhà:</label>
-                      <input
-                        id="search"
-                        type="text"
-                        value={searchTerm}
-                        onChange={handleSearchChange} // Gọi hàm khi người dùng thay đổi ô tìm kiếm
-                        className="search-input" // Thêm lớp CSS cho ô input
-                      />
-                    </div>
-
-                  </div>
-
-                  <table className="printer-table">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Cơ sở</th>
-                        <th>Tòa nhà</th>
-                        <th>Tầng</th>
-                        <th>Trạng thái</th>
-                        <th>Hàng chờ</th>
-                        <th>Chọn</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredPrinters.map((printer) => (
-                        <tr key={printer.id}>
-                          <td>{printer.id}</td>
-                          <td>{printer.coSo}</td>
-                          <td>{printer.toaNha}</td>
-                          <td>{printer.tang}</td>
-                          <td className={printer.trangThai === "Bảo trì" ? "trang-thai-bao-tri" : ""}>
-                            {printer.trangThai}
-                          </td>
-                          <td>{printer.hangCho}</td>
-                          <td>
-                            <input
-                              type="radio"
-                              name="selectPrinter"
-                              value={printer.id}
-                              disabled={printer.trangThai !== "Hoạt động"} 
-                              checked={selectedPrinterId === printer.id}
-                              onChange={() => handleSelectPrinter(printer.id)}
-                            />
-                          </td>
-
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <button className="close-button" onClick={toggleTable}>Đóng</button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
         <div id='wrapper1'>
-          {/* Nhóm 2 */}
           <div className="input-group">
             <div className="quantity-input-container">
               <form>
                 <label>Cơ sở
-                  <select class="node" value={myCar} onChange={handleChange}>
+                  <select name="coSo" className="node" value={formData.coSo} onChange={handleInputChange}>
                     <option value="CS1">CS1</option>
                     <option value="CS2">CS2</option>
                   </select>
@@ -345,7 +366,7 @@ function Print() {
             <div className="quantity-input-container">
               <form>
                 <label>Tòa nhà
-                  <select class="node" value={myCar} onChange={handleChange}>
+                  <select name="toaNha" className="node" value={formData.toaNha} onChange={handleInputChange}>
                     <option value="A1">A1</option>
                     <option value="B1">B1</option>
                     <option value="C1">C1</option>
@@ -357,23 +378,27 @@ function Print() {
             <div className="quantity-input-container">
               <form>
                 <label>Tầng
-
-                  <select class="node" value={myCar} onChange={handleChange}>
-                    <option value="Tầng 1">Tầng 1</option>
-                    <option value="Tầng 2">Tầng 2</option>
-                    <option value="Tầng 3">Tầng 3</option>
-                    <option value="Tầng 4">Tầng 4</option>
-                    <option value="Tầng 5">Tầng 5</option>
+                  <select name="tang" className="node" value={formData.tang} onChange={handleInputChange}>
+                    <option value="Tầng 1"> 1</option>
+                    <option value="Tầng 2"> 2</option>
+                    <option value="Tầng 3"> 3</option>
+                    <option value="Tầng 4"> 4</option>
+                    <option value="Tầng 5"> 5</option>
                   </select>
                 </label>
               </form>
             </div>
-          </div>
 
+          </div>
+          <div className="button-container">
+            {/* <button className="preview-button" onClick={handleSubmit}>Print</button> */}
+            <button className="done-button" onClick={handleSubmit}>Đăng Kí</button>
+          </div>
         </div>
 
       </div>
     </div>
   );
 }
+
 export default Print;

@@ -1,7 +1,9 @@
 .page-wrapper{
   width: fit-content;
 
+
   min-width: 99vw;
+
 }
 .header {
   background-color: #367fa9;
@@ -9,14 +11,21 @@
   flex-direction: row;
   align-items: center;
   padding: 10px;
+  position: fixed; 
+  top: 0;
+  width: 100%; 
+  z-index: 1000; 
 }
 
-.ant-layout-sider{
-  width: fit-content;
+.ant-layout-sider-children {
   background-color: white;
 
 }
-
+.layout-sidebar{
+  margin-top: 8vh;
+  width: fit-content;
+  background-color: white;
+}
 
 
 .logobk {
