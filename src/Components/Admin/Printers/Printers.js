@@ -316,7 +316,7 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Tình trạng">
+                    <Form.Item label="Hoạt động">
                         <Switch checked={newPrinter.status} onChange={handleStatusChange} />
                     </Form.Item>
                     <Form.Item label="Vị trí">
@@ -354,7 +354,7 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Tình trạng">
+                    <Form.Item label="Hoạt động">
                         <Switch checked={editedPrinter?.status} onChange={handleEditStatusChange} />
                     </Form.Item>
                     <Form.Item label="Vị trí Campus">
