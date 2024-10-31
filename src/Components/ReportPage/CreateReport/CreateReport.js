@@ -28,7 +28,7 @@ function CreateReport() {
       <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
 
         <h1>Tạo báo cáo mới</h1>
-      <Button className='plus-button' icon={<PlusOutlined />}>Create new Report</Button>
+      <Button className='plus-button' icon={<PlusOutlined />}>Tạo báo cáo mới</Button>
       <Button className='print-button' icon={<PrinterOutlined />}>In Báo cáo</Button>
 
       </div>
