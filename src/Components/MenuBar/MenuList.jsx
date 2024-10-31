@@ -44,9 +44,9 @@ function MenuList({userData}) {
       <NavLink to="/printers">Quản lý máy in</NavLink>
 
       </Menu.Item>}
-      {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
+      {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
       <NavLink to="/Configuration">Cấu hình in</NavLink>
-      </Menu.Item>}
+      </Menu.Item>} */}
 
       {userData?.admin && <SubMenu key="report" className="submenu" icon={<BarChartOutlined />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined />}>
