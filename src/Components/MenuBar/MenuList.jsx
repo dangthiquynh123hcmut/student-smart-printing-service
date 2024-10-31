@@ -39,7 +39,7 @@ function MenuList({userData}) {
       
       </Menu.Item>}
       
-      {userData?.admin && <SubMenu key="report" icon={<BarChartOutlined />} title="Quản lí báo cáo">
+      {userData?.admin && <SubMenu key="report" className="submenu" icon={<BarChartOutlined />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined />}>
           <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
         </Menu.Item>

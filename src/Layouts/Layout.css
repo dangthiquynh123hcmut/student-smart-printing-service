@@ -13,12 +13,11 @@
 
 .ant-layout-sider{
   width: fit-content;
+  background-color: white;
+
 }
 
-.ant-layout-sider-children {
-  background-color: white;
-  width: fit-content;
-}
+
 
 .logobk {
   background: url("../Components/Assets/logobk.png") no-repeat center;

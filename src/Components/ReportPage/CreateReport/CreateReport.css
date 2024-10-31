@@ -1,0 +1,6 @@
+.plus-button{
+    background: linear-gradient(135deg, #2c49c8, #3f98d3);
+    color: white;
+    position: relative; 
+    margin:  12px 0;
+}
