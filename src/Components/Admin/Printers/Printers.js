@@ -9,6 +9,7 @@ function Printers() {
     const productsPerPage = 8;
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isMaintainModalVisible,setIsMaintainModalVisible] = useState(false)
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [newPrinter, setNewPrinter] = useState({
         status: true,
@@ -203,6 +204,17 @@ function Printers() {
         showDeleteConfirmation();
     };
 
+    //maintain modal
+    const showMaintainModal = () => {
+        // setEditedPrinter(selectedProduct);
+        setIsMaintainModalVisible(true);
+        handleCloseModal();
+    };
+    const handleCloseMaintainModal = () =>{
+        setIsMaintainModalVisible(false);
+        setSelectedProduct(null);
+
+    }
 
     //show info
 
@@ -266,6 +278,10 @@ function Printers() {
                 visible={isModalVisible}
                 onCancel={handleCloseModal}
                 footer={[
+                    <Button type="primary" key="maintain" onClick={showMaintainModal}>
+                        Bảo trì
+                    </Button>,
+
                     <Button type="primary" key="back" onClick={handleDeletePrinter} danger>
                         Xóa
                     </Button>,
@@ -303,6 +319,23 @@ function Printers() {
             </Modal>
 
             <Modal
+            title="Bảo trì máy in"
+            visible={isMaintainModalVisible}
+            onCancel={handleCloseMaintainModal}
+            footer={[
+                <Button key="back" onClick={handleCloseMaintainModal}>
+                    Đóng
+                </Button>,
+                <Button key="submit" type="primary" onClick={() => setIsEditModalVisible(true)}>
+                    Bảo trì
+                </Button>,
+                <Button key="submit" type="primary" onClick={() => setIsEditModalVisible(true)}>
+                    Kích hoạt
+                </Button>,
+            ]}
+            />
+
+            <Modal
                 title="Thêm Máy In"
                 visible={isAddModalVisible}
                 onCancel={handleCloseAddModal}
@@ -316,7 +349,7 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Tình trạng">
+                    <Form.Item label="Hoạt động">
                         <Switch checked={newPrinter.status} onChange={handleStatusChange} />
                     </Form.Item>
                     <Form.Item label="Vị trí">
@@ -354,7 +387,7 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Tình trạng">
+                    <Form.Item label="Hoạt động">
                         <Switch checked={editedPrinter?.status} onChange={handleEditStatusChange} />
                     </Form.Item>
                     <Form.Item label="Vị trí Campus">

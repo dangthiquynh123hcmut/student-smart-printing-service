@@ -39,8 +39,8 @@ function History() {
 
   return <div className="wrapper-history">
       <div >
-        <NavLink to='/'>&larr; Tro ve trang chu</NavLink>
-        <h1 >History</h1>
+        <NavLink to='/'>&larr;Trở về trang chủ</NavLink>
+        <h1 >Xem lịch sử</h1>
       </div>
 
       <table className="table-list-info">

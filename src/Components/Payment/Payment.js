@@ -1,6 +1,7 @@
 import "./Payment.css";
 import { useState, useEffect } from "react";
-import { notification } from "antd";
+import { notification, Button } from "antd";
+import html2pdf from 'html2pdf.js';
 
 function Payment() {
   const [bill, setBill] = useState([]);
@@ -10,17 +11,32 @@ function Payment() {
     paperSize: "A4",
     paymentMethod: '',
     date: new Date(),
+    price: 0,
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    
+    const updatedFormData = { ...formData, [name]: value };
+
+    const pricePerPaper =
+    updatedFormData.paperSize === "A4" ? 500 :
+    updatedFormData.paperSize === "A3" ? 1000 :
+    updatedFormData.paperSize === "A2" ? 2000 :
+    updatedFormData.paperSize === "A1" ? 5000 : 0;
+
+  const totalAmount = updatedFormData.paperNumber * pricePerPaper;
+
+  // Cập nhật `price` trong `formData` và set lại `formData`
+  setFormData({ ...updatedFormData, price: totalAmount });
   };
 
   const handlePaymentMethodChange = (e) => {
     setFormData({ ...formData, paymentMethod: e.target.value });
   };
+
   const handleSubmit = () => {
+
     if (!formData.email || !formData.paymentMethod) {
       notification.error({
         message: "Vui lòng điền đầy đủ thông tin",
@@ -28,6 +44,7 @@ function Payment() {
       });
       return;
     }
+
     fetch('https://671d199b09103098807c4344.mockapi.io/api/bill', {
       method: 'POST',
       headers: {
@@ -47,6 +64,7 @@ function Payment() {
           paperSize: "A4",
           paymentMethod: "",
           date: new Date(),
+          price: 0,
         });
       })
       .catch(() => {
@@ -56,6 +74,32 @@ function Payment() {
         });
       });
 
+  };
+
+  const generatePDF = (item) => {
+    const billContent = `
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2>HÓA ĐƠN THANH TOÁN</h2>
+      </div>
+      <div style="padding-left: 20px;">
+        <p><strong>ID hóa đơn:</strong> ${item.id}</p>
+        <p><strong>Email:</strong> ${item.email}</p>
+        <p><strong>Ngày thanh toán:</strong> ${new Date(item.date).toLocaleDateString("vi-VN")}</p>
+        <p><strong>Loại giấy:</strong> ${item.paperSize}</p>
+        <p><strong>Số lượng:</strong> ${item.paperNumber}</p>
+        <p><strong>Thanh toán qua phương thức:</strong> ${item.paymentMethod}</p>
+        <p><strong>Tổng tiền:</strong> ${item.price} VNĐ</p>
+      </div>
+    `;
+
+    const opt = {
+      margin: 1,
+      filename: `HoaDon_${item.id}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdf().from(billContent).set(opt).save();
   };
 
   useEffect(() => {
@@ -126,41 +170,40 @@ function Payment() {
 
         <div className="box billing-history">
           <h3>Lịch sử hóa đơn</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Số hóa đơn</th>
-                <th>Email</th>
-                <th>Giá tiền</th>
-                <th>Ngày</th>
-                <th>Loại giấy</th>
-                <th>Số lượng giấy</th>
-                <th>Thanh toán qua phương thức</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bill.map((item) => {
-                const pricePerPaper =
-                  item.paperSize === 'A4' ? 500 :
-                    item.paperSize === 'A3' ? 1000 :
-                      item.paperSize === 'A2' ? 2000 :
-                        item.paperSize === 'A1' ? 5000 :
-                          0;
-
-                return (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.email}</td>
-                    <td>{item.paperNumber * pricePerPaper} VNĐ</td>
-                    <td>{new Date(item.date).toLocaleDateString("vi-VN")}</td>
-                    <td>{item.paperSize}</td>
-                    <td>{item.paperNumber}</td>
-                    <td>{item.paymentMethod}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div id="billing-history-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Số hóa đơn</th>
+                  <th>Email</th>
+                  <th>Giá tiền</th>
+                  <th>Ngày</th>
+                  <th>Loại giấy</th>
+                  <th>Số lượng giấy</th>
+                  <th>Thanh toán qua phương thức</th>
+                  <th>Tải hóa đơn</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bill.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.email}</td>
+                      <td>{item.price} VNĐ</td>
+                      <td>{new Date(item.date).toLocaleDateString("vi-VN")}</td>
+                      <td>{item.paperSize}</td>
+                      <td>{item.paperNumber}</td>
+                      <td>{item.paymentMethod}</td>
+                      <td>
+                        <Button onClick={() => generatePDF(item)}>Tải hóa đơn</Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

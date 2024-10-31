@@ -1,9 +1,12 @@
 .menu-bar {
   position: relative;
   height: 88vh;
+  /* width: fit-content; */
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  font-size: 1rem;
   background-color: transparent;
+  font-size: 12.4px;
+
 }
+

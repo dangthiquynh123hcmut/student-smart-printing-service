@@ -1,10 +1,12 @@
 .wrapper-history{
     padding: 5px 5px 10px 30px;
+    margin-top: 20px;
     /* width: 100%; */
     /* max-width: 100%; */
 
 }
 .table-list-info{
+    margin-top: 10px;
     background-color: white;
     border-collapse: collapse;
     text-align: center;

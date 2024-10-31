@@ -16,6 +16,8 @@ import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
 import Printers from "./Components/Admin/Printers/Printers"
+import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
+import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
 //authenticate
@@ -30,13 +32,7 @@ function PrivateRoute({ children, isAuthenticated }) {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null); // State to store user data
-  // useEffect(() => {
-  //   // Chỉ chạy khi `userData` được cập nhật từ `null` sang một giá trị
-  //   if (userData !== null) {
-  //     console.log("userData đã được cập nhật:", userData);
-  //     // Thực hiện các hành động khác tại đây
-  //   }
-  // }, [userData]);
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -67,14 +63,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="print"
-            element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Print />
-              </PrivateRoute>
-            }
-          />
+
           <Route
             path="history"
             element={
@@ -91,7 +80,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
             path="printers"
             element={
@@ -100,15 +88,26 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
-            path="Configuration"
+            path="createReport"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Configuration />
+                <CreateReport/>
               </PrivateRoute>
             }
           />
+          <Route
+            path="oldReport"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <OldReport/>
+              </PrivateRoute>
+            }
+          />
+
         </Route>
+
       </>
     )
   );

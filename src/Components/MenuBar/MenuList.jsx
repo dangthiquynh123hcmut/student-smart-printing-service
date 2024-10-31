@@ -5,9 +5,14 @@ import {
   ClockCircleOutlined,
   PrinterOutlined,
   DollarOutlined,
+  BarChartOutlined,
+  EyeOutlined,
+  FileAddOutlined,
   SettingOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
+const {SubMenu} =Menu
+
 function MenuList({userData}) {
   // console.log(userData.admin)
   return (
@@ -37,11 +42,20 @@ function MenuList({userData}) {
 
       {userData?.admin && <Menu.Item key="printers" icon={<PrinterOutlined />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
+
       </Menu.Item>}
-      
-      {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
+      {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
       <NavLink to="/Configuration">Cấu hình in</NavLink>
-      </Menu.Item>}
+      </Menu.Item>} */}
+
+      {userData?.admin && <SubMenu key="report" className="submenu" icon={<BarChartOutlined />} title="Quản lí báo cáo">
+        <Menu.Item key="old-report" icon={<EyeOutlined />}>
+          <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
+        </Menu.Item>
+        <Menu.Item key="create-report" icon={<FileAddOutlined />}>
+          <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
+        </Menu.Item>
+      </SubMenu>}
 
     </Menu>
   );
