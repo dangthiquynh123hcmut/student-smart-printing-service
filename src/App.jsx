@@ -16,6 +16,8 @@ import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
 import Printers from "./Components/Admin/Printers/Printers"
+import AdHome from "./Components/Admin/AdHome/AdHome"
+import Configuration from "./Components/Admin/Configuration/Configuration"
 //authenticate
 // layouts
 import RootLayout from "./Layouts/RootLayout";
@@ -53,7 +55,15 @@ function App() {
             index
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Home />
+                {userData?.admin ? <AdHome /> : <Home />}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="print"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Print />
               </PrivateRoute>
             }
           />
@@ -81,11 +91,20 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
             path="printers"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <Printers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="Configuration"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Configuration />
               </PrivateRoute>
             }
           />

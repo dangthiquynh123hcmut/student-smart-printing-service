@@ -12,13 +12,13 @@ import React from "react";
 import "../Layouts/Layout.css";
 import "./UserInfo.jsx";
 import UserInfo from "./UserInfo.jsx";
-
+import Notification from "./Notification/Notification.jsx"; 
 // import Sider from "antd/es/layout/Sider";
 
 const { Header, Sider } = Layout;
 function RootLayout({userData}) {
   const [collapsed, setCollapsed] = useState(false);
-
+  const [showNotifications, setShowNotifications] = useState(false);
   return (
     <div className="page-wrapper">
       <Header className="header">
@@ -30,9 +30,18 @@ function RootLayout({userData}) {
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         />
         <div className="right-corner">
-          <Button className="notification-button" icon={<BellOutlined />} />
-          <UserInfo userData={userData} />
-        </div>
+        <Button
+          className="notification-button"
+          icon={<BellOutlined />}
+          onClick={() => setShowNotifications(!showNotifications)}
+        />
+        <UserInfo userData={userData} />
+      </div>
+      
+      {showNotifications && (
+        <Notification /> 
+      )}
+       
       </Header>
       <Layout className="layout-sidebar">
         <Sider
