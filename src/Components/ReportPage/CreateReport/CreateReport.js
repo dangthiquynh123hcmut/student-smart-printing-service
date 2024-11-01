@@ -29,7 +29,7 @@ function CreateReport() {
 
         <h1>Tạo báo cáo mới</h1>
       <Button className='plus-button' icon={<PlusOutlined />}>Tạo báo cáo mới</Button>
-      <Button className='print-button' icon={<PrinterOutlined />}>In Báo cáo</Button>
+      <Button className='print-button' icon={<PrinterOutlined />}>Download Báo cáo</Button>
 
       </div>
       {fetchStatus? reportList.map((item) =>(

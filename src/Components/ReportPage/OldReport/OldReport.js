@@ -57,7 +57,7 @@ function OldReport() {
       <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
       <h1>Xem lại báo cáo</h1>
       </div>
-      <Button className='print-button' style={{marginLeft:0}} icon={<PrinterOutlined />}>In Báo cáo</Button>
+      <Button className='print-button' style={{marginLeft:0}} icon={<PrinterOutlined />}>Download Báo cáo</Button>
 
       <div className='wrap-select'>
       <label className='choose-month'>Chọn tháng:</label>
