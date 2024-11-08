@@ -24,12 +24,17 @@ import RootLayout from "./Layouts/RootLayout";
 import RegisterPage from "./Components/RegisterForm/Register";
 // import UserInfo from "./Layouts/UserInfo";
 
-function PrivateRoute({ children, isAuthenticated }) {
-  return isAuthenticated ? children : <Navigate to="/login" />;
+function PrivateRoute({ children, token }) {
+  return token ? children : <Navigate to="/login" />;
 }
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null); // State to store user data
+
+  const token = localStorage.getItem("token");
+  if (token) {
+      // Kiểm tra tính hợp lệ của token hoặc thực hiện xác minh nếu cần
+      // Ví dụ: Gửi request lên backend để xác minh
+  }
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,7 +43,6 @@ function App() {
           path="/login"
           element={
             <LoginForm
-              setIsAuthenticated={setIsAuthenticated}
               setUserData={setUserData}
             />
           }
@@ -48,7 +52,7 @@ function App() {
           <Route
             index
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <Home />
               </PrivateRoute>
             }
@@ -56,7 +60,7 @@ function App() {
           <Route
             path="print"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <Print />
               </PrivateRoute>
             }
@@ -64,7 +68,7 @@ function App() {
           <Route
             path="history"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <History />
               </PrivateRoute>
             }
@@ -72,7 +76,7 @@ function App() {
           <Route
             path="payment"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <Payment />
               </PrivateRoute>
             }
@@ -80,7 +84,7 @@ function App() {
           <Route
             path="printers"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <Printers />
               </PrivateRoute>
             }
@@ -89,7 +93,7 @@ function App() {
           <Route
             path="createReport"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <CreateReport/>
               </PrivateRoute>
             }
@@ -97,7 +101,7 @@ function App() {
           <Route
             path="oldReport"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute token={token}>
                 <OldReport/>
               </PrivateRoute>
             }

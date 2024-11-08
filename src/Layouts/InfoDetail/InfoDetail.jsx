@@ -2,6 +2,9 @@ import "./InfoDetail.css";
 import { NavLink } from "react-router-dom";
 
 function InfoDetail({userData}) {
+  const handleLogout = ()=>{
+    localStorage.removeItem("token");
+  }
   return (
     <div className="infodetail">
       <ul>
@@ -14,7 +17,7 @@ function InfoDetail({userData}) {
         <li>Remainder</li>
         <button><NavLink to='/payment'>Buy more</NavLink></button>
         <br />
-        <button><NavLink to='/login'>Exit</NavLink></button>
+        <button><NavLink to='/login' onClick={handleLogout}>Exit</NavLink></button>
       </ul>
     </div>
   );
