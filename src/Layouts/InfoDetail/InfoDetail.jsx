@@ -5,16 +5,17 @@ import { LogoutOutlined } from '@ant-design/icons';
 import axios from "axios";
 
 function InfoDetail({userData}) {
-  // check data tí xóa
-  console.log(userData);
-
-  if (!userData) {
-    return <div>No user data available.</div>;
+  const handleLogout = ()=>{
+    localStorage.removeItem("token");
   }
+    // check data tí xóa
+    console.log(userData);
 
+    if (!userData) {
+      return <div>No user data available.</div>;
+    }
   return (
     <div className="infodetail">
-      
       {!userData?.admin ? (
         <ul>
           <p>Thông tin sinh viên</p>
@@ -45,7 +46,8 @@ function InfoDetail({userData}) {
           </button>
         )}
         <button className="exit">
-          <NavLink to='/login'>
+          <NavLink to='/login'
+          onClick={handleLogout}>
             <LogoutOutlined style={{ marginRight: 14 }} />
             Thoát
           </NavLink>

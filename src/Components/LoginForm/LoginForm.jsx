@@ -6,7 +6,7 @@ import { FaUser, FaClock } from "react-icons/fa";
 // import PropTypes from "prop-types";
 import { loginApi } from "../../api/API";
 
-const LoginForm = ({ setIsAuthenticated, setUserData }) => {
+const LoginForm = ({ setUserData }) => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
@@ -28,16 +28,18 @@ const LoginForm = ({ setIsAuthenticated, setUserData }) => {
     const { email, password } = formValues;
 
     const res = await loginApi(email, password);
+    // console.log(">>Success:", res);
+    
     // debugger;
-    if (res && res.EC === 0) {
+    if (res && res.code === 0) {
       //depend on backend return res => will be set again
-      localStorage.setItem("access_token", res?.access_token);
       notification.success({
         message: "Login SUCCESS",
         description: "Success",
       });
-      setIsAuthenticated(true);
-      setUserData(res.user);
+      localStorage.setItem("token", res.result.token);
+      setUserData(res.result);
+
       navigate("/");
     } else {
       notification.error({
@@ -46,6 +48,7 @@ const LoginForm = ({ setIsAuthenticated, setUserData }) => {
       });
     }
     console.log(">>Success:", res);
+
   };
 
   return (
@@ -57,7 +60,7 @@ const LoginForm = ({ setIsAuthenticated, setUserData }) => {
           <h1>Login</h1>
           <div className="input-box">
             <input
-              type="email"
+              type="text"
               placeholder="Username"
               name="email"
               value={formValues.email} // Bind value to state
