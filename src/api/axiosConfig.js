@@ -4,6 +4,8 @@ const db_url = process.env.REACT_APP_DB_URL;
 console.log("dxawdaw", db_url);
 const instance = axios.create({
   baseURL: db_url,
+  adapter: 'fetch'
+
 });
 // Add a request interceptor
 instance.interceptors.request.use(

@@ -1,32 +1,72 @@
 import React from "react";
-import { Button, Form, Input, notification } from "antd";
-import { createUserApi } from "../../api/API";
+import { Button, Form, Input, notification, DatePicker } from "antd";
+import { useState } from "react";
+// import { createUserApi } from "../../api/API";
 import { useNavigate } from "react-router-dom";
+import "./Register.css";
 const RegisterPage = () => {
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
-    const { name, email, password } = values;
 
-    const res = await createUserApi(name, email, password);
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
 
-    if (res) {
-      notification.success({
-        message: "CREATE USER SUCCESS",
-        description: "Success",
+
+  const onFinish = async (formValues) => {
+    const { firstname, email, password, lastname,id,date,username } = formValues;
+    console.log(formValues)
+    try {
+      const response = await fetch("http://localhost:8080/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          firstName: firstname,
+          lastName:lastname,
+          mssv:id,
+          birthDate:date,
+          username:username,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      notification.success({
+          message: "Register SUCCESS",
+          description: "Success",
+      });
+  
       navigate("/login");
-    } else {
+
+    } catch (error) {
+      console.error("Error:", error);
       notification.error({
-        message: "CREATE USER Fail",
-        description: "Fail",
+              message: "Register Failed",
+              description: "Try Again, @hcmut.edu.vn",
       });
     }
-    console.log(">>Success:", res);
+
+
   };
 
   return (
-    <div style={{ margin: "50px" }}>
+    <div className="register-form" style={{ padding: "50px"  }}>
       <Form
         name="basic"
         labelCol={{
@@ -37,6 +77,9 @@ const RegisterPage = () => {
         }}
         style={{
           maxWidth: 600,
+          backdropFilter: 'blur(10px)',
+
+          
         }}
         onFinish={onFinish}
         autoComplete="off"
@@ -45,6 +88,8 @@ const RegisterPage = () => {
         <Form.Item
           label="Email"
           name="email"
+          // value={formValues.email} // Bind value to state
+          // onChange={handleChange}
           rules={[
             {
               required: true,
@@ -54,10 +99,25 @@ const RegisterPage = () => {
         >
           <Input />
         </Form.Item>
-
+        <Form.Item
+          label="username"
+          name="username"
+          // value={formValues.username} // Bind value to state
+          // onChange={handleChange}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label="Password"
           name="password"
+          // value={formValues.password} // Bind value to state
+          // onChange={handleChange}
           rules={[
             {
               required: true,
@@ -65,20 +125,68 @@ const RegisterPage = () => {
             },
           ]}
         >
-          <Input.Password />
+        <Input.Password />
         </Form.Item>
         <Form.Item
-          label="Name"
-          name="name"
+          label="First Name"
+          name="firstname"
+          // value={formValues.firstname} // Bind value to state
+          // onChange={handleChange}
           rules={[
             {
               required: true,
-              message: "Please input your name!",
+              message: "Please input your First name!",
             },
           ]}
         >
           <Input />
         </Form.Item>
+
+        <Form.Item
+          label="Last Name"
+          name="lastname"
+          // value={formValues.lastname} // Bind value to state
+          // onChange={handleChange}
+          rules={[
+            {
+              required: true,
+              message: "Please input your Last name!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Id"
+          name="id"
+          // value={formValues.id} // Bind value to state
+          // onChange={handleChange}
+          rules={[
+            {
+              required: true,
+              message: "Please input your ID!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Date of birth"
+          name="date"
+          // value={formValues.date} // Bind value to state
+          // onChange={handleChange}
+          rules={[
+            {
+              required: true,
+              message: "Please select your date: year-month-date!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+
 
         <Form.Item>
           <Button type="primary" htmlType="submit">

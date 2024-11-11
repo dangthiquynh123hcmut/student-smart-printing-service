@@ -1,28 +1,61 @@
 import "./InfoDetail.css";
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { LogoutOutlined } from '@ant-design/icons';
 import axios from "axios";
+import { AuthContext } from "../../Components/Authentication/Authenticate";
 
-function InfoDetail({userData}) {
+function InfoDetail() {
+  const { setToken,userData } = useContext(AuthContext);
+  //careful with auth
+  const logOutApi = async () =>{
+    const token = localStorage.getItem("token")
+    try{
+      const response = await fetch("http://localhost:8080/auth/logout",{
+        method: "POST",
+        header:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          token:token
+        })
+      })
+      if(!response.ok){
+        throw new Error("Unable to delete token")
+      
+      }
+    else{
+      alert("logout")
+    }
+    }catch(error){
+      console.log("Logout token failed",error)
+    }
+  }
+
   const handleLogout = ()=>{
+    //logout api
+
+    logOutApi();
     localStorage.removeItem("token");
+    setToken(null);
+
   }
     // check data tí xóa
-    console.log(userData);
+    console.log("user data in info site",userData);
 
     if (!userData) {
       return <div>No user data available.</div>;
     }
   return (
     <div className="infodetail">
-      {!userData?.admin ? (
+      {!(userData?.result.role ==="admin") ? (
         <ul>
           <p>Thông tin sinh viên</p>
           <hr className="custom-hr" />
-          <li>Họ tên: {userData?.name}</li>
-          <li>MSSV: {userData?.ID}</li>
-          <li>Khoa: {userData?.role}</li>
+          <li>Họ tên: {userData?.result.firstname} {userData?.result.lastname} {userData?.result.username}</li>
+          <li>MSSV: {userData?.result.mssv}</li>
+          <li>Khoa: {userData?.result.role}</li>
           <li>Lớp: {userData?.class}</li>
           <li>Số trang còn lại: {userData?.page}</li>
           <li>Số dư BK pay: {userData?.money}</li>

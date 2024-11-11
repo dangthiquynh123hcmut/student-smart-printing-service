@@ -1,0 +1,6 @@
+.register-form{
+    background: url("/src/Components/Assets/print.jpg") no-repeat;
+    background-size: cover;
+    background-position: left;
+    /* color: white */
+}

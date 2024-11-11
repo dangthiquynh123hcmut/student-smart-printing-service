@@ -6,9 +6,8 @@ import {
   Navigate,
 } from "react-router-dom";
 //fetch api
-import axios from "./api/axiosConfig";
 //
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // pages
 import Home from "./Components/HomePage/Home";
 import Print from "./Components/PrintPage/Print";
@@ -21,22 +20,26 @@ import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
 //authenticate
+import { AuthContext } from "./Components/Authentication/Authenticate";
+
 // layouts
 import RootLayout from "./Layouts/RootLayout";
 import RegisterPage from "./Components/RegisterForm/Register";
 // import UserInfo from "./Layouts/UserInfo";
 
+
 function PrivateRoute({ children, token }) {
   return token ? children : <Navigate to="/login" />;
 }
 function App() {
-  const [userData, setUserData] = useState(null); // State to store user data
+  // const [userData, setUserData] = useState(null); // State to store user data
+  // const [token, setToken] = useState(null);
 
-  const token = localStorage.getItem("token");
-  //check token
-  if (token) {
-      console.log("token",token);
-  }
+  const { token, userData,setToken } = useContext(AuthContext);
+  // const { isExpired,reEvaluateToken} = useJwt(token)
+  // console.log(token);
+
+
   // remember authentication
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -45,16 +48,16 @@ function App() {
           path="/login"
           element={
             <LoginForm
-              setUserData={setUserData}
+              
             />
           }
         />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<RootLayout userData={userData} />}>
+        <Route path="/" element={<RootLayout />}>
           <Route
             index
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 {<Home />}
               </PrivateRoute>
             }
@@ -62,7 +65,7 @@ function App() {
           <Route
             path="print"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <Print />
               </PrivateRoute>
             }
@@ -71,7 +74,7 @@ function App() {
           <Route
             path="history"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <History />
               </PrivateRoute>
             }
@@ -79,7 +82,7 @@ function App() {
           <Route
             path="payment"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <Payment />
               </PrivateRoute>
             }
@@ -87,7 +90,7 @@ function App() {
           <Route
             path="printers"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <Printers />
               </PrivateRoute>
             }
@@ -96,7 +99,7 @@ function App() {
           <Route
             path="createReport"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <CreateReport/>
               </PrivateRoute>
             }
@@ -104,7 +107,7 @@ function App() {
           <Route
             path="oldReport"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <OldReport/>
               </PrivateRoute>
             }
@@ -112,7 +115,7 @@ function App() {
             <Route
             path="adHome"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <AdHome/>
               </PrivateRoute>
             }
@@ -120,14 +123,13 @@ function App() {
           <Route
             path="configuration"
             element={
-              <PrivateRoute token={token}>
+              <PrivateRoute token={token} >
                 <Configuration/>
               </PrivateRoute>
             }
           />
 
         </Route>
-
       </>
     )
   );

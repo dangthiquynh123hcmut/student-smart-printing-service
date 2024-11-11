@@ -1,5 +1,9 @@
 import { Menu } from "antd";
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../Authentication/Authenticate";
+
+
 import {
   HomeOutlined,
   ClockCircleOutlined,
@@ -13,34 +17,36 @@ import {
 import "./MenuList.css";
 const {SubMenu} =Menu
 
-function MenuList({userData}) {
+function MenuList() {
+  const { token, userData } = useContext(AuthContext);
+
   // console.log(userData.admin)
   return (
     <Menu mode="inline" className="menu-bar">
-      {!userData?.admin && <Menu.Item key="home" icon={<HomeOutlined />}>
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="home" icon={<HomeOutlined />}>
         <NavLink to="/">Home</NavLink>
       </Menu.Item>}
 
-      {userData?.admin && <Menu.Item key="adHome" icon={<HomeOutlined />}>
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="adHome" icon={<HomeOutlined />}>
         <NavLink to="/">Trang Chủ</NavLink>
       </Menu.Item>}
 
 
-      {!userData?.admin && <Menu.Item key="print" icon={<PrinterOutlined />}>
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="print" icon={<PrinterOutlined />}>
         <NavLink to="/print">Print</NavLink>
       </Menu.Item>}
 
-      {!userData?.admin && <Menu.Item key="history" icon={<ClockCircleOutlined />}>
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="history" icon={<ClockCircleOutlined />}>
         <NavLink to="/history">History</NavLink>
       </Menu.Item>}
 
 
 
-      {!userData?.admin && <Menu.Item key="payment" icon={<DollarOutlined />}>
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="payment" icon={<DollarOutlined />}>
       <NavLink to="/payment">Thanh toán</NavLink>
       </Menu.Item>}
 
-      {userData?.admin && <Menu.Item key="printers" icon={<PrinterOutlined />}>
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="printers" icon={<PrinterOutlined />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
 
       </Menu.Item>}
@@ -48,7 +54,7 @@ function MenuList({userData}) {
       <NavLink to="/configuration">Cấu hình in</NavLink>
       </Menu.Item>} */}
 
-      {userData?.admin && <SubMenu key="report" className="submenu" icon={<BarChartOutlined />} title="Quản lí báo cáo">
+      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<BarChartOutlined />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined />}>
           <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
         </Menu.Item>

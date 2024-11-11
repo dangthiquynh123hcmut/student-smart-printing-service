@@ -16,9 +16,10 @@ import Notification from "./Notification/Notification.jsx";
 // import Sider from "antd/es/layout/Sider";
 
 const { Header, Sider } = Layout;
-function RootLayout({userData}) {
+function RootLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
   return (
     <div className="page-wrapper">
       <Header className="header">
@@ -35,7 +36,7 @@ function RootLayout({userData}) {
           icon={<BellOutlined />}
           onClick={() => setShowNotifications(!showNotifications)}
         />
-        <UserInfo userData={userData} />
+        <UserInfo/>
       </div>
       
       {showNotifications && (
@@ -50,7 +51,7 @@ function RootLayout({userData}) {
           collapsible
           trigger={null}
         >
-          <MenuList userData = {userData}/>
+          <MenuList/>
         </Sider>
 
         <main>
