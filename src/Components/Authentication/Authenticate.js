@@ -95,9 +95,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-
+        if(token){ // in case logout, token => null
         fetchUserData();
-        handleExpTime(token)
+        handleExpTime(token)}
 
     }, [token]);
 
