@@ -1,6 +1,17 @@
 .register-form{
     background: url("/src/Components/Assets/print.jpg") no-repeat;
-    background-size: cover;
-    background-position: left;
+    /* display: flex; */
+    /* flex-direction: row; */
+    background-size: 100%;
+    background-position: right;
+    
+    /* padding-left: 30%; */
     /* color: white */
+    /* background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat; */
 }
+/* .imageBK{
+
+    min-width: 500px;
+    min-width: 500px;
+    background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat;
+} */

@@ -25,7 +25,7 @@ const RegisterPage = () => {
     const { firstname, email, password, lastname,id,date,username } = formValues;
     console.log(formValues)
     try {
-      const response = await fetch("http://localhost:8080/users", {
+      const response = await fetch("https://projectprintmachine-backend.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const RegisterPage = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Email should have @hcmut.edu.vn"/>
         </Form.Item>
         <Form.Item
           label="username"
@@ -111,7 +111,7 @@ const RegisterPage = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="At least 8 characters"/>
         </Form.Item>
         <Form.Item
           label="Password"
@@ -125,7 +125,7 @@ const RegisterPage = () => {
             },
           ]}
         >
-        <Input.Password />
+        <Input.Password placeholder="At least 8 characters"/>
         </Form.Item>
         <Form.Item
           label="First Name"
@@ -176,6 +176,7 @@ const RegisterPage = () => {
           name="date"
           // value={formValues.date} // Bind value to state
           // onChange={handleChange}
+          
           rules={[
             {
               required: true,
@@ -183,7 +184,7 @@ const RegisterPage = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Ex: 2000-01-01"/>
         </Form.Item>
 
 
@@ -194,6 +195,7 @@ const RegisterPage = () => {
           </Button>
         </Form.Item>
       </Form>
+      {/* <div className="imageBK"></div> */}
     </div>
   );
 };

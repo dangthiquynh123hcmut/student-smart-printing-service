@@ -21,7 +21,8 @@ import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
-
+//decode token
+import { decodeToken } from "react-jwt";
 // layouts
 import RootLayout from "./Layouts/RootLayout";
 import RegisterPage from "./Components/RegisterForm/Register";
@@ -29,7 +30,17 @@ import RegisterPage from "./Components/RegisterForm/Register";
 
 
 function PrivateRoute({ children, token }) {
-  return token ? children : <Navigate to="/login" />;
+  const currentTime = Date.now(); // Current time in milliseconds
+  const timeOut= decodeToken(token)
+  console.log("timeout",timeOut.exp)
+  console.log("time current", Date.now())
+  console.log(token)
+  const timeUntilExpiry = timeOut.exp - currentTime/1000;
+  console.log("time remain",timeUntilExpiry)
+  return timeUntilExpiry > 0 ? children : <Navigate to="/login" />
+
+
+  // return token ? children : <Navigate to="/login" />;
 }
 function App() {
   // const [userData, setUserData] = useState(null); // State to store user data
