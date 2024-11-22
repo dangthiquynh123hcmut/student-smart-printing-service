@@ -81,6 +81,27 @@
     border-radius: 4px;
 }
 
+.status-box {
+    padding: 5px 10px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  
+.status-active {
+    color: green;
+    font-weight: bold;
+    background-color: lightgreen;
+    border: 2px solid green;
+}
+  
+.status-inactive {
+    color: red;
+    font-weight: bold;
+    background-color: rgb(255, 193, 193);
+    border: 2px solid red;
+}
+  
+
 .pagination {
     display: flex;
     justify-content: center;

@@ -1,7 +1,10 @@
 import "./Printers.css";
+import axios from "axios";
+import printerImage from './printer.jpg';
 import { useState, useEffect } from "react";
-import { Modal, Button, Input, Form, Switch, notification } from "antd";
+import { Modal, Button, Input, Form, notification, Switch } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
+import { postNewPrinterApi } from "../../../api/adminApi";
 
 function Printers() {
     const [printers, setPrinters] = useState([]);
@@ -9,20 +12,31 @@ function Printers() {
     const productsPerPage = 8;
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isMaintainModalVisible,setIsMaintainModalVisible] = useState(false)
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const token = localStorage.getItem("token");
     const [newPrinter, setNewPrinter] = useState({
-        status: true,
-        campus: "",
-        depart: "",
+        name: "",
+        manufacturer: "",
+        model: "",
+        description: "",
+        base: "",
+        building: "",
         floor: "",
-        paperNumber: 100,
-        inkRate: 100,
-        url: "",
+        blackWhiteInkStatus: 500,
+        colorInkStatus: 500,
+        a0paperStatus: 500,
+        a1paperStatus: 500,
+        a2paperStatus: 500,
+        a3paperStatus: 500,
+        a4paperStatus: 500,
+        a5paperStatus: 500,
+        capacity: 500,
+        warrantyDate: "",
     });
 
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-    const [editedPrinter, setEditedPrinter] = useState(null);
+    const [editedPrinter, setEditedPrinter] = useState({});
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -50,53 +64,44 @@ function Printers() {
     const handleCloseAddModal = () => {
         setIsAddModalVisible(false);
         setNewPrinter({
-            status: true,
-            campus: "",
-            depart: "",
+            name: "",
+            manufacturer: "",
+            model: "",
+            description: "",
+            base: "",
+            building: "",
             floor: "",
-            paperNumber: 100,
-            inkRate: 100,
-            url: "",
-        });
-    };
-    // add new printer
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewPrinter({
-            ...newPrinter,
-            [name]: value,
+            paperStatus: 500,
+            capacity: 500,
+            warrantyDate: "",
         });
     };
 
-    const handleStatusChange = (checked) => {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setNewPrinter((prev) => ({
             ...prev,
-            status: checked,
+            [name]: value,
         }));
     };
 
     const handleSubmitNewPrinter = () => {
-        if (!newPrinter.campus || !newPrinter.depart || !newPrinter.floor || !newPrinter.url) {
+        if (!newPrinter.base || !newPrinter.building || !newPrinter.floor || !newPrinter.name || !newPrinter.manufacturer || !newPrinter.model || !newPrinter.description) {
             notification.error({
                 message: "Vui lòng điền đầy đủ thông tin",
                 description: "Error",
             });
             return;
         }
-        fetch('https://6720e67198bbb4d93ca694f9.mockapi.io/printers', {
-            method: 'POST',
+
+        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-printer', JSON.stringify(newPrinter), {
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(newPrinter),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
+            .then((response) => {
+                const data = response.data;
                 setPrinters((prev) => [...prev, data]);
                 handleCloseAddModal();
                 notification.success({
@@ -104,62 +109,47 @@ function Printers() {
                     description: "Success",
                 });
             })
-            .catch(() => {
+            .catch((error) => {
                 notification.error({
                     message: "Không thể thêm máy in",
-                    description: "Error",
+                    description: `Lỗi: ${error.message}`,
                 });
             });
     };
 
-    //Edit printer info
     const showEditModal = () => {
-        setEditedPrinter(selectedProduct);
+        setEditedPrinter(selectedProduct || {});
         setIsEditModalVisible(true);
         handleCloseModal();
     };
 
-    const handleEditInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditedPrinter((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleEditStatusChange = (checked) => {
-        setEditedPrinter((prev) => ({
-            ...prev,
-            status: checked,
-        }));
-    };
-
     const handleSubmitEditPrinter = () => {
-        fetch(`https://6720e67198bbb4d93ca694f9.mockapi.io/printers/${editedPrinter.id}`, {
-            method: 'PUT',
+        const { id, status } = editedPrinter;
+
+        axios.post("https://projectprintmachine-backend.onrender.com/printers/changestatus", { id, status }, {
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(editedPrinter),
+                'Authorization': `Bearer ${token}`
+            }
         })
-            .then(response => response.json())
-            .then((data) => {
-                setPrinters((prev) => prev.map((printer) => (printer.id === data.id ? data : printer)));
+            .then((response) => {
+                const updatedPrinter = response.data;
+                setPrinters((prev) => prev.map((printer) => (printer.id === updatedPrinter.id ? updatedPrinter : printer)));
                 setIsEditModalVisible(false);
+                setIsEdit(!isEdit);
                 notification.success({
-                    message: "Cập nhật máy in thành công",
+                    message: "Cập nhật trạng thái máy in thành công",
                     description: "Success",
                 });
             })
-            .catch(() => {
+            .catch((error) => {
                 notification.error({
-                    message: "Không thể cập nhật máy in",
-                    description: "Error",
+                    message: "Không thể cập nhật trạng thái máy in",
+                    description: `Lỗi: ${error.message}`,
                 });
             });
     };
 
-    //delete printer
     const showDeleteConfirmation = () => {
         Modal.confirm({
             title: 'Bạn chắc chắn muốn xóa máy in?',
@@ -174,16 +164,13 @@ function Printers() {
             },
         });
     };
+
     const handleDeletePrinterConfirmed = () => {
-        fetch(`https://6720e67198bbb4d93ca694f9.mockapi.io/printers/${selectedProduct.id}`, {
-            method: 'DELETE',
+        axios.delete(`https://projectprintmachine-backend.onrender.com/printers/delete-printer?id=${selectedProduct.id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
             .then(() => {
                 setPrinters(prevPrinters => prevPrinters.filter(printer => printer.id !== selectedProduct.id));
                 notification.success({
@@ -192,10 +179,10 @@ function Printers() {
                 });
                 handleCloseModal();
             })
-            .catch(() => {
+            .catch((error) => {
                 notification.error({
                     message: "Không thể xóa máy in",
-                    description: "Error",
+                    description: `Lỗi: ${error.message}`,
                 });
             });
     };
@@ -204,30 +191,19 @@ function Printers() {
         showDeleteConfirmation();
     };
 
-    //maintain modal
-    const showMaintainModal = () => {
-        // setEditedPrinter(selectedProduct);
-        setIsMaintainModalVisible(true);
-        handleCloseModal();
-    };
-    const handleCloseMaintainModal = () =>{
-        setIsMaintainModalVisible(false);
-        setSelectedProduct(null);
-
-    }
-
-    //show info
-
     useEffect(() => {
-        fetch("https://6720e67198bbb4d93ca694f9.mockapi.io/printers")
-            .then((res) => res.json())
-            .then((printers) => {
-                setPrinters(printers);
+        axios.get("https://projectprintmachine-backend.onrender.com/printers/all-printers", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                setPrinters(res.data.result);
             })
             .catch((error) => {
                 console.error("Error fetching printers:", error);
             });
-    }, []);
+    }, [isEdit]);
 
     return (
         <div id="wrapper">
@@ -246,20 +222,18 @@ function Printers() {
             </div>
 
             <div className="printer-container">
-                {currentProducts.map((product) => (
+                {currentProducts && currentProducts.map((product) => (
                     <div
                         className={`printer ${product.status ? 'active' : 'inactive'}`}
                         key={product.id}
                         onClick={() => showModal(product)}
                     >
-                        <img src={product.url} alt="Ảnh máy in" />
-                        <h3>Máy in ID{product.id}</h3>
-                        <p>{product.campus}, tòa {product.depart}, tầng {product.floor}</p>
+                        <img src={printerImage} alt="Ảnh máy in" />
+                        <h3>Máy in {product.name}</h3>
+                        <p>{product.address.base}, tòa {product.address.building}, tầng {product.address.floor}</p>
                     </div>
                 ))}
             </div>
-
-
 
             <div className="pagination">
                 {Array.from({ length: totalPages }, (_, index) => (
@@ -278,62 +252,80 @@ function Printers() {
                 visible={isModalVisible}
                 onCancel={handleCloseModal}
                 footer={[
-                    <Button type="primary" key="maintain" onClick={showMaintainModal}>
-                        Bảo trì
-                    </Button>,
-
-                    <Button type="primary" key="back" onClick={handleDeletePrinter} danger>
-                        Xóa
-                    </Button>,
-                    <Button type="primary" key="edit" onClick={showEditModal} >
+                    <Button type="primary" key="edit" onClick={showEditModal}>
                         Chỉnh sửa
+                    </Button>,
+                    <Button type="primary" key="delete" onClick={handleDeletePrinter} danger>
+                        Xóa
                     </Button>,
                 ]}
             >
                 {selectedProduct && (
                     <>
-                        <img src={selectedProduct.url} alt="Ảnh máy in" style={{ width: "100%", height: "auto" }} />
+                        <img src={printerImage} alt="Ảnh máy in" style={{ width: "100%", height: "auto" }} />
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                alignItems: "center",
+                                margin: "10px 0",
+                            }}
+                        >
+                            <p style={{ margin: 0 }}>
+                                <span
+                                    className={`status-box ${selectedProduct.status ? "status-active" : "status-inactive"
+                                        }`}
+                                >
+                                    {selectedProduct.status ? "Đang hoạt động" : "Tạm dừng"}
+                                </span>
+                            </p>
+                        </div>
+
                         <p>
-                            <strong>Tình trạng: </strong>
-                            <span style={{ color: selectedProduct.status ? "green" : "red" }}>
-                                {selectedProduct.status ? "Đang hoạt động" : "Tạm dừng"}
-                            </span>
+                            <strong>Kiểu in:</strong> {selectedProduct.model}
                         </p>
                         <p>
-                            <strong>Vị trí:</strong> {selectedProduct.campus}, tòa {selectedProduct.depart}, tầng {selectedProduct.floor}
+                            <strong>Vị trí:</strong> {selectedProduct.address.base}, tòa {selectedProduct.address.building}, tầng {selectedProduct.address.floor}
                         </p>
-                        <p>
+                        {/* <p>
                             <strong>Số lượng giấy còn lại trong máy: </strong>
-                            <span style={{ color: selectedProduct.paperNumber <= 50 ? "red" : "green" }}>
-                                {selectedProduct.paperNumber}
+                            <span style={{ color: selectedProduct.paperStatus <= 50 ? "red" : "green" }}>
+                                {selectedProduct.paperStatus} 
                             </span>
+                        </p> */}
+                        <p>
+                            <strong>Mực in trắng đen: </strong> {selectedProduct.blackWhiteInkStatus}
                         </p>
                         <p>
-                            <strong>Phần trăm mực in trong máy: </strong>
-                            <span style={{ color: selectedProduct.inkRate <= 20 ? "red" : "green" }}>
-                                {selectedProduct.inkRate}%
-                            </span>
+                            <strong>Mực in màu: </strong> {selectedProduct.colorInkStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a0: </strong> {selectedProduct.a0paperStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a1: </strong> {selectedProduct.a1paperStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a2: </strong> {selectedProduct.a2paperStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a3: </strong> {selectedProduct.a3paperStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a4: </strong> {selectedProduct.a4paperStatus}
+                        </p>
+                        <p>
+                            <strong>Số giấy a5: </strong> {selectedProduct.a5paperStatus}
+                        </p>
+                        <p>
+                            <strong>Sức chứa: </strong> {selectedProduct.capacity}
+                        </p>
+                        <p>
+                            <strong>Ngày bảo hành: </strong> {new Date(selectedProduct.warrantyDate).toLocaleDateString("vi-VN")}
                         </p>
                     </>
                 )}
             </Modal>
-
-            <Modal
-            title="Bảo trì máy in"
-            visible={isMaintainModalVisible}
-            onCancel={handleCloseMaintainModal}
-            footer={[
-                <Button key="back" onClick={handleCloseMaintainModal}>
-                    Đóng
-                </Button>,
-                <Button key="submit" type="primary" onClick={() => setIsEditModalVisible(true)}>
-                    Bảo trì
-                </Button>,
-                <Button key="submit" type="primary" onClick={() => setIsEditModalVisible(true)}>
-                    Kích hoạt
-                </Button>,
-            ]}
-            />
 
             <Modal
                 title="Thêm Máy In"
@@ -349,26 +341,56 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Hoạt động">
-                        <Switch checked={newPrinter.status} onChange={handleStatusChange} />
+                    <Form.Item label="Tên máy in">
+                        <Input name="name" value={newPrinter.name} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Nhà sản xuất">
+                        <Input name="manufacturer" value={newPrinter.manufacturer} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Kiểu in">
+                        <Input name="model" value={newPrinter.model} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Mô tả">
+                        <Input name="description" value={newPrinter.description} onChange={handleInputChange} />
                     </Form.Item>
                     <Form.Item label="Vị trí">
-                        <Input name="campus" placeholder="Cơ sở 1, 2..." value={newPrinter.campus} onChange={handleInputChange} />
+                        <Input name="base" placeholder="CS1 hoặc CS2" value={newPrinter.base} onChange={handleInputChange} />
                     </Form.Item>
                     <Form.Item label="Tòa">
-                        <Input name="depart" placeholder="H6..." value={newPrinter.depart} onChange={handleInputChange} />
+                        <Input name="building" placeholder="H6, H1..." value={newPrinter.building} onChange={handleInputChange} />
                     </Form.Item>
                     <Form.Item label="Tầng">
                         <Input name="floor" placeholder="1, 2..." value={newPrinter.floor} onChange={handleInputChange} />
                     </Form.Item>
-                    <Form.Item label="Số lượng giấy còn lại">
-                        <Input type="number" name="paperNumber" value={newPrinter.paperNumber} onChange={handleInputChange} />
+                    <Form.Item label="Mực in trắng đen">
+                        <Input type="number" name="blackWhiteInkStatus" value={newPrinter.blackWhiteInkStatus} onChange={handleInputChange} />
                     </Form.Item>
-                    <Form.Item label="Phần trăm mực in">
-                        <Input type="number" name="inkRate" value={newPrinter.inkRate} onChange={handleInputChange} />
+                    <Form.Item label="Mực in màu">
+                        <Input type="number" name="colorInkStatus" value={newPrinter.colorInkStatus} onChange={handleInputChange} />
                     </Form.Item>
-                    <Form.Item label="URL Ảnh">
-                        <Input name="url" placeholder="Link..." value={newPrinter.url} onChange={handleInputChange} />
+                    <Form.Item label="Số lượng giấy a0">
+                        <Input type="number" name="a0paperStatus" value={newPrinter.a0paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy a1">
+                        <Input type="number" name="a1paperStatus" value={newPrinter.a1paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy a2">
+                        <Input type="number" name="a2paperStatus" value={newPrinter.a2paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy a3">
+                        <Input type="number" name="a3paperStatus" value={newPrinter.a3paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy a4">
+                        <Input type="number" name="a4paperStatus" value={newPrinter.a4paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy a5">
+                        <Input type="number" name="a5paperStatus" value={newPrinter.a5paperStatus} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Sức chứa">
+                        <Input type="number" name="capacity" value={newPrinter.capacity} onChange={handleInputChange} />
+                    </Form.Item>
+                    <Form.Item label="Ngày bảo hành">
+                        <Input type="date" name="warrantyDate" value={newPrinter.warrantyDate} onChange={handleInputChange} />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -387,30 +409,14 @@ function Printers() {
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Hoạt động">
-                        <Switch checked={editedPrinter?.status} onChange={handleEditStatusChange} />
-                    </Form.Item>
-                    <Form.Item label="Vị trí Campus">
-                        <Input name="campus" value={editedPrinter?.campus} onChange={handleEditInputChange} />
-                    </Form.Item>
-                    <Form.Item label="Tòa">
-                        <Input name="depart" value={editedPrinter?.depart} onChange={handleEditInputChange} />
-                    </Form.Item>
-                    <Form.Item label="Tầng">
-                        <Input name="floor" value={editedPrinter?.floor} onChange={handleEditInputChange} />
-                    </Form.Item>
-                    <Form.Item label="Số lượng giấy còn lại">
-                        <Input type="number" name="paperNumber" value={editedPrinter?.paperNumber} onChange={handleEditInputChange} />
-                    </Form.Item>
-                    <Form.Item label="Phần trăm mực in">
-                        <Input type="number" name="inkRate" value={editedPrinter?.inkRate} onChange={handleEditInputChange} />
-                    </Form.Item>
-                    <Form.Item label="URL Ảnh">
-                        <Input name="url" value={editedPrinter?.url} onChange={handleEditInputChange} />
+                    <Form.Item label="Trạng thái">
+                        <Switch
+                            checked={editedPrinter.status}
+                            onChange={(checked) => setEditedPrinter({ ...editedPrinter, status: checked })}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
-
         </div>
     );
 }
