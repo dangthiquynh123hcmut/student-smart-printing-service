@@ -25,7 +25,7 @@ const RegisterPage = () => {
     const { firstname, email, password, lastname,id,date,username } = formValues;
     console.log(formValues)
     try {
-      const response = await fetch("https://projectprintmachine-backend.onrender.com/users", {
+      const response = await fetch("http://localhost:8080/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const RegisterPage = () => {
         }}
         style={{
           maxWidth: 600,
-          backdropFilter: 'blur(10px)',
+          // backdropFilter: 'blur(10px)',
 
           
         }}
@@ -100,7 +100,7 @@ const RegisterPage = () => {
           <Input placeholder="Email should have @hcmut.edu.vn"/>
         </Form.Item>
         <Form.Item
-          label="username"
+          label="Username"
           name="username"
           // value={formValues.username} // Bind value to state
           // onChange={handleChange}

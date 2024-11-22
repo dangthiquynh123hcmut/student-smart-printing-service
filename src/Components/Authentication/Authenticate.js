@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     const refreshToken = async () =>{
         try {
-            const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/refresh",{
+            const response = await fetch("http://localhost:8080/auth/refresh",{
                 method: "POST",
                 headers : {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         const currentTime = Date.now(); // Current time in milliseconds
         const timeOut= decodeToken(token)
         console.log("timeout",timeOut.exp)
-        console.log("time current", Date.now())
+        console.log("time current", Date.now()/1000)
         console.log(token)
         const timeUntilExpiry = timeOut.exp - currentTime/1000;
         console.log("time remain",timeUntilExpiry)
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
             // const userDataHashed = await getMyInfoApi(token);
             // setUserData(userDataHashed);
             try{
-                const response = await fetch("https://projectprintmachine-backend.onrender.com/users/myInfo",{
+                const response = await fetch("http://localhost:8080/users/myInfo",{
                     method: 'GET',
                     headers: {
                       Authorization: `Bearer ${token}`,
@@ -96,8 +96,10 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if(token){ // in case logout, token => null
-        fetchUserData();
-        handleExpTime(token)}
+            fetchUserData();
+            handleExpTime(token)
+            console.log("check refresh token")
+        }
 
     }, [token]);
 

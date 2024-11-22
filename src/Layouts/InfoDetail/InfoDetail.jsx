@@ -11,7 +11,7 @@ function InfoDetail() {
   const logOutApi = async () =>{
     const token = localStorage.getItem("token")
     try{
-      const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/logout",{
+      const response = await fetch("http://localhost:8080/auth/logout",{
         method: "POST",
         header:{
           "Content-Type": "application/json",

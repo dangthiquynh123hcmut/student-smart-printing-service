@@ -30,6 +30,7 @@ import RegisterPage from "./Components/RegisterForm/Register";
 
 
 function PrivateRoute({ children, token }) {
+  if(!token) return <Navigate to="/login" />
   const currentTime = Date.now(); // Current time in milliseconds
   const timeOut= decodeToken(token)
   console.log("timeout",timeOut.exp)
