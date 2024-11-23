@@ -19,6 +19,7 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
+// import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
 //decode token
@@ -65,12 +66,21 @@ function App() {
           }
         />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<RootLayout />}>
-          <Route
+        {/* <Route path="/" element={<RootLayout />}> */}
+          {/* <Route
             index
             element={
               <PrivateRoute token={token} >
                 {<Home />}
+              </PrivateRoute>
+            }
+          /> */}
+          <Route path="/" element={<RootLayout userData={userData} />}>
+          <Route
+            index
+            element={
+              <PrivateRoute token={token}>
+                {userData?.result.role === "ADMIN" ? <AdHome /> : <Home />}
               </PrivateRoute>
             }
           />
@@ -91,6 +101,7 @@ function App() {
               </PrivateRoute>
             }
           />
+        
           <Route
             path="payment"
             element={
@@ -107,7 +118,14 @@ function App() {
               </PrivateRoute>
             }
           />
-
+            {/* <Route
+            path="updateUser"
+            element={
+              <PrivateRoute token={token} >
+                <UpdateUser />
+              </PrivateRoute>
+            }
+          /> */}
           <Route
             path="createReport"
             element={
@@ -124,14 +142,14 @@ function App() {
               </PrivateRoute>
             }
           />
-            <Route
+            {/* <Route
             path="adHome"
             element={
               <PrivateRoute token={token} >
                 <AdHome/>
               </PrivateRoute>
             }
-          />
+          /> */}
           <Route
             path="configuration"
             element={

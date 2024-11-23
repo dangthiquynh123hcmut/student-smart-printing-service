@@ -7,9 +7,10 @@ import {
   UploadOutlined,
   SettingOutlined,
   PrinterOutlined,
-  SearchOutlined
+  SearchOutlinedS
 } from "@ant-design/icons";
 import "./Print.css";
+import ChosenPrinter from "./ChosenPrinter";
 
 function Print() {
   const [files, setFiles] = useState([]);
@@ -108,46 +109,7 @@ function Print() {
   const handleDragOver = (event) => {
     event.preventDefault(); // Ngăn chặn hành vi mặc định
   };
-  // const [myCar, setMyCar] = useState("Volvo");
-  // const [selectedOption, setSelectedOption] = useState('1'); // Quản lý trạng thái của radio buttons
-
-  // const handleChange = (event) => {
-  //   setMyCar(event.target.value);
-  // };
-
-  // const handleOptionChange = (event) => {
-  //   setSelectedOption(event.target.value); // Cập nhật khi người dùng chọn radio button
-  // };
-
-  // const [showTable, setShowTable] = useState(false);
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [selectedPrinterId, setSelectedPrinterId] = useState(null);
-
-  // // Danh sách máy in giả định
-  // const printers = [
-  //   { id: 1, coSo: "Cơ sở 1", toaNha: "Tòa nhà A", tang: 1, trangThai: "Hoạt động", hangCho: 2 },
-  //   { id: 2, coSo: "Cơ sở 2", toaNha: "Tòa nhà B", tang: 3, trangThai: "Hoạt động", hangCho: 5 },
-  //   { id: 3, coSo: "Cơ sở 3", toaNha: "Tòa nhà C", tang: 2, trangThai: "Bảo trì", hangCho: 0 },
-  //   { id: 4, coSo: "Cơ sở 4", toaNha: "Tòa nhà D", tang: 2, trangThai: "Hoạt động", hangCho: 1 }
-  // ];
-
-  // Hàm toggle hiển thị bảng
-  // const toggleTable = () => {
-  //   setShowTable(!showTable);
-  // };
-  // // Hàm để lọc danh sách máy in theo tên tòa nhà
-  // // const filteredPrinters = printers.filter(printer =>
-  // //   printer.toaNha.toLowerCase().includes(searchTerm.toLowerCase())
-  // // );
-
-  // const handleSearchChange = (event) => {
-  //   setSearchTerm(event.target.value); // Cập nhật giá trị tìm kiếm khi người dùng nhập
-  // };
-
-  // // Hàm xử lý chọn máy in
-  // const handleSelectPrinter = (id) => {
-  //   setSelectedPrinterId(id); // Cập nhật máy in được chọn
-  // };
+  
   return (
     <div id="wrapper0">
       <div id="header">
@@ -329,11 +291,9 @@ function Print() {
         </div>
       </div>
 
-      <div>
+     
 
-      </div>
-
-      <div className="file-upload-container">
+      {/* <div className="file-upload-container">
         <div className="file-upload-header">
           <div className="file-image">
             <PrinterOutlined style={{ fontSize: '24px', color: '#000' }} />
@@ -346,7 +306,7 @@ function Print() {
                 style={{ fontSize: '24px', color: '#000', cursor: 'pointer' }}
                 onClick={toggleTable}
               /> */}
-            </div>
+            {/* </div>
 
           </div>
         </div>
@@ -391,12 +351,14 @@ function Print() {
 
           </div>
           <div className="button-container">
-            {/* <button className="preview-button" onClick={handleSubmit}>Print</button> */}
+             <button className="preview-button" onClick={handleSubmit}>Chọn máy in</button>
             <button className="done-button" onClick={handleSubmit}>Đăng Kí</button>
           </div>
         </div>
 
-      </div>
+      </div> */} 
+      <ChosenPrinter />
+
     </div>
   );
 }

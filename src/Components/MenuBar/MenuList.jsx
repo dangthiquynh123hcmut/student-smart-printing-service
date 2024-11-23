@@ -12,7 +12,8 @@ import {
   BarChartOutlined,
   EyeOutlined,
   FileAddOutlined,
-  SettingOutlined
+  SettingOutlined,
+  EditOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
 const {SubMenu} =Menu
@@ -45,6 +46,10 @@ function MenuList() {
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="payment" icon={<DollarOutlined />}>
       <NavLink to="/payment">Thanh toán</NavLink>
       </Menu.Item>}
+      {/* {!(userData?.result.role === "ADMIN") && <Menu.Item key="updateUser" icon={<EditOutlined />}>
+      <NavLink to="/updateUser">Chỉnh sửa thông tin</NavLink>
+      </Menu.Item>} */}
+
 
       {(userData?.result.role === "ADMIN") && <Menu.Item key="printers" icon={<PrinterOutlined />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
