@@ -257,7 +257,7 @@
 }
 
 
-.close-button {
+/* .close-button {
   padding: 10px 20px;
   background-color: #ff4d4f;
   color: white;
@@ -265,8 +265,9 @@
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
-}
+} */
 
-.close-button:hover {
+/* .close-button:hover {
   background-color: #ff7875;
-}
+} */
+

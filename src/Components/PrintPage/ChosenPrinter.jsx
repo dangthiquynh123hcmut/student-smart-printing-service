@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { PrinterOutlined } from "@ant-design/icons";
 import { GetAvailablePrinters } from "../../api/studentApi"; // Đường dẫn tệp API
 import "./ChosenPrinter.css";
+import printerImage from "../Admin/Printers/printer.jpg";
 
 function ChosenPrinter() {
   const [formData, setFormData] = useState({
@@ -13,8 +14,9 @@ function ChosenPrinter() {
   const [printers, setPrinters] = useState([]);
   const [error, setError] = useState("");
   // const [error, setError] = useState(null);
-  const [showPrinters, setShowPrinters] = useState(false);
+  // const [showPrinters, setShowPrinters] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedPrinter, setSelectedPrinter] = useState(null); // Trạng thái lưu máy in đã chọn
 
   const token = localStorage.getItem("token"); // Thay bằng token của bạn
   console.log(token);
@@ -33,31 +35,34 @@ function ChosenPrinter() {
     const floorNumber = tang.replace("Tầng ", ""); // Loại bỏ chữ "Tầng"
 
     try {
-      const response = await GetAvailablePrinters(token, coSo, toaNha, floorNumber);
+      const response = await GetAvailablePrinters(
+        token,
+        coSo,
+        toaNha,
+        floorNumber
+      );
 
-       setPrinters(response.result || []); // Ghi danh sách máy in
-      console.log("get api",response.result)
+      setPrinters(response.result || []); // Ghi danh sách máy in
+      console.log("get api", response.result);
 
-      setShowPrinters(true); // Hiển thị danh sách máy in
+      // setShowPrinters(true); // Hiển thị danh sách máy in
       setShowModal(true); // Hiển thị modal với danh sách máy in
       setError(""); // Xóa lỗi
-
     } catch (err) {
       console.error(err);
       setError("Không thể lấy danh sách máy in. Vui lòng thử lại.");
-      setShowPrinters(false);
+      // setShowPrinters(false);
       setPrinters([]); // Reset danh sách
     }
   };
-
- 
 
   const handlePrinterSelection = (printer) => {
     console.log("Máy in được chọn:", printer);
     alert(`Bạn đã chọn máy in: ${printer.name}`);
     setShowModal(false); // Đóng modal sau khi chọn máy in
+    setSelectedPrinter(printer.name); // Lưu tên máy in
   };
- 
+
   return (
     <div className="file-upload-container">
       <div className="file-upload-header">
@@ -131,10 +136,27 @@ function ChosenPrinter() {
             </form>
           </div>
         </div>
+        <div>
+          <p>
+            {selectedPrinter ? (
+              <>
+                Máy in đã chọn: <strong>{selectedPrinter}</strong>
+              </>
+            ) : (
+              <strong>Chưa chọn máy in cụ thể.</strong>
+            )}
+          </p>
+        </div>
+
         <div className="button-container">
           <button className="preview-button" onClick={handleSubmit}>
             Chọn máy in
           </button>
+          
+          <button className="send-button" >
+            In tệp
+          </button>
+      
         </div>
         {/* <div className="printer-list">
           {error && <p className="error-message">{error}</p>}
@@ -149,9 +171,7 @@ function ChosenPrinter() {
           )}
         </div> */}
 
-        
-
-{/* {showPrinters && (
+        {/* {showPrinters && (
 
 <div className="printer-list">
 
@@ -191,40 +211,75 @@ function ChosenPrinter() {
 
 )} */}
 
-{showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <button className="close-button" onClick={() => setShowModal(false)}>
-                            X
-                        </button>
-                        <div className="printer-list">
-                            {error && <p className="error-message">{error}</p>}
-                            {printers.length > 0 ? (
-                                <div className="printer-grid">
-                                    {printers.map((printer, index) => (
-                                        <div className="printer-card" key={index}>
-                                            <h3>{printer.name}</h3>
-                                            <p>Công suất: {printer.capacity}</p>
-                                            <p>Trạng thái mực đen: {printer.blackWhiteInkStatus}</p>
-                                            <p>Trạng thái mực màu: {printer.colorInkStatus}</p>
-                                            <p>Số lượng in chờ: {printer.printWaiting}</p>
-                                            <button
-                                                className="select-button"
-                                                onClick={() => handlePrinterSelection(printer)}
-                                            >
-                                                Chọn
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p>Không có máy in nào sẵn có.</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button
+                className="close-button"
+                onClick={() => setShowModal(false)}
+              >
+                X
+              </button>
 
+              <div className="printer-list">
+                {error && <p className="error-message">{error}</p>}
+                {printers.length > 0 ? (
+                  <div className="printer-grid">
+                    {printers.map((printer, index) => (
+                      <div className="printer-card" key={index}>
+                        {/* Thêm ảnh máy in */}
+                        <img
+                          src={printerImage}
+                          alt="Printer"
+                          className="printer-image"
+                        />
+
+                        <h3>Tên: {printer.name}</h3>
+                        <p>
+                          <strong>Lượng mực đen:</strong>{" "}
+                          {printer.blackWhiteInkStatus}
+                        </p>
+                        <p>
+                          <strong>Lượng mực màu:</strong>{" "}
+                          {printer.colorInkStatus}
+                        </p>
+                        <p>
+                          <strong>Số lượng chờ in:</strong>{" "}
+                          {printer.printWaiting}
+                        </p>
+                        <p>
+                          <strong>Số giấy A0:</strong> {printer.a0paperStatus}
+                        </p>
+                        <p>
+                          <strong>Số giấy A1:</strong> {printer.a1paperStatus}
+                        </p>
+                        <p>
+                          <strong>Số giấy A2:</strong> {printer.a2paperStatus}
+                        </p>
+                        <p>
+                          <strong>Số giấy A3:</strong> {printer.a3paperStatus}
+                        </p>
+                        <p>
+                          <strong>Số giấy A4:</strong> {printer.a4paperStatus}
+                        </p>
+                        <button
+                          className="select-button"
+                          onClick={() => handlePrinterSelection(printer)}
+                        >
+                          Chọn
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="no-printer-message">
+                    <p>Không có máy in nào ở vị trí này.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
