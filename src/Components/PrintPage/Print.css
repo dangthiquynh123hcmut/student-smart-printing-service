@@ -1,12 +1,13 @@
 #wrapper0 {
-    padding: 1vw 2vw ;
-    width: 85vw;
+  width: 100%;
+  padding: 20px;
+    
    
 }
 
-#header{
+/* #header{
   width: 100%;
-}
+} */
 .file-upload-container {
     width: 100%;
     margin: 20px auto;

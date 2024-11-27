@@ -2,7 +2,7 @@ import "./Printers.css";
 import axios from "axios";
 import printerImage from './printer.jpg';
 import { useState, useEffect } from "react";
-import { Modal, Button, Input, Form, notification, Switch } from "antd";
+import { Modal, Button, Input, Form, notification, Switch, Select } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import { postNewPrinterApi } from "../../../api/adminApi";
 
@@ -14,6 +14,7 @@ function Printers() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [isAddMaterial, setIsAddMaterial] = useState(false);
     const token = localStorage.getItem("token");
     const [newPrinter, setNewPrinter] = useState({
         name: "",
@@ -36,7 +37,22 @@ function Printers() {
     });
 
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [isAddMaterialModal, setIsAddMaterialModal] = useState(false);
     const [editedPrinter, setEditedPrinter] = useState({});
+    const [addedPrinter, setAddedPrinter] = useState({});
+    const { Option } = Select;
+    const paperType = [
+        { value: "A0Page", label: "A0" },
+        { value: "A1Page", label: "A1" },
+        { value: "A2Page", label: "A2" },
+        { value: "A3Page", label: "A3" },
+        { value: "A4Page", label: "A4" },
+        { value: "A5Page", label: "A5" },
+        { value: "COLOR_INK", label: "In Màu" },
+        { value: "BLACK_WHITE_INK", label: "Đen Trắng" }
+    ];
+    const [materialType, setMaterialType] = useState(null);
+    const [amount, setAmount] = useState(0);
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -120,7 +136,16 @@ function Printers() {
     const showEditModal = () => {
         setEditedPrinter(selectedProduct || {});
         setIsEditModalVisible(true);
-        handleCloseModal();
+        // handleCloseModal();
+    };
+    const showAddMaterialModal = () => {
+        setAddedPrinter(selectedProduct || {});
+        setIsAddMaterialModal(true);
+        setIsEditModalVisible(false);
+    };
+    const resetModal = () => {
+        setMaterialType(null); 
+        setAmount(0); 
     };
 
     const handleSubmitEditPrinter = () => {
@@ -141,6 +166,7 @@ function Printers() {
                     message: "Cập nhật trạng thái máy in thành công",
                     description: "Success",
                 });
+                setIsModalVisible(false);
             })
             .catch((error) => {
                 notification.error({
@@ -191,6 +217,37 @@ function Printers() {
         showDeleteConfirmation();
     };
 
+    const handleAddMaterialPrinter = () => {
+        const data = {
+            printerId: addedPrinter.id,
+            materialType: materialType,
+            amount: amount,
+        };
+
+        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-material', JSON.stringify(data), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+        })
+            .then((response) => {
+                notification.success({
+                    message: "Thêm vật liệu thành công",
+                    description: "Vật liệu đã được thêm vào máy in.",
+                });
+                resetModal();
+                setIsAddMaterialModal(false);
+                setIsModalVisible(false);
+                setIsAddMaterial(!isAddMaterial);
+            })
+            .catch((error) => {
+                notification.error({
+                    message: "Không thể thêm vật liệu",
+                    description: `Lỗi: ${error.message}`,
+                });
+            });
+    };
+
     useEffect(() => {
         axios.get("https://projectprintmachine-backend.onrender.com/printers/all-printers", {
             headers: {
@@ -203,7 +260,7 @@ function Printers() {
             .catch((error) => {
                 console.error("Error fetching printers:", error);
             });
-    }, [isEdit]);
+    }, [isEdit, isAddMaterial]);
 
     return (
         <div id="wrapper">
@@ -287,12 +344,6 @@ function Printers() {
                         <p>
                             <strong>Vị trí:</strong> {selectedProduct.address.base}, tòa {selectedProduct.address.building}, tầng {selectedProduct.address.floor}
                         </p>
-                        {/* <p>
-                            <strong>Số lượng giấy còn lại trong máy: </strong>
-                            <span style={{ color: selectedProduct.paperStatus <= 50 ? "red" : "green" }}>
-                                {selectedProduct.paperStatus} 
-                            </span>
-                        </p> */}
                         <p>
                             <strong>Mực in trắng đen: </strong> {selectedProduct.blackWhiteInkStatus}
                         </p>
@@ -398,18 +449,18 @@ function Printers() {
             <Modal
                 title="Chỉnh sửa Máy In"
                 visible={isEditModalVisible}
-                onCancel={() => setIsEditModalVisible(false)}
+                onCancel={handleCloseModal}
                 footer={[
-                    <Button key="back" onClick={() => setIsEditModalVisible(false)}>
-                        Đóng
+                    <Button key="addMaterial" onClick={showAddMaterialModal}>
+                        Thêm vật liệu
                     </Button>,
                     <Button key="submit" type="primary" onClick={handleSubmitEditPrinter}>
-                        Lưu
+                        Xong
                     </Button>,
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label="Trạng thái">
+                    <Form.Item label="Trạng thái hoạt động">
                         <Switch
                             checked={editedPrinter.status}
                             onChange={(checked) => setEditedPrinter({ ...editedPrinter, status: checked })}
@@ -417,6 +468,40 @@ function Printers() {
                     </Form.Item>
                 </Form>
             </Modal>
+            <Modal
+                title="Thêm vật liệu"
+                visible={isAddMaterialModal}
+                onCancel={() => setIsAddMaterialModal(false)}
+                footer={[
+                    <Button key="submit" type="primary" onClick={handleAddMaterialPrinter}>
+                        Xong
+                    </Button>,
+                ]}
+            >
+                <Form layout="vertical">
+                    <Form.Item label="Chọn vật liệu">
+                        <Select
+                            placeholder="A0"
+                            style={{ width: 200 }}
+                            onChange={value => setMaterialType(value)}
+                        >
+                            {paperType.map((type) => (
+                                <Option key={type.value} value={type.value}>
+                                    {type.label}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Số lượng giấy">
+                        <Input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                        />
+                    </Form.Item>
+                </Form>
+            </Modal>
+
         </div>
     );
 }

@@ -47,9 +47,14 @@ function RootLayout() {
       <Layout className="layout-sidebar">
         <Sider
           className="sidebar"
+          width={225} 
+          collapsedWidth={80}
           collapsed={collapsed}
           collapsible
           trigger={null}
+          style={{
+            transition: "all 0.3s ease",
+          }}
         >
           <MenuList/>
         </Sider>

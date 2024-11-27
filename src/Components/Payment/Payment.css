@@ -161,11 +161,16 @@
     padding: 10px;
     box-sizing: border-box;
 }
+.billing-history {
+    width: 100%;
+    overflow-x: auto; 
+}
 
 .billing-history table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    min-width: 800px;
 }
 
 .billing-history th,
@@ -180,10 +185,24 @@
 .billing-history th {
     background-color: #f1f1f1;
 }
+.billing-history tbody tr:hover {
+    background-color: #f7f7f7;
+}
+#billing-history-table {
+    overflow-x: auto; /* Thêm overflow cho container trực tiếp chứa bảng */
+    display: block; /* Bắt buộc để kích hoạt cuộn trong một số trường hợp */
+  }
 @media (max-width: 768px) {
     .payment-info,
     .payment-method {
         flex: 1 1 100%; 
         margin-bottom: 20px; 
+    }
+    .billing-history {
+        overflow-x: auto; 
+    }
+
+    .billing-history table {
+        min-width: 800px; 
     }
 }
