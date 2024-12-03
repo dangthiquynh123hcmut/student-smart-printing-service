@@ -3,6 +3,14 @@
     padding: 5px 5px 10px 30px;
     margin-top: 20px;
 }
+
+.back-button {
+    color: gray; 
+    text-decoration: none; 
+}
+.back-button:hover {
+    text-decoration: none;
+}
 .add-button {
     display: flex;           
     justify-content: flex-end; 
@@ -15,7 +23,7 @@
     background-color: #4CAF50; 
     color: white;              
     border: none;             
-    border-radius: 10px;       
+    border-radius: 4px;      
     padding: 8px 16px;        
     cursor: pointer;           
     transition: background-color 0.3s ease; 
@@ -47,6 +55,7 @@
     flex: 0 1 calc(25% - 15px); 
     margin-bottom: 20px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    /* border: solid 3px whitesmoke; */
     text-align: center; 
     /* border: 1px solid #a09f9f;  */
     border-radius: 10px; 

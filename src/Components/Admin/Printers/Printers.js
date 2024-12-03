@@ -4,7 +4,7 @@ import printerImage from './printer.jpg';
 import { useState, useEffect } from "react";
 import { Modal, Button, Input, Form, notification, Switch, Select } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import { postNewPrinterApi } from "../../../api/adminApi";
+import { postNewPrinterApi, editPrinterInfo, deletePrinter, addPrinterMaterial, getAllPrinter } from "../../../api/adminApi";
 
 function Printers() {
     const [printers, setPrinters] = useState([]);
@@ -110,12 +110,7 @@ function Printers() {
             return;
         }
 
-        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-printer', JSON.stringify(newPrinter), {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-        })
+        postNewPrinterApi(token, newPrinter)
             .then((response) => {
                 const data = response.data;
                 setPrinters((prev) => [...prev, data]);
@@ -151,12 +146,7 @@ function Printers() {
     const handleSubmitEditPrinter = () => {
         const { id, status } = editedPrinter;
 
-        axios.post("https://projectprintmachine-backend.onrender.com/printers/changestatus", { id, status }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
+        editPrinterInfo(token, id, status)
             .then((response) => {
                 const updatedPrinter = response.data;
                 setPrinters((prev) => prev.map((printer) => (printer.id === updatedPrinter.id ? updatedPrinter : printer)));
@@ -192,11 +182,7 @@ function Printers() {
     };
 
     const handleDeletePrinterConfirmed = () => {
-        axios.delete(`https://projectprintmachine-backend.onrender.com/printers/delete-printer?id=${selectedProduct.id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+        deletePrinter(token, selectedProduct.id)
             .then(() => {
                 setPrinters(prevPrinters => prevPrinters.filter(printer => printer.id !== selectedProduct.id));
                 notification.success({
@@ -224,12 +210,7 @@ function Printers() {
             amount: amount,
         };
 
-        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-material', JSON.stringify(data), {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-        })
+        addPrinterMaterial (token, data)
             .then((response) => {
                 notification.success({
                     message: "Thêm vật liệu thành công",
@@ -249,11 +230,7 @@ function Printers() {
     };
 
     useEffect(() => {
-        axios.get("https://projectprintmachine-backend.onrender.com/printers/all-printers", {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+        getAllPrinter(token)
             .then((res) => {
                 setPrinters(res.data.result);
             })

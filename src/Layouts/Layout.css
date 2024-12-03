@@ -1,9 +1,6 @@
 .page-wrapper{
   width: fit-content;
-
-
   min-width: 99vw;
-
 }
 .header {
   background-color: #367fa9;
@@ -83,4 +80,12 @@
 .layout-sidebar{
   display: flex;
   flex-direction: column;
+}
+.ant-layout {
+  width: 100% !important;
+}
+
+
+main {
+  width: 99%; 
 }
