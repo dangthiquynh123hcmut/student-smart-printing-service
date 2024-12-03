@@ -13,9 +13,12 @@ import {
   EyeOutlined,
   FileAddOutlined,
   SettingOutlined,
-  EditOutlined
+  EditOutlined,
+  DropboxOutlined,
+  FieldTimeOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
+import MenuItem from "antd/es/menu/MenuItem";
 const {SubMenu} =Menu
 
 function MenuList() {
@@ -67,6 +70,16 @@ function MenuList() {
           <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
         </Menu.Item>
       </SubMenu>}
+      {(userData?.result.role === "ADMIN")&&
+      <Menu.Item key="material-storage" icon={<DropboxOutlined style={{ fontSize: 22 }} />} > 
+        <NavLink to="/materialStorage"> Material Storage </NavLink>
+      </Menu.Item>
+      }
+      {(userData?.result.role === "ADMIN")&&
+      <Menu.Item key="material-history" icon={<FieldTimeOutlined style={{ fontSize: 22 }} />} > 
+        <NavLink to="/materialHistory"> Material History</NavLink>
+      </Menu.Item>
+      }
 
     </Menu>
   );

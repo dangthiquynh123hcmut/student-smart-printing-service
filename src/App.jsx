@@ -19,6 +19,8 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
+import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
+import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
@@ -142,6 +144,26 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+          path="materialStorage"
+          element={
+            <PrivateRoute token={token}>
+              <MaterialStorage/>
+            </PrivateRoute>
+          }          
+          />
+
+          <Route
+          path="materialHistory"
+          element={
+            <PrivateRoute token={token}>
+              <MaterialHistory/>
+            </PrivateRoute>
+          }          
+          />
+
+
+
             {/* <Route
             path="adHome"
             element={

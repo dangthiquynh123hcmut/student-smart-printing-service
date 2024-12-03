@@ -42,7 +42,7 @@
 //   const logOutApi = async () => {
 //     const token = localStorage.getItem("token");
 //     try {
-//       const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/logout", {
+//       const response = await fetch("http://localhost:8080/auth/logout", {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -84,7 +84,7 @@
 
 //     try {
 //       const response = await axios.put(
-//         `https://projectprintmachine-backend.onrender.com/users/${userData.result.id}`,
+//         `http://localhost:8080/users/${userData.result.id}`,
 //         formData,
 //         {
 //           headers: {

@@ -25,7 +25,7 @@ const RegisterPage = () => {
     const { firstname, email, password, lastname,id,date,username } = formValues;
     console.log(formValues)
     try {
-      const response = await fetch("https://projectprintmachine-backend.onrender.com/users", {
+      const response = await fetch("http://localhost:8080/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -110,7 +110,7 @@ function Printers() {
             return;
         }
 
-        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-printer', JSON.stringify(newPrinter), {
+        axios.post('http://localhost:8080/printers/add-printer', JSON.stringify(newPrinter), {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
@@ -151,7 +151,7 @@ function Printers() {
     const handleSubmitEditPrinter = () => {
         const { id, status } = editedPrinter;
 
-        axios.post("https://projectprintmachine-backend.onrender.com/printers/changestatus", { id, status }, {
+        axios.post("http://localhost:8080/printers/changestatus", { id, status }, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -192,7 +192,7 @@ function Printers() {
     };
 
     const handleDeletePrinterConfirmed = () => {
-        axios.delete(`https://projectprintmachine-backend.onrender.com/printers/delete-printer?id=${selectedProduct.id}`, {
+        axios.delete(`http://localhost:8080/printers/delete-printer?id=${selectedProduct.id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -224,7 +224,7 @@ function Printers() {
             amount: amount,
         };
 
-        axios.post('https://projectprintmachine-backend.onrender.com/printers/add-material', JSON.stringify(data), {
+        axios.post('http://localhost:8080/printers/add-material', JSON.stringify(data), {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
@@ -249,7 +249,7 @@ function Printers() {
     };
 
     useEffect(() => {
-        axios.get("https://projectprintmachine-backend.onrender.com/printers/all-printers", {
+        axios.get("http://localhost:8080/printers/all-printers", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
