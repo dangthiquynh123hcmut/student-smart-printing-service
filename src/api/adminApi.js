@@ -22,8 +22,8 @@ export const GetAllReportWarranty = async (token) => {
           Authorization: `Bearer ${token}`, 
         },
       });
-      console.log("get all",response)
-      return response.result; 
+      console.log("get all",response.data)
+      return response.data.result; 
     } catch (error) {
       console.error("Error fetching files:", error);
       throw error; 
@@ -39,7 +39,7 @@ export const GetAllReportWarranty = async (token) => {
       },
     });
     console.log("Data fetched successfully:", response.result);
-    return response.result; 
+    return response.data.result; 
   } catch (error) {
     if (error.response) {
       const { status, data } = error.response;

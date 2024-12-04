@@ -81,21 +81,14 @@
   display: flex;
   flex-direction: column;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/PhucBranch
+
 .ant-layout {
   width: 100% !important;
 }
 
-<<<<<<< HEAD
-main {
-  width: 99%; 
-}
-=======
 
 main {
   width: 99%; 
 }
->>>>>>> origin/PhucBranch
+
