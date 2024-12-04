@@ -1,9 +1,6 @@
 .page-wrapper{
   width: fit-content;
-
-
   min-width: 99vw;
-
 }
 .header {
   background-color: #367fa9;
@@ -84,11 +81,21 @@
   display: flex;
   flex-direction: column;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/PhucBranch
 .ant-layout {
   width: 100% !important;
 }
 
+<<<<<<< HEAD
 main {
   width: 99%; 
 }
+=======
+
+main {
+  width: 99%; 
+}
+>>>>>>> origin/PhucBranch

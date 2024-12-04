@@ -19,8 +19,12 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
+
 import File from "./Components/File/File";
 import Warranty from "./Components/Admin/Warranty/Warranty";
+
+import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
@@ -173,6 +177,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <Configuration/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="price-setting"
+            element={
+              <PrivateRoute token={token} >
+                <PriceSetting/>
               </PrivateRoute>
             }
           />

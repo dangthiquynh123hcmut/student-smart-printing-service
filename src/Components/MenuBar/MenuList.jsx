@@ -57,9 +57,18 @@ function MenuList() {
       {(userData?.result.role === "ADMIN") && <Menu.Item key="printers" icon={<PrinterOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
       </Menu.Item>}
+
       
       {(userData?.result.role === "ADMIN") && <Menu.Item key="warranty" icon={<SafetyOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/warranty">Bảo hành máy in</NavLink>
+      </Menu.Item>}
+      {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
+      <NavLink to="/configuration">Cấu hình in</NavLink>
+      </Menu.Item>} */}
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="priceSetting" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/price-setting">Cập nhật giá in</NavLink>
+
+
       </Menu.Item>}
 
       {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<BarChartOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">

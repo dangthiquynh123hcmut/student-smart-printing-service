@@ -28,7 +28,7 @@ function InfoDetail() {
   const logOutApi = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8080/auth/logout", {
+      const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ function InfoDetail() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/users/${userData.result.id}`,
+        `https://projectprintmachine-backend.onrender.com/users/${userData.result.id}`,
         formData,
         {
           headers: {
