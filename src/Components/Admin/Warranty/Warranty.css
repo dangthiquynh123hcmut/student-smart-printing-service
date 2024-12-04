@@ -1,0 +1,138 @@
+.warranty-container {
+   
+    margin-left:  20px;
+   
+    margin-right: 10px;
+    padding: 20px;
+    /* background-color: #f9f9f9; */
+    /* border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    font-family: Arial, sans-serif;
+  }
+  
+  .file-table {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: collapse;
+    
+    margin-top: 20px;
+  }
+  
+  .file-table th, .file-table td {
+    
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .file-table th {
+    text-align: center;
+    background-color: #5db7db;
+    color: white;
+  }
+  
+  .file-table tr:nth-child(even) {
+    text-align: center;
+    /* background-color: #f2f2f2; */
+  }
+  
+  .file-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  .file-table td {
+    text-align: center;
+  }
+  .loading {
+    margin-top: 5vh;
+    text-align: center;
+    color: #007bff;
+    font-size: 16px;
+  }
+  
+  .error {
+    text-align: center;
+    color: #ff4d4f;
+    font-size: 16px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .pagination-button {
+    background-color: #337ead;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 25px; 
+  }
+  
+  .pagination-button:disabled {
+    background-color: #070707;
+    cursor: not-allowed;
+  }
+  
+  /* .pagination-button:hover:not(:disabled) {
+    background-color: #285c82;
+  } */
+  
+  .pagination-info {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .pagination button:disabled {
+    background-color: #ffff;
+    cursor: not-allowed;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #395e94;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #54cf70, #37d996);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, #37d996, #54cf70);
+}
+
+.error {
+  text-align: center;
+  color: #ff4d4f;
+  font-size: 25px;
+  margin-top: 5vh;
+}
+.wrapper-error{
+  margin-top: 20px;
+  margin-left: 20px;
+}

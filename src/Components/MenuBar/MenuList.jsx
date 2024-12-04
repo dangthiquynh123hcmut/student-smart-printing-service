@@ -13,7 +13,9 @@ import {
   EyeOutlined,
   FileAddOutlined,
   SettingOutlined,
-  EditOutlined
+  FolderOutlined,
+  EditOutlined,
+  SafetyOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
 const {SubMenu} =Menu
@@ -32,6 +34,9 @@ function MenuList() {
         <NavLink to="/">Trang chủ</NavLink>
       </Menu.Item>}
 
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="file" icon={<FolderOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/file">Tệp</NavLink>
+      </Menu.Item>}
 
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="print" icon={<PrinterOutlined style={{ fontSize: 22 }} />}>
         <NavLink to="/print">In ấn</NavLink>
@@ -46,18 +51,16 @@ function MenuList() {
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="payment" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/payment">Thanh toán</NavLink>
       </Menu.Item>}
-      {/* {!(userData?.result.role === "ADMIN") && <Menu.Item key="updateUser" icon={<EditOutlined />}>
-      <NavLink to="/updateUser">Chỉnh sửa thông tin</NavLink>
-      </Menu.Item>} */}
+     
 
 
       {(userData?.result.role === "ADMIN") && <Menu.Item key="printers" icon={<PrinterOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
-
       </Menu.Item>}
-      {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
-      <NavLink to="/configuration">Cấu hình in</NavLink>
-      </Menu.Item>} */}
+      
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="warranty" icon={<SafetyOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/warranty">Bảo hành máy in</NavLink>
+      </Menu.Item>}
 
       {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<BarChartOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined style={{ fontSize: 22 }} />}>

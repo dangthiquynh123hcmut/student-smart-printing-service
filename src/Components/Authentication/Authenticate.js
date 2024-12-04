@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
     const refreshToken = async () =>{
         try {
-            const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/refresh",{
+            const response = await fetch("http://localhost:8080/auth/refresh",{
                 method: "POST",
                 headers : {
                     'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
             // const userDataHashed = await getMyInfoApi(token);
             // setUserData(userDataHashed);
             try{
-                const response = await fetch("https://projectprintmachine-backend.onrender.com/users/myInfo",{
+                const response = await fetch("http://localhost:8080/users/myInfo",{
                     method: 'GET',
                     headers: {
                       Authorization: `Bearer ${token}`,

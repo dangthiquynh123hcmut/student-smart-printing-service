@@ -19,6 +19,8 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
+import File from "./Components/File/File";
+import Warranty from "./Components/Admin/Warranty/Warranty";
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
@@ -85,6 +87,14 @@ function App() {
             }
           />
           <Route
+            path="file"
+            element={
+              <PrivateRoute token={token} >
+                <File />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="print"
             element={
               <PrivateRoute token={token} >
@@ -107,6 +117,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <Payment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="warranty"
+            element={
+              <PrivateRoute token={token} >
+                <Warranty />
               </PrivateRoute>
             }
           />

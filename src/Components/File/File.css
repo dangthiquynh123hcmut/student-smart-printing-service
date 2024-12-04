@@ -1,0 +1,127 @@
+.file-upload-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 97%;
+    margin: 20px;
+  }
+  
+  .file-upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .file-choose-button {
+    background-color: #008cba;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+  }
+  
+  .upload-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .uploaded-files {
+    margin: 10px;
+    
+  }
+  .uploaded-files h2 {
+    text-align: center;
+    
+  }
+  .uploaded-files p {
+    /* text-align: center; */
+    margin-top: 10px;
+  }
+  .file-dropzone {
+    margin-top: 1px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+    margin-right: 10px;
+  } 
+  
+  
+  .upload-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  .file-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+  
+  .file-table th, .file-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    text-align: center; 
+   
+  }
+  
+  .file-table th {
+    background-color: #f2f2f2;
+    /* text-align: center; Căn giữa tên các cột */
+  }
+  .file-table td { 
+    vertical-align: middle; /* Đảm bảo nội dung căn giữa theo chiều dọc */
+  }
+  
+   .file-actions {
+    display: flex;
+    gap: 10px; 
+  }
+  .action-button {
+    display: inline-block; /* Đặt nút nằm ngang */
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-button {
+    background-color: #ff4d4f;
+    color: white;
+  }
+  
+  .print-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .file-table th:first-child, .file-table td:first-child {
+    text-align: center; /* Căn giữa nội dung cột STT */
+    width: 50px; /* Đặt độ rộng hợp lý cho cột STT */
+  }
+  
+  .file-search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .search-input {
+    padding: 8px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

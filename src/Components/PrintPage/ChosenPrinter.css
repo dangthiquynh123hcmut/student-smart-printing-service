@@ -123,11 +123,11 @@
 
 .button-container {
     display: flex;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .preview-button {
-    margin-right: 30px;
+    margin-right: 40px;
     background-color: #4caf50; 
     color: white; 
     font-size: 14px; 
@@ -162,6 +162,7 @@
     border-radius: 5px; 
     cursor: pointer; 
     transition: all 0.3s ease; 
+    margin-right: 40px;
   }
   
   .send-button:hover {
@@ -172,6 +173,25 @@
   .send-button:active {
     background-color: #082a9c; 
     transform: scale(0.95); 
+  }
+  .quantity-input-container {
+    display: flex;
+    flex-direction: column; /* Sắp xếp label và input theo cột */
+    margin-bottom: 20px; /* Khoảng cách giữa các ô input */
+  }
+  
+  .quantity-input-container label {
+    font-size: 16px; /* Kích thước chữ của label */
+    margin-bottom: 8px; /* Khoảng cách giữa label và select */
+    color: #333; /* Màu chữ */
+  }
+  
+  .quantity-input-container select {
+    padding: 10px; /* Nội dung bên trong select */
+    font-size: 14px; /* Kích thước chữ trong select */
+    border: 1px solid #ccc; /* Viền */
+    border-radius: 4px; /* Góc bo tròn */
+    background-color: #fff; /* Màu nền */
   }
   
   

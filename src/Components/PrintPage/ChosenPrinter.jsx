@@ -3,8 +3,9 @@ import { PrinterOutlined } from "@ant-design/icons";
 import { GetAvailablePrinters } from "../../api/studentApi"; // Đường dẫn tệp API
 import "./ChosenPrinter.css";
 import printerImage from "../Admin/Printers/printer.jpg";
+import { notification } from "antd";
 
-function ChosenPrinter() {
+function ChosenPrinter({ onPrinterSelect }) {
   const [formData, setFormData] = useState({
     coSo: "CS1",
     toaNha: "A1",
@@ -13,12 +14,10 @@ function ChosenPrinter() {
 
   const [printers, setPrinters] = useState([]);
   const [error, setError] = useState("");
-  // const [error, setError] = useState(null);
-  // const [showPrinters, setShowPrinters] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedPrinter, setSelectedPrinter] = useState(null); // Trạng thái lưu máy in đã chọn
 
-  const token = localStorage.getItem("token"); // Thay bằng token của bạn
+  const token = localStorage.getItem("token"); 
   console.log(token);
 
   const handleInputChange = (e) => {
@@ -58,11 +57,21 @@ function ChosenPrinter() {
 
   const handlePrinterSelection = (printer) => {
     console.log("Máy in được chọn:", printer);
-    alert(`Bạn đã chọn máy in: ${printer.name}`);
+
+    // Hiển thị thông báo thành công
+    notification.success({
+      message: "Chọn máy in thành công",
+      description: `Bạn đã chọn máy in: ${printer.name}`,
+
+      placement: "topRight", // Vị trí hiển thị thông báo
+    });
+    onPrinterSelect(printer.id); // Gửi idPrinter qua callback
+
     setShowModal(false); // Đóng modal sau khi chọn máy in
     setSelectedPrinter(printer.name); // Lưu tên máy in
   };
 
+  
   return (
     <div className="file-upload-container">
       <div className="file-upload-header">
@@ -74,56 +83,49 @@ function ChosenPrinter() {
 
       <div id="wrapper1">
         <div className="input-group">
-          <div className="quantity-input-container">
-            <form>
-              <label>
-                Cơ sở
-                <select
-                  name="coSo"
-                  className="node"
-                  value={formData.coSo}
-                  onChange={handleInputChange}
-                >
-                  <option value="CS1">CS1</option>
-                  <option value="CS2">CS2</option>
-                </select>
-              </label>
-            </form>
+          <div className="field-container">
+            <label className="form-label">Cơ sở</label>
+            <select
+              name="coSo"
+              className="form-select"
+              value={formData.coSo}
+              onChange={handleInputChange}
+            >
+              <option value="CS1">CS1</option>
+              <option value="CS2">CS2</option>
+            </select>
           </div>
-          <div className="quantity-input-container">
-            <form>
-              <label>
-                Tòa nhà
-                <select
-                  name="toaNha"
-                  className="node"
-                  value={formData.toaNha}
-                  onChange={handleInputChange}
-                >
-                  <option value="H1">H1</option>
-                  <option value="H2">H2</option>
-                  <option value="H3">H3</option>
-                  <option value="H6">H6</option>
-                  <option value="A1">A1</option>
-                  <option value="A2">A2</option>
-                  <option value="A3">A3</option>
-                  <option value="A4">A4</option>
-                  <option value="A5">A5</option>
-                </select>
-              </label>
-            </form>
+
+          <div className="field-container">
+            <label className="form-label">Tòa nhà</label>
+            <select
+              name="toaNha"
+              className="form-select"
+              value={formData.toaNha}
+              onChange={handleInputChange}
+            >
+              <option value="H1">H1</option>
+              <option value="H2">H2</option>
+              <option value="H3">H3</option>
+              <option value="H6">H6</option>
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="A3">A3</option>
+              <option value="A4">A4</option>
+              <option value="A5">A5</option>
+            </select>
           </div>
-          <div className="quantity-input-container">
-            <form>
-              <label>
-                Tầng
-                <select
-                  name="tang"
-                  className="node"
-                  value={formData.tang}
-                  onChange={handleInputChange}
-                >
-                  <option value="Tầng 1">Tầng 1</option>
+
+          
+          <div className="field-container">
+            <label className="form-label">Tầng</label>
+            <select
+              name="tang"
+              className="form-select"
+              value={formData.tang}
+              onChange={handleInputChange}
+            >
+             <option value="Tầng 1">Tầng 1</option>
                   <option value="Tầng 2">Tầng 2</option>
                   <option value="Tầng 3">Tầng 3</option>
                   <option value="Tầng 4">Tầng 4</option>
@@ -131,9 +133,7 @@ function ChosenPrinter() {
                   <option value="Tầng 6">Tầng 6</option>
                   <option value="Tầng 7">Tầng 7</option>
                   <option value="Tầng 8">Tầng 8</option>
-                </select>
-              </label>
-            </form>
+            </select>
           </div>
         </div>
         <div>
@@ -152,64 +152,9 @@ function ChosenPrinter() {
           <button className="preview-button" onClick={handleSubmit}>
             Chọn máy in
           </button>
-          
-          <button className="send-button" >
-            In tệp
-          </button>
-      
+
+          {/* <button className="send-button">In tệp</button> */}
         </div>
-        {/* <div className="printer-list">
-          {error && <p className="error-message">{error}</p>}
-          {printers.length > 0 && (
-            <ul>
-              {printers.map((printer, index) => (
-                <li key={index} onClick={() => handlePrinterSelection(printer)}>
-                  {printer.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div> */}
-
-        {/* {showPrinters && (
-
-<div className="printer-list">
-
-    {error && <p className="error-message">{error}</p>}
-
-    {printers.length > 0 ? (
-
-        <ul>
-
-            {printers.map((printer, index) => (
-
-                <li key={index} onClick={() => handlePrinterSelection(printer)}>
-
-                    <p>Tên máy in: {printer.name}</p>
-
-                    <p>Công suất: {printer.capacity}</p>
-
-                    <p>Trạng thái mực đen: {printer.blackWhiteInkStatus}</p>
-
-                    <p>Trạng thái mực màu: {printer.colorInkStatus}</p>
-
-                    <p>Số lượng in chờ: {printer.printWaiting}</p>
-
-                </li>
-
-            ))}
-
-        </ul>
-
-    ) : (
-
-        <p>Không có máy in nào sẵn có.</p>
-
-    )}
-
-</div>
-
-)} */}
 
         {showModal && (
           <div className="modal-overlay">

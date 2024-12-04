@@ -1,77 +1,230 @@
+// import { NavLink } from "react-router-dom";
+// import React from "react";
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import {
+
+//   SettingOutlined,
+// } from "@ant-design/icons";
+// import "./Print.css";
+// import ChosenPrinter from "./ChosenPrinter";
+// import File from "../File/File";
+
+// function Print() {
+//   const [files, setFiles] = useState([]);
+//   const [selectedFile, setSelectedFile] = useState("");
+//   const [uploadTriggered, setUploadTriggered] = useState(false);
+//   const [formData, setFormData] = useState({
+//     copiesNum: 1,
+//     typeOfPage: "A4Page",
+//     printColor: "true",
+//     sideOfPage: "false"
+//   });
+//   const handleFileChange = (event) => {
+//     const selectedFiles = Array.from(event.target.files); // Chuyển đổi đối tượng FileList thành mảng
+//     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // Thêm tệp mới vào mảng
+//   };
+
+//   const handleRemoveFile = (fileToRemove) => {
+//     setFiles((prevFiles) => prevFiles.filter((file) => file !== fileToRemove)); // Xóa tệp khỏi mảng
+//   };
+
+//   useEffect(() => {
+//     async function fetchFiles() {
+//       if (uploadTriggered) {
+//         try {
+//           const response = await axios.get(
+//             "https://671d178809103098807c3d9c.mockapi.io/api/uploadfiles"
+//           );
+//           const lastFile = response.data[response.data.length - 1]; // Get only the last element
+//           setFiles([lastFile]);
+//         } catch (error) {
+//           console.error("Error fetching files:", error);
+//         }
+//       }
+//     }
+//     fetchFiles();
+//   }, []);
+
+//   const handleInputChange = (event) => {
+//     const { name, value } = event.target;
+//     setFormData((prevState) => ({
+//       ...prevState,
+//       [name]: value,
+//     }));
+//   };
+//   // Submit configuration to MockAPI
+//   const handleSubmit = async () => {
+//     if (!selectedFile) {
+//       alert("Please select a file to configure.");
+//       return;
+//     }
+
+//     const configurationData = {
+//       fileId: selectedFile,
+//       ...formData,
+//     };
+
+//     try {
+//       await axios.post(
+//         "https://671d178809103098807c3d9c.mockapi.io/api/configureFiles",
+//         configurationData
+//       );
+//       alert("Configuration saved successfully!");
+//     } catch (error) {
+//       console.error("Error saving configuration:", error);
+//       alert("Failed to save configuration.");
+//     }
+//   };
+
+//   const handleDrop = (event) => {
+//     event.preventDefault();
+//     const droppedFiles = Array.from(event.dataTransfer.files);
+//     setFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // Thêm tệp được kéo thả vào mảng
+//   };
+
+//   const handleDragOver = (event) => {
+//     event.preventDefault(); // Ngăn chặn hành vi mặc định
+//   };
+
+//   return (
+//     <div id="wrapper0">
+//       <div id="header">
+//         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
+//         <h1>In ấn</h1>
+//       </div>
+
+//       <div className="file-upload-container">
+//         <div className="file-upload-header">
+//           <div className="file-image">
+//             <SettingOutlined style={{ fontSize: "24px", color: "#000" }} />
+//             <h2>Cấu hình in</h2>
+//           </div>
+//         </div>
+
+//         <div id="wrapper1">
+//           {/* Dropdown to select file */}
+//           <div className="chooseFile">
+
+//           </div>
+
+//           {/* Configuration form */}
+//           <div className="input-group">
+//             <div className="quantity-input-container">
+//               <label className="quantity-input-label">Số lượng bản in</label>
+//               <input
+//                 type="number"
+//                 name="copiesNum"
+//                 value={formData.copiesNum}
+//                 onChange={handleInputChange}
+//                 className="quantity-input"
+//               />
+//             </div>
+//             <div className="quantity-input-container">
+//               <label>Kích thước trang</label>
+//               <select
+//                 name="typeOfPage" // Add this attribute
+//                 className="node"
+//                 value={formData.typeOfPage}
+//                 onChange={handleInputChange}
+//               >
+//                 <option value="A0Page">A0</option>
+//                 <option value="A1Page">A1</option>
+//                 <option value="A2Page">A2</option>
+//                 <option value="A3Page">A3</option>
+//                 <option value="A4Page">A4</option>
+//                 <option value="A5Page">A5</option>
+//               </select>
+//             </div>
+//           </div>
+
+//           {/* Additional configuration fields */}
+//           <div className="input-group">
+//             <div className="quantity-input-container">
+//               <label>Kiểu in</label>
+//               <select
+//                 name="printType"
+//                 className="node"
+//                 value={formData.printType}
+//                 onChange={handleInputChange}
+//               >
+//                 <option value="false">In 1 mặt</option>
+//                 <option value="true">In 2 mặt</option>
+
+//               </select>
+//             </div>
+//             <div className="quantity-input-container">
+//               <label>Loại in</label>
+//               <select
+//                 name="printColor"
+//                 className="node"
+//                 value={formData.printColor}
+//                 onChange={handleInputChange}
+//               >
+//                 <option value="true">In màu</option>
+//                 <option value="false">In đen trắng</option>
+//               </select>
+//             </div>
+//           </div>
+
+//         </div>
+//       </div>
+
+//       <ChosenPrinter />
+
+//     </div>
+//   );
+// }
+// export default Print;
+
 import { NavLink } from "react-router-dom";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  FolderOutlined,
-  UploadOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { SettingOutlined } from "@ant-design/icons";
 import "./Print.css";
 import ChosenPrinter from "./ChosenPrinter";
+import { useLocation, useNavigate } from "react-router-dom";
+import { implementPrint } from "../../api/studentApi";
+import { notification } from "antd";
+import { AuthContext } from "../Authentication/Authenticate";
+import { useContext } from "react";
+
 
 function Print() {
   const [files, setFiles] = useState([]);
+  const [file1, setFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState("");
   const [uploadTriggered, setUploadTriggered] = useState(false);
+  const [selectedPrinterId, setSelectedPrinterId] = useState(null);
+  const { userData } = useContext(AuthContext);
+
+  const handlePrinterSelect = (idPrinter) => {
+    setSelectedPrinterId(idPrinter);
+    console.log("Selected Printer ID:", idPrinter); // Xử lý hoặc sử dụng `idPrinter` tại đây
+  };
+  const location = useLocation();
+  const navigate = useNavigate();
+  const file = location.state?.file;
+  const token = localStorage.getItem("token");
+
   const [formData, setFormData] = useState({
-    printCopies: 1,
-    scale: 100,
-    pagesPerSheet: 1,
-    paperSize: "A4",
-    printType: "In trắng đen",
-    orientation: "In dọc",
-    layout: "1",
-    coSo: "CS1", // New field
-    toaNha: "A1", // New field
-    tang: "Tầng 1",
+    copiesNum: 1,
+    typeOfPage: "A4Page",
+    printColor: "true",
+    sideOfPage: "false",
   });
+
   const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files); // Chuyển đổi đối tượng FileList thành mảng
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // Thêm tệp mới vào mảng
-  };
-
-  const handleRemoveFile = (fileToRemove) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file !== fileToRemove)); // Xóa tệp khỏi mảng
-  };
-
-  const handleUpload = async () => {
-    const uploadData = {
-      files: files.map((file) => ({
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      })),
-    };
-    try {
-      const response = await axios.post(
-        "https://671d178809103098807c3d9c.mockapi.io/api/uploadfiles",
-        uploadData
-      );
-      setUploadTriggered("true");
-      alert("Tải lên thành công: " + JSON.stringify(response.data));
-    } catch (error) {
-      console.error("Đã xảy ra lỗi khi tải lên: ", error);
-      alert("Tải lên thất bại");
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
 
-  useEffect(() => {
-    async function fetchFiles() {
-      if (uploadTriggered) {
-        try {
-          const response = await axios.get(
-            "https://671d178809103098807c3d9c.mockapi.io/api/uploadfiles"
-          );
-          const lastFile = response.data[response.data.length - 1]; // Get only the last element
-          setFiles([lastFile]);
-        } catch (error) {
-          console.error("Error fetching files:", error);
-        }
-      }
-    }
-    fetchFiles();
-  }, []);
+  const handleRemoveFile = () => {
+    setFile(null); // Xóa file đã chọn
+    navigate("/file"); // Điều hướng lại sang trang File
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -80,38 +233,52 @@ function Print() {
       [name]: value,
     }));
   };
-  // Submit configuration to MockAPI
+   const userId = userData.result.id;
+   console.log("user data", userData)
+
   const handleSubmit = async () => {
-    if (!selectedFile) {
-      alert("Please select a file to configure.");
+    if (!file) {
+      notification.success({
+        message: "Bạn vui lòng chọn máy in và tài liệu cần in trước",
+        // description: `Bạn đã chọn máy in: ${printer.name}`,
+  
+        placement: "topRight", // Vị trí hiển thị thông báo
+      });
       return;
     }
 
-    const configurationData = {
-      fileId: selectedFile,
-      ...formData,
+    const printData = {
+      idUser: userId, 
+      idPrinter: selectedPrinterId, 
+      idFile: file.id, 
+      copiesNum: formData.copiesNum,
+      typeOfPage: formData.typeOfPage,
+      printColor: formData.printColor,
+      sideOfPage: formData.sideOfPage,
     };
 
     try {
-      await axios.post(
-        "https://671d178809103098807c3d9c.mockapi.io/api/configureFiles",
-        configurationData
-      );
-      alert("Configuration saved successfully!");
+      console.log("printData", printData)
+      const response = await implementPrint(printData, token); // Gọi API
+      // console.log("In tập tin thành công:", response);
+      // alert("In tập tin thành công!");
+      notification.success({
+        message: response,
+        // description: `Bạn đã chọn máy in: ${printer.name}`,
+  
+        placement: "topRight", // Vị trí hiển thị thông báo
+      });
+
     } catch (error) {
-      console.error("Error saving configuration:", error);
-      alert("Failed to save configuration.");
+      console.error("Lỗi khi in tập tin:", error);
+      // alert("Không thể in tập tin. Vui lòng thử lại!");
+      notification.error({
+        message: "Error",
+        description: error.message || "Something went wrong",
+        placement: "topRight",
+      });
+      
     }
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const droppedFiles = Array.from(event.dataTransfer.files);
-    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // Thêm tệp được kéo thả vào mảng
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định
   };
 
   return (
@@ -120,64 +287,8 @@ function Print() {
         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>In ấn</h1>
       </div>
-
-      <div className="file-upload-container">
-        {/* Phần header phía trên */}
-        <div className="file-upload-header">
-          <div className="file-image">
-            <FolderOutlined style={{ fontSize: "24px", color: "#000" }} />
-            <h2>Tải tập tin</h2>
-          </div>
-          <div className="file-actions">
-            <label className="file-choose-button">
-              Chọn tệp
-              <input
-                type="file"
-                multiple // Cho phép chọn nhiều tệp
-                onChange={handleFileChange}
-                style={{ display: "none" }} // Ẩn nút input file
-              />
-            </label>
-            <button
-              onClick={handleUpload}
-              className="upload-button"
-              disabled={files.length === 0} // Chỉ kích hoạt nút khi đã chọn tệp
-            >
-              Tải lên
-            </button>
-          </div>
-        </div>
-
-        {/* Phần khung kéo thả phía dưới */}
-        <div
-          className="file-dropzone"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-        >
-          <UploadOutlined style={{ fontSize: "24px", color: "#08c" }} />
-          {files.length > 0 ? (
-            <div className="file-info">
-              {files.map((file) => (
-                <div key={file.name} className="file-item">
-                  <span>{file.name}</span>
-                  <button
-                    onClick={() => handleRemoveFile(file)}
-                    style={{
-                      marginLeft: "10px",
-                      color: "red",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Xóa
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>Kéo thả tệp tin vào đây hoặc chọn tệp ở trên</p>
-          )}
-        </div>
-      </div>
+      <ChosenPrinter onPrinterSelect={handlePrinterSelect} />
+      {/* {selectedPrinterId && <p>Máy in đã chọn có ID: {selectedPrinterId}</p>} */}
 
       <div className="file-upload-container">
         <div className="file-upload-header">
@@ -188,131 +299,89 @@ function Print() {
         </div>
 
         <div id="wrapper1">
-          {/* Dropdown to select file */}
-          <div className="chooseFile">
-            <label>
-              Chọn file để in
-              <select
-                className="node"
-                value={selectedFile}
-                onChange={(e) => setSelectedFile(e.target.value)}
-              >
-                <option value="">Select a file</option>
-                {files.map((file) => (
-                  <option key={file.id} value={file.id}>
-                    {file.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <div className="choosen-file">
+            {file ? (
+              <div className="file-info">
+                <p>
+                  <strong>Tên file in:</strong> {file.name}
+                </p>
+
+                <p>
+                  <strong>Kích thước:</strong>{" "}
+                  {(file.fileSize / 1024).toFixed(2)} KB
+                </p>
+
+                <button onClick={handleRemoveFile} className="remove-button">
+                  X
+                </button>
+              </div>
+            ) : (
+              <p>Không có file nào được chọn để in.</p>
+            )}
           </div>
 
-          {/* Configuration form */}
           <div className="input-group">
-            <div className="quantity-input-container">
-              <label className="quantity-input-label">Số lượng bản in</label>
+            <div className="field-container">
+              <label className="form-label">Số lượng bản in</label>
               <input
                 type="number"
-                name="printCopies"
-                value={formData.printCopies}
+                name="copiesNum"
+                value={formData.copiesNum}
                 onChange={handleInputChange}
-                className="quantity-input"
+                className="form-input"
               />
             </div>
-            <div className="quantity-input-container">
-              <label className="quantity-input-label">Tỉ lệ</label>
-              <input
-                type="number"
-                name="scale"
-                value={formData.scale}
-                onChange={handleInputChange}
-                className="quantity-input"
-              />
-            </div>
-            <div className="quantity-input-container">
-              <label className="quantity-input-label">Số trang mỗi tờ</label>
-              <input
-                type="number"
-                name="pagesPerSheet"
-                value={formData.pagesPerSheet}
-                onChange={handleInputChange}
-                className="quantity-input"
-              />
-            </div>
-          </div>
 
-          {/* Additional configuration fields */}
-          <div className="input-group">
-            <div className="quantity-input-container">
-              <label>Kích thước trang</label>
+            <div className="field-container">
+              <label className="form-label">Kích thước trang</label>
               <select
-                name="paperSize" // Add this attribute
-                className="node"
-                value={formData.paperSize}
+                name="typeOfPage"
+                className="form-select"
+                value={formData.typeOfPage}
                 onChange={handleInputChange}
               >
-                <option value="A4">A4</option>
-                <option value="A3">A3</option>
-                <option value="A2">A2</option>
+                <option value="A0Page">A0</option>
+                <option value="A1Page">A1</option>
+                <option value="A2Page">A2</option>
+                <option value="A3Page">A3</option>
+                <option value="A4Page">A4</option>
+                <option value="A5Page">A5</option>
               </select>
             </div>
 
-            <div className="quantity-input-container">
-              <label>Kiểu in</label>
+            <div className="field-container">
+              <label className="form-label">Kiểu in</label>
               <select
                 name="printType"
-                className="node"
+                className="form-select"
                 value={formData.printType}
                 onChange={handleInputChange}
               >
-                <option value="In trắng đen">In trắng đen</option>
-                <option value="In màu nhám">In màu nhám</option>
-                <option value="In màu bóng">In màu bóng</option>
+                <option value="false">In 1 mặt</option>
+                <option value="true">In 2 mặt</option>
               </select>
             </div>
-            <div className="quantity-input-container">
-              <label>Hướng giấy</label>
+
+            <div className="field-container">
+              <label className="form-label">Loại in</label>
               <select
-                name="orientation"
-                className="node"
-                value={formData.orientation}
+                name="printColor"
+                className="form-select"
+                value={formData.printColor}
                 onChange={handleInputChange}
               >
-                <option value="In dọc">In dọc</option>
-                <option value="In ngang">In ngang</option>
+                <option value="true">In màu</option>
+                <option value="false">In đen trắng</option>
               </select>
             </div>
           </div>
-
-          {/* Layout selection */}
-          <div className="input-group1">
-            <p style={{ marginRight: "10px" }}>Bố cục</p>
-            <label>
-              <input
-                type="radio"
-                name="layout"
-                value="1"
-                checked={formData.layout === "1"}
-                onChange={handleInputChange}
-              />
-              Chân dung
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="layout"
-                value="2"
-                checked={formData.layout === "2"}
-                onChange={handleInputChange}
-              />
-              Toàn cảnh
-            </label>
+          <div className="button-container">
+            <button className="send-button" onClick={handleSubmit}>
+              In tập tin
+            </button>
           </div>
         </div>
       </div>
-
-      <ChosenPrinter />
-      
     </div>
   );
 }
