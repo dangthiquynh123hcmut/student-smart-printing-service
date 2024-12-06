@@ -1,4 +1,4 @@
-import { api, localApi } from "./baseURL";
+import { api} from "./baseURL";
 import axios from "axios";
 
 export const postNewPrinterApi = (token, newPrinter) => {

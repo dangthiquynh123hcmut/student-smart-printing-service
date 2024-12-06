@@ -19,7 +19,6 @@
     text-decoration: none;
     color: #007bff;
 }
-
 .container {
     background: white;
     padding: 20px;
@@ -29,6 +28,7 @@
     margin-top: 20px;
     box-sizing: border-box;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 510px;
 }
 
 .container h3 {
@@ -65,7 +65,7 @@
     width: 100%;
     border-collapse: collapse;
     border-radius: 8px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     text-align: left;
 }
 
@@ -85,6 +85,15 @@
 
 .price-table tbody tr:hover {
     background-color: #f1f1f1;
+}
+.outer {
+    display: flex; 
+    flex-direction: column;
+}
+.pagination-container {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px;
 }
 @media (max-width: 768px) {
     .container{

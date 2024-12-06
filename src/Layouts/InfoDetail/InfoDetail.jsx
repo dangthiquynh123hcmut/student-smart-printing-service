@@ -1,14 +1,16 @@
 import "./InfoDetail.css";
 import { NavLink } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { LogoutOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { AuthContext } from "../../Components/Authentication/Authenticate";
+import { getBalanceInfo } from "../../api/studentApi";
 //import fetchUserData from "../../Components/Authentication/Authenticate";
 
 function InfoDetail() {
   const { setToken, userData, fetchUserData } = useContext(AuthContext); // Thêm setUserData để cập nhật context
   const [isEditing, setIsEditing] = useState(false); // Quản lý hiển thị bảng chỉnh sửa
+  const [balance, setBalance] = useState(0)
   const [formData, setFormData] = useState({
     firstName: userData?.result.firstName || "",
     lastName: userData?.result.lastName || "",
@@ -28,18 +30,21 @@ function InfoDetail() {
   const logOutApi = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("https://projectprintmachine-backend.onrender.com/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ token }),
-      });
+      const response = await fetch(
+        "http://localhost:8080/auth/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ token }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Unable to delete token");
       } else {
-       // alert("Đã đăng xuất");
+        // alert("Đã đăng xuất");
       }
     } catch (error) {
       console.error("Logout token failed", error);
@@ -68,7 +73,7 @@ function InfoDetail() {
 
     try {
       const response = await axios.put(
-        `https://projectprintmachine-backend.onrender.com/users/${userData.result.id}`,
+        `http://localhost:8080/users/${userData.result.id}`,
         formData,
         {
           headers: {
@@ -82,9 +87,7 @@ function InfoDetail() {
         alert("Cập nhật thông tin thành công!");
         setIsEditing(false);
 
-        // Cập nhật lại context
-         await fetchUserData(); 
-        
+        await fetchUserData();
       }
     } catch (error) {
       console.error("Lỗi khi cập nhật thông tin:", error);
@@ -92,20 +95,36 @@ function InfoDetail() {
     }
   };
 
+  useEffect (()=>{
+    const token = localStorage.getItem("token");
+
+    getBalanceInfo(token)
+      .then((res)=>{
+        setBalance(res.data.result.balance);
+      })
+      .catch((error) => {
+        console.error("Error get balance:", error);
+      });
+  },[]);
+
   if (!userData) {
     return <div>No user data available.</div>;
   }
 
   return (
     <div className="infodetail">
-     {console.log("thong tin nguoi dung",userData)} 
+     {/* {console.log("thong tin nguoi dung",userData)}  */}
       {!(userData?.result.role === "ADMIN") ? (
         <>
           <ul>
-            <p>Thông tin sinh viên</p>
-            <hr className="custom-hr" />
+            <button className="modification" onClick={handleEditClick}>
+              Chỉnh sửa
+            </button>
+            {/* <p>Thông tin sinh viên</p> */}
+            {/* <hr className="custom-hr" /> */}
             <li>
-              <strong>Họ tên:</strong> {`${userData?.result.lastName} ${userData?.result.firstName}`}
+              <strong>Họ tên:</strong>{" "}
+              {`${userData?.result.lastName} ${userData?.result.firstName}`}
             </li>
             <li>
               <strong>MSSV:</strong> {userData?.result.mssv}
@@ -119,13 +138,16 @@ function InfoDetail() {
             <li>
               <strong>Email:</strong> {userData?.result.email}
             </li>
+            <li>
+              <strong>Số dư:</strong> {balance}đ
+            </li>
           </ul>
         </>
       ) : (
         <>
           <ul>
-            <p>Thông tin quản lí</p>
-            <hr className="custom-hr" />
+            {/* <p>Thông tin quản lí</p> */}
+            {/* <hr className="custom-hr" /> */}
             <li>
               <strong>Họ tên:</strong> {userData?.result.username}
             </li>
@@ -149,9 +171,6 @@ function InfoDetail() {
               <NavLink to="/payment" className="nav-link">
                 Mua thêm
               </NavLink>
-            </button>
-            <button className="modification" onClick={handleEditClick}>
-              Chỉnh sửa
             </button>
           </>
         )}
@@ -232,9 +251,13 @@ function InfoDetail() {
                 </label>
                 <div className="button-group">
                   <button type="submit" className="submit-button">
-                    Nộp
+                    Xong
                   </button>
-                  <button type="button" className="cancel-button" onClick={handleCancel}>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={handleCancel}
+                  >
                     Hủy
                   </button>
                 </div>

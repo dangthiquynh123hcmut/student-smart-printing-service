@@ -1,30 +1,28 @@
 .infodetail {
   position: absolute;
-  margin-left: auto;
+  /* margin-left: auto; */
   background-color: white;
   border-radius: 10px;
   border: solid 1px white;
   margin-top: 55px;
-  margin-right: 40px;
+  margin-right: 150px;
   padding: 5px 20px 10px 10px;
   height: fit-content;
   z-index: 1;
   line-height: 1.5;
   color: black; 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 250px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  border: 1px solid #ababac;
 }
 
-.infodetail p {
+/* .infodetail p {
   text-align: center;
-  font-size: 18px; 
+  font-size: 16px; 
   font-weight: bold;
-}
-.custom-hr {
-  border: none; 
-  border-bottom: 3px solid rgb(0, 0, 255); 
-  margin: 0 0 15px 0; 
-}
+  padding-bottom: 5px;
+  border-bottom: 2px solid #ababac;
+} */
 .infodetail ul {
   list-style-type: none;
   padding-left: 20px;
@@ -32,14 +30,16 @@
 }
 
 .infodetail li {
-  font-size: 12px;
+  font-size: 14px;
   margin: 10px 0;
 }
 .buttons-container {
   margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
-    flex-direction: column;
-    align-items: center; 
+  flex-direction: row;
+  justify-content: center; 
+  gap: 20px; 
 }
 
 .buttons-container button {
@@ -49,31 +49,21 @@
   border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: bold;
 }
+
 .buy {
   background-color: #6eb71b;
-  margin-bottom: 2vh;
-  font-weight: bold;
 }
-.buy a {
-  color: white; 
-}
-.modification {
-  background-color: #1b86b7;
-  margin-bottom: 2vh;
-  font-weight: bold;
-}
-.modification a {
-  color: white; 
-}
+
 .exit {
   background-color: #f33123;
-  font-weight: bold;
 }
-.exit a {
+
+.buy a, .exit a {
   color: white;
- 
 }
+
 
 .edit-modal {
   position: fixed;
@@ -158,3 +148,26 @@
 .cancel-button:hover {
   background-color: #d32f2f;
 }
+.modification {
+  position: absolute; 
+  top: 5px; 
+  right: 20px; 
+  background: none; 
+  border: none; 
+  color: #007bff; 
+  font-size: 14px; 
+  cursor: pointer; 
+  font-weight: lighter;
+}
+
+.modification:hover {
+  text-decoration: underline; /* Thêm hiệu ứng hover */
+}
+
+.infodetail ul {
+  list-style-type: none;
+  padding-left: 20px;
+  text-align: left;
+}
+
+

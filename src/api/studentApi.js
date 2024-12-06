@@ -1,5 +1,5 @@
 import axios from "./axiosConfig"; // Đảm bảo đã cấu hình axios
-import { api, localApi } from "./baseURL";
+import { api} from "./baseURL";
 
 export const GetAvailablePrinters = (token, coSo, toaNha, floorNumber) => {
   return api.get(
@@ -12,6 +12,25 @@ export const GetAvailablePrinters = (token, coSo, toaNha, floorNumber) => {
     }
   );
 };
+export const getBalanceInfo = (token) => {
+  return api.get("/wallet/get-balance", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const getPaymentInfo = (token, amount, bankCode) => {
+  return api.get("/wallet/vn-pay", {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+    params: {
+      amount, 
+      bankCode,
+    },
+  });
+};
+
 
 
 export const uploadFile = async (token, file) => {
