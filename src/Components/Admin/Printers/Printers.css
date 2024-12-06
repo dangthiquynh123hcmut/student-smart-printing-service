@@ -19,6 +19,26 @@
     align-items: center; 
 }
 
+.filter-and-button-wrapper {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    margin-top: 10px; 
+}
+
+.filter-wrapper {
+    display: flex;
+    gap: 10px; 
+}
+
+.filter-wrapper div {
+    min-width: fit-content;
+}
+
+
+.add-button {
+    margin-left: auto; 
+}
 .add-button {
     display: flex;           
     justify-content: flex-end; 

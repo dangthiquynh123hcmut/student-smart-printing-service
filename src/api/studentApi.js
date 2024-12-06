@@ -31,7 +31,13 @@ export const getPaymentInfo = (token, amount, bankCode) => {
   });
 };
 
-
+export const getBalanceHistory = (token) => {
+  return api.get("/wallet/get-history", {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+  });
+};
 
 export const uploadFile = async (token, file) => {
   try {

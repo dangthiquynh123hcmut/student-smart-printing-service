@@ -6,7 +6,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { postNewPrinterApi, editPrinterInfo, deletePrinter, addPrinterMaterial, getAllPrinter } from "../../../api/adminApi";
 
 function Printers() {
-    const [searchTerm, setSearchTerm] = useState("");
     const [printers, setPrinters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 8;
@@ -58,6 +57,23 @@ function Printers() {
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     // const currentProducts = printers.slice(indexOfFirstProduct, indexOfLastProduct);
     // const totalPages = Math.ceil(printers.length / productsPerPage);
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedBase, setSelectedBase] = useState("");
+    const [selectedBuilding, setSelectedBuilding] = useState("");
+    const [selectedFloor, setSelectedFloor] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("");
+
+    const baseOptions = [...new Set(printers.map(printer => printer.address.base))];
+    const buildingOptions = [...new Set(printers.map(printer => printer.address.building))];
+    const floorOptions = [...new Set(printers.map(printer => printer.address.floor))];
+
+    const statusOptions = [
+        { value: "", label: "Tất cả" },
+        { value: "active", label: "Đang hoạt động" },
+        { value: "inactive", label: "Tạm dừng" },
+    ];
+
     // Hàm xử lý tìm kiếm
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -65,8 +81,11 @@ function Printers() {
 
     // Lọc danh sách máy in theo tên và vị trí
     const filteredPrinters = printers.filter(printer =>
-        printer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        `${printer.address.base}, tòa ${printer.address.building}, tầng ${printer.address.floor}`.toLowerCase().includes(searchTerm.toLowerCase())
+        printer.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedBase ? printer.address.base === selectedBase : true) &&
+        (selectedBuilding ? printer.address.building === selectedBuilding : true) &&
+        (selectedFloor ? printer.address.floor === selectedFloor : true) &&
+        (selectedStatus ? (selectedStatus === "active" ? printer.status : !printer.status) : true)
     );
 
     const currentProducts = filteredPrinters.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -263,6 +282,13 @@ function Printers() {
             });
     }, [isEdit, isAddMaterial]);
 
+    const resetFilters = () => {
+        setSelectedBase("");
+        setSelectedBuilding("");
+        setSelectedFloor("");
+        setSelectedStatus("");
+    };
+
     return (
         <div id="wrapper">
             <div id="header">
@@ -273,7 +299,7 @@ function Printers() {
             </div>
             <div className="search-wrapper">
                 <Input
-                    placeholder="Nhập tên máy in hoặc vị trí"
+                    placeholder="Nhập tên máy in"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     style={{
@@ -284,11 +310,80 @@ function Printers() {
                     prefix={<SearchOutlined />}
                 />
             </div>
+            <div className="filter-and-button-wrapper">
+                <div className="filter-wrapper">
+                    <div>
+                        {/* <p>Cơ sở</p> */}
+                        <Select
+                            placeholder="Chọn cơ sở"
+                            value={selectedBase || undefined}
+                            onChange={value => {
+                                setSelectedBase(value);
+                                setSelectedBuilding("");
+                                setSelectedFloor("");
+                            }}
+                        >
+                            {baseOptions.map(base => (
+                                <Option key={base} value={base}>{base}</Option>
+                            ))}
+                        </Select>
+                    </div>
 
-            <div className="add-button">
-                <button onClick={showAddModal} className="add-printer-button">
-                    Thêm máy in
-                </button>
+                    <div>
+                        {/* <p>Tòa</p> */}
+                        <Select
+                            placeholder="Chọn tòa"
+                            value={selectedBuilding || undefined}
+                            onChange={value => {
+                                setSelectedBuilding(value);
+                                setSelectedFloor("");
+                            }}
+                        >
+                            {buildingOptions.map(building => (
+                                <Option key={building} value={building}>{building}</Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <div>
+                        {/* <p>Tầng</p> */}
+                        <Select
+                            placeholder="Chọn tầng"
+                            value={selectedFloor || undefined}
+                            onChange={setSelectedFloor}
+                        >
+                            {floorOptions.map(floor => (
+                                <Option key={floor} value={floor}>{floor}</Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <div>
+                        {/* <p>Trạng thái</p> */}
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            value={selectedStatus || undefined}
+                            onChange={setSelectedStatus}
+                        >
+                            {statusOptions.map(status => (
+                                <Option key={status.value} value={status.value}>
+                                    {status.label}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div>
+                        <Button color="default" variant="solid" onClick={resetFilters} className="reset-button">
+                            Reset
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="add-button" style={{ marginLeft: "auto" }}>
+                    <button onClick={showAddModal} className="add-printer-button">
+                        Thêm máy in
+                    </button>
+                </div>
             </div>
 
             <div className="printer-container">
@@ -311,7 +406,7 @@ function Printers() {
                     pageSize={productsPerPage}
                     total={printers.length}
                     onChange={handlePageChange}
-                    showSizeChanger={false} 
+                    showSizeChanger={false}
                 />
             </div>
 

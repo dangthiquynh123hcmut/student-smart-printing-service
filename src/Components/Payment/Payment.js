@@ -1,18 +1,13 @@
 import "./Payment.css";
+import React from 'react';
 import { useState, useEffect } from "react";
-import { notification, Button, Pagination } from "antd"; // Import Pagination
+import { notification, Button, Pagination} from "antd";
 import vnpayimg from "../Assets/vnpay.png";
-import html2pdf from 'html2pdf.js';
-import { getPaymentInfo } from "../../api/studentApi";
+import { getPaymentInfo, getBalanceHistory } from "../../api/studentApi";
+import { parseISO, format } from 'date-fns';
 
 function Payment() {
   const [bill, setBill] = useState([]);
-  const [formData, setFormData] = useState({
-    paperNumber: 1,
-    paperSize: "A4",
-    date: new Date(),
-    price: 0,
-  });
   const [payment, setPayment] = useState({
     bankCode: "NCB",
     amount: 0,
@@ -22,88 +17,24 @@ function Payment() {
 
   const token = localStorage.getItem("token");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };
-
-    const pricePerPaper = updatedFormData.paperSize === "A4" ? 500 :
-      updatedFormData.paperSize === "A3" ? 1000 :
-        updatedFormData.paperSize === "A2" ? 2000 :
-          updatedFormData.paperSize === "A1" ? 5000 : 0;
-
-    const totalAmount = updatedFormData.paperNumber * pricePerPaper;
-
-    setFormData({ ...updatedFormData, price: totalAmount });
-  };
-
-  const handleSubmit = () => {
-    fetch('https://671d199b09103098807c4344.mockapi.io/api/bill', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(response => response.json())
-      .then(() => {
-        notification.success({
-          message: "Thanh toán thành công",
-          description: "Success",
-        });
-        setFormData({
-          paperNumber: 1,
-          paperSize: "A4",
-          date: new Date(),
-          price: 0,
-        });
-      })
-      .catch(() => {
-        notification.error({
-          message: "Thanh toán thất bại",
-          description: "Error",
-        });
-      });
-  };
-
   const handlePaymentInfo = (e) => {
     const { name, value } = e.target;
     setPayment({ ...payment, [name]: value });
   };
 
-  const generatePDF = (item) => {
-    const billContent = `
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2>HÓA ĐƠN THANH TOÁN</h2>
-      </div>
-      <div style="padding-left: 20px;">
-        <p><strong>ID hóa đơn:</strong> ${item.id}</p>
-        <p><strong>Ngày thanh toán:</strong> ${new Date(item.date).toLocaleDateString("vi-VN")}</p>
-        <p><strong>Loại giấy:</strong> ${item.paperSize}</p>
-        <p><strong>Số lượng:</strong> ${item.paperNumber}</p>
-        <p><strong>Tổng tiền:</strong> ${item.price} VNĐ</p>
-      </div>
-    `;
-
-    const opt = {
-      margin: 1,
-      filename: `HoaDon_${item.id}.pdf`,
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    };
-
-    html2pdf().from(billContent).set(opt).save();
-  };
-
-  useEffect(() => {
-    fetch('https://671d199b09103098807c4344.mockapi.io/api/bill')
-      .then(res => res.json())
-      .then(bill => {
-        setBill(bill);
+  const fetchBill = () => {
+    getBalanceHistory(token)
+      .then((response) => {
+        setBill(response.data.result.content);
       })
       .catch(error => {
         console.error('Error fetching bill:', error);
       });
-  }, [formData]);
+  };
+
+  useEffect(() => {
+    fetchBill();
+  }, []);
 
   const handlePayment = (amount, bankCode) => {
     getPaymentInfo(token, amount, bankCode)
@@ -143,24 +74,8 @@ function Payment() {
       <div className="payment-container">
         <div className="row">
           <div className="box payment-info">
-            <h3>Thông tin thanh toán</h3>
-            <div className="personal-info">
-              <label>
-                Số lượng giấy
-                <input type="number" name="paperNumber" step="1" min="1" value={formData.paperNumber} onChange={handleInputChange} />
-              </label>
-              <label>
-                Kích cỡ
-                <select name="paperSize" value={formData.paperSize} onChange={handleInputChange}>
-                  <option value="A4">A4</option>
-                  <option value="A3">A3</option>
-                  <option value="A2">A2</option>
-                  <option value="A1">A1</option>
-                </select>
-              </label>
-              <div className="payment-button">
-                <button onClick={handleSubmit}>Mua thêm</button>
-              </div>
+            <div>
+              <img src={require('../Assets/printer.gif')} alt="GIF Example" />
             </div>
           </div>
 
@@ -191,27 +106,25 @@ function Payment() {
             <table>
               <thead>
                 <tr>
-                  <th>Số hóa đơn</th>
-                  <th>Giá tiền</th>
+                  <th>STT</th>
+                  <th>Số tiền giao dịch</th>
                   <th>Ngày</th>
-                  <th>Loại giấy</th>
-                  <th>Số lượng giấy</th>
-                  <th>Tải hóa đơn</th>
                 </tr>
               </thead>
               <tbody>
-                {currentBills.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.price} VNĐ</td>
-                    <td>{new Date(item.date).toLocaleDateString("vi-VN")}</td>
-                    <td>{item.paperSize}</td>
-                    <td>{item.paperNumber}</td>
-                    <td>
-                      <Button onClick={() => generatePDF(item)}>Tải hóa đơn</Button>
-                    </td>
+                {currentBills.length > 0 ? (
+                  currentBills.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index+1}</td>
+                      <td>{item.balance}</td>
+                      <td>{format(parseISO(item.updatedAt), 'dd/MM/yyyy')}</td> {/* Định dạng ngày */}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">Không có hóa đơn nào.</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
