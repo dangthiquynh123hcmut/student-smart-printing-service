@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PrinterOutlined } from "@ant-design/icons";
 import { GetAvailablePrinters } from "../../api/studentApi"; // Đường dẫn tệp API
 import "./ChosenPrinter.css";
-import printerImage from "../Admin/Printers/printer.jpg";
+import printerImage from "../Assets/printer-img.jpg";
 import { notification } from "antd";
 
 function ChosenPrinter({ onPrinterSelect }) {
