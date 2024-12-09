@@ -1,10 +1,11 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { notification } from "antd";
+import { notification, Input } from "antd";
 import "./LoginForm.css";
 import { AuthContext } from "../Authentication/Authenticate";
 
-import { FaUser, FaClock } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa"; // Sử dụng FaLock cho mật khẩu
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 // import PropTypes from "prop-types";
 
 // import { loginApi} from "../../api/API";
@@ -35,7 +36,7 @@ const LoginForm = () => {
     const { email, password } = formValues;
     // try{
     //   const res = await loginApi(email, password);
-    
+
     //   // debugger;
     //   if (res && res.code === 0) {
     //     //depend on backend return res => will be set again
@@ -59,7 +60,7 @@ const LoginForm = () => {
     //   alert("Login error:", error);
 
     // }
-    
+
     try {
       const response = await fetch("http://localhost:8080/auth/token", {
         method: "POST",
@@ -79,25 +80,21 @@ const LoginForm = () => {
       const data = await response.json();
       console.log(data);
       notification.success({
-          message: "Login SUCCESS",
-          description: "Success",
+        message: "Login SUCCESS",
+        description: "Success",
       });
       localStorage.setItem("token", data.result.token);
-      setToken(data.result.token);  // Cập nhật token trong AuthContext
+      setToken(data.result.token); // Cập nhật token trong AuthContext
       navigate("/");
-
     } catch (error) {
       console.error("Error:", error);
       notification.error({
-              message: "Login Failed",
-              description: "Username or password wrong",
+        message: "Login Failed",
+        description: "Username or password wrong",
       });
     }
 
-
-
     // console.log(">>Success:", res);
-
   };
 
   return (
@@ -108,26 +105,30 @@ const LoginForm = () => {
           {/*onSubmit={handleSubmit} */}
           <h1>Login</h1>
           <div className="input-box">
-            <input
+            <Input
               type="text"
               placeholder="Username"
               name="email"
-              value={formValues.email} // Bind value to state
-              onChange={handleChange} // Update state on change
+              value={formValues.email}
+              onChange={handleChange}
               required
+              prefix={<FaUser className="icon" />} // Thêm biểu tượng người dùng
+              className="custom-input"
             />
-            <FaUser className="icon" />
           </div>
           <div className="input-box">
-            <input
-              type="password"
+            <Input.Password
               placeholder="Password"
               name="password"
-              value={formValues.password} // Bind value to state
-              onChange={handleChange} // Update state on change
+              value={formValues.password}
+              onChange={handleChange}
               required
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              } // Biểu tượng ẩn/hiện
+              prefix={<FaLock className="icon" />} // Thêm biểu tượng khóa
+              className="custom-input"
             />
-            <FaClock className="icon" />
           </div>
           <div className="member-forgot">
             <label>

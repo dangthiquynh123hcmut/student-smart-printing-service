@@ -1,13 +1,15 @@
 import "./Payment.css";
 import React from 'react';
 import { useState, useEffect } from "react";
-import { notification, Button, Pagination} from "antd";
+import { notification, Button, Pagination } from "antd";
 import vnpayimg from "../Assets/vnpay.png";
-import { getPaymentInfo, getBalanceHistory } from "../../api/studentApi";
+import { getPaymentInfo, getBalanceHistory, getBalanceInfo } from "../../api/studentApi";
 import { parseISO, format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 function Payment() {
   const [bill, setBill] = useState([]);
+  const [balance, setBalance] = useState(0);
   const [payment, setPayment] = useState({
     bankCode: "NCB",
     amount: 0,
@@ -36,10 +38,20 @@ function Payment() {
     fetchBill();
   }, []);
 
+  const navigate = useNavigate();
+
   const handlePayment = (amount, bankCode) => {
+    if (amount<10000) {
+      notification.error({
+        message: "Không thể giao dịch",
+        description: "Số tiền giao dịch tối thiểu là 10.000đ",
+      });
+      return;
+    }
     getPaymentInfo(token, amount, bankCode)
       .then((res) => {
         if (res.data.result.paymentUrl) {
+          navigate('/file');
           window.open(res.data.result.paymentUrl, '_blank');
         } else {
           notification.error({
@@ -60,7 +72,23 @@ function Payment() {
   // Tính toán hóa đơn cho trang hiện tại
   const indexOfLastBill = currentPage * itemsPerPage;
   const indexOfFirstBill = indexOfLastBill - itemsPerPage;
-  const currentBills = bill.slice(indexOfFirstBill, indexOfLastBill);
+  const sortedBills = bill.sort((a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  });
+  const currentBills = sortedBills.slice(indexOfFirstBill, indexOfLastBill);
+
+  useEffect (()=>{
+    const token = localStorage.getItem("token");
+
+    getBalanceInfo(token)
+      .then((res)=>{
+        setBalance(res.data.result.balance);
+      })
+      .catch((error) => {
+        console.error("Error get balance:", error);
+      });
+  },[]);
+
 
   return (
     <div id="wrapper">
@@ -103,6 +131,7 @@ function Payment() {
         <div className="box billing-history">
           <h3>Lịch sử hóa đơn</h3>
           <div id="billing-history-table">
+          <h4>Số dư: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance)}</h4>
             <table>
               <thead>
                 <tr>
@@ -115,7 +144,7 @@ function Payment() {
                 {currentBills.length > 0 ? (
                   currentBills.map((item, index) => (
                     <tr key={index}>
-                      <td>{index+1}</td>
+                      <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                       <td>{item.balance}</td>
                       <td>{format(parseISO(item.updatedAt), 'dd/MM/yyyy')}</td> {/* Định dạng ngày */}
                     </tr>

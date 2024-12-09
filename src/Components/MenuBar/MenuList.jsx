@@ -12,10 +12,9 @@ import {
   BarChartOutlined,
   EyeOutlined,
   FileAddOutlined,
-  SettingOutlined,
   FolderOutlined,
-  EditOutlined,
-  SafetyOutlined
+  SafetyOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
 const {SubMenu} =Menu
@@ -79,6 +78,9 @@ function MenuList() {
           <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
         </Menu.Item>
       </SubMenu>}
+      {/* <Menu.Item key="userprofile" icon={<UserOutlined style={{ fontSize: 22 }} />}>
+        <NavLink to="/user-profile">Thông tin cá nhân</NavLink>
+      </Menu.Item> */}
 
     </Menu>
   );

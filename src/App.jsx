@@ -24,6 +24,7 @@ import File from "./Components/File/File";
 import Warranty from "./Components/Admin/Warranty/Warranty";
 
 import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+import { UserProfile } from "./Components/Profile/Profile";
 
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
@@ -185,6 +186,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <PriceSetting/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-profile"
+            element={
+              <PrivateRoute token={token} >
+                <UserProfile/>
               </PrivateRoute>
             }
           />

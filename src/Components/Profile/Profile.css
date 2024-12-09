@@ -1,0 +1,62 @@
+h2 {
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+p {
+    color: #636262;
+    font-style: italic;
+}
+.outer {
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    margin-top: 10px;
+}
+.profile-container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.avatar-container {
+    margin-right: 20px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.email-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.email {
+    margin-top: 4px;
+    color: #888;
+}
+.change-password {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    margin-left: auto;
+  }

@@ -1,5 +1,5 @@
 import "./Printers.css";
-import printerImage from '../../Assets/printer-img.jpg';
+import printerImage from '../../Assets/printer.avif';
 import { useState, useEffect } from "react";
 import { Input, Pagination, Modal, Button, Form, notification, Switch, Select } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
