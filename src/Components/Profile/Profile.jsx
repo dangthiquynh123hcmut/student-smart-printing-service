@@ -243,7 +243,7 @@ export function UserProfile() {
             )}
 
             <Form.Item style={{ textAlign: "center", marginTop: "10px" }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={!isEditing}>
                 Lưu thay đổi
               </Button>
             </Form.Item>
