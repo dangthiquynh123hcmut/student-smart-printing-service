@@ -1,38 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { FolderOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  FolderOutlined,
+  UploadOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { uploadFile, getAllFile, deleteFile } from "../../api/studentApi";
 import { Modal, notification } from "antd";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./File.css";
 
 function File() {
-  const [files, setFiles] = useState([]); // Danh sách các file đã chọn
-  const [uploading, setUploading] = useState(false); // Trạng thái tải lên
-  const [uploadedFiles, setUploadedFiles] = useState([]); // Danh sách file từ server
-  const [searchQuery, setSearchQuery] = useState(""); // Trạng thái cho tìm kiếm
+  const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1); // Giá trị số trang
+  const [size, setSize] = useState(10); // Giá trị kích thước trang
+  const [totalFiles, setTotalFiles] = useState(0); // Tổng số file
+  const [totalPage, setTotalPage] = useState(0);
   const navigate = useNavigate();
-
   const token = localStorage.getItem("token");
 
-  // Gọi API getAllFile để lấy danh sách file khi component được render
+  const fetchFiles = async () => {
+    try {
+      const pageReal = page - 1;
+      const data = await getAllFile(token, pageReal, size);
+      setTotalFiles(data.totalElements);
+      setTotalPage(data.totalPages);
+      setUploadedFiles(Array.isArray(data.content) ? data.content : []);
+    } catch (error) {
+      console.error("Không thể lấy danh sách file:", error);
+      setUploadedFiles([]);
+    }
+  };
+
   useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const data = await getAllFile(token);
-
-        setUploadedFiles(Array.isArray(data) ? data : []); // Đảm bảo luôn là mảng
-      } catch (error) {
-        console.error("Không thể lấy danh sách file:", error);
-        setUploadedFiles([]); // Đặt giá trị mặc định nếu lỗi xảy ra
-      }
-    };
-
     fetchFiles();
-  }, [token]);
+  }, [token, page, size]);
 
-  // Xử lý khi người dùng chọn file
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
+
     setFiles(selectedFiles);
   };
 
@@ -43,26 +52,21 @@ function File() {
   const filteredFiles = uploadedFiles.filter((file) =>
     file.name.toLowerCase().includes(searchQuery)
   );
-    
 
-  // Xử lý kéo thả file
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
     setFiles(droppedFiles);
   };
 
-  // Xử lý sự kiện khi kéo file vào vùng thả
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
-  // Xóa file khỏi danh sách
   const handleRemoveFile = (fileToRemove) => {
     setFiles(files.filter((file) => file !== fileToRemove));
   };
 
-  // Upload từng file
   const handleUpload = async () => {
     if (files.length === 0) return;
     setUploading(true);
@@ -71,33 +75,15 @@ function File() {
       try {
         const response = await uploadFile(token, file);
         console.log(`File ${file.name} uploaded successfully:`, response);
-        // Sau khi upload thành công, gọi lại API để cập nhật danh sách file
-
-        const data = await getAllFile(token);
-
-        setUploadedFiles(data);
+        await fetchFiles(); // Gọi lại API sau khi upload thành công
       } catch (error) {
         console.error(`Failed to upload file ${file.name}:`, error);
       }
     }
 
     setUploading(false);
-    setFiles([]); // Xóa danh sách file sau khi tải lên xong
+    setFiles([]);
   };
-
-  // Xử lý xóa file
-  // const handleDeleteFile = async (fileId) => {
-  //   try {
-  //     await deleteFile(token, fileId);
-  //     console.log(`File với ID ${fileId} đã được xóa`);
-
-  //     // Cập nhật danh sách file sau khi xóa
-  //     const data = await getAllFile(token);
-  //     setUploadedFiles(data);
-  //   } catch (error) {
-  //     console.error("Không thể xóa file:", error);
-  //   }
-  // };
 
   const handleDeleteFile = (fileId) => {
     Modal.confirm({
@@ -112,10 +98,7 @@ function File() {
             message: "Delete SUCCESS",
             description: "File đã được xóa thành công.",
           });
-  
-          // Gọi lại API để cập nhật danh sách file sau khi xóa
-          const data = await getAllFile(token);
-          setUploadedFiles(data);
+          await fetchFiles(); // Gọi lại API sau khi xóa
         } catch (error) {
           notification.error({
             message: "Delete FAILED",
@@ -128,20 +111,19 @@ function File() {
       },
     });
   };
-  
 
-  // Xử lý in file
   const handlePrintFile = (file) => {
     console.log("In file:", file);
-    
-    // Điều hướng đến trang Print và truyền toàn bộ thông tin file qua state
     navigate("/print", { state: { file } });
   };
 
   return (
     <div>
+      <div className="header-file">
+        <NavLink to="/">&larr; Trở về trang chủ</NavLink>
+        <h1>Tập tin</h1>
+      </div>
       <div className="file-upload-container">
-        {/* Phần header phía trên */}
         <div className="file-upload-header">
           <div className="file-image">
             <FolderOutlined style={{ fontSize: "24px", color: "#000" }} />
@@ -152,12 +134,11 @@ function File() {
               Chọn tệp
               <input
                 type="file"
-                multiple // Cho phép chọn nhiều tệp
+                multiple
                 onChange={handleFileChange}
-                style={{ display: "none" }} // Ẩn nút input file
+                style={{ display: "none" }}
               />
             </label>
-
             <button
               onClick={handleUpload}
               className="upload-button"
@@ -170,7 +151,6 @@ function File() {
           </div>
         </div>
 
-        {/* Phần khung kéo thả phía dưới */}
         <div
           className="file-dropzone"
           onDrop={handleDrop}
@@ -199,74 +179,96 @@ function File() {
             <p>Kéo thả tệp tin vào đây hoặc chọn tệp ở trên</p>
           )}
         </div>
-
-        {/* Phần danh sách file đã upload */}
       </div>
 
       <div className="file-upload-container">
-  <div className="uploaded-files">
-    <h2>Danh sách file đã tải lên</h2>
-    
-    <p>
-      Tổng số file: {uploadedFiles.length} | Tổng kích thước:{" "}
-      {uploadedFiles.reduce((acc, file) => acc + file.fileSize / 1024, 0).toFixed(2)} KB
-    </p>
+      <div className="uploaded-files">
+        <h2>Danh sách file đã tải lên</h2>
 
-    <div className="file-search-container">
-      <input
-        type="text"
-        placeholder="Tìm kiếm file theo tên"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        className="search-input"
-      />
-    </div>
+        <div className="file-container">
+          <div className="search-container">
+            <div className="search-input-wrapper">
+              <SearchOutlined className="search-icon" />
+              <input 
+                type="text"
+                placeholder="Tìm kiếm file theo tên"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                 className="search-input-file"
+              />
+            </div>
+          </div>
 
-    {filteredFiles.length > 0 ? (
-      <table className="file-table">
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Tên tệp</th>
-            <th>Kích thước (KB)</th>
-            <th>Ngày tải lên</th>
-            <th>Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredFiles.map((file, index) => (
-            <tr key={file.id}>
-              <td>{index + 1}</td>
-              <td>{file.name}</td>
-              <td>{(file.fileSize / 1024).toFixed(2)}</td>
-              <td>{new Date(file.uploadDate).toLocaleDateString()}</td>
-              <td>
-                <button
-                  onClick={() => handleDeleteFile(file.id)}
-                  className="action-button delete-button"
-                >
-                  Xóa file
-                </button>
-                <button
-                  onClick={() => handlePrintFile(file)}
-                  className="action-button print-button"
-                >
-                  In tài liệu
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    ) : (
-      <p>Không tìm thấy file nào khớp với từ khóa.</p>
-    )}
+          <div className="file-infomation">
+            <div className="general-information">
+              <h4>Tổng file tải lên: {totalFiles}</h4>
+              <h4>Tổng số trang: {totalPage}</h4>
+            </div>
+            
+            <div className="pagination-controls">
+              <label>
+                Trang thứ:{" "}
+                <input
+                  type="number"
+                  value={page}
+                  onChange={(e) => setPage(Number(e.target.value))}
+                  className="pagination-input"
+                />
+              </label>
+              <label>
+                Kích thước:{" "}
+                <input
+                  type="number"
+                  value={size}
+                  onChange={(e) => setSize(Number(e.target.value))}
+                  className="pagination-input"
+                />
+              </label>
+            </div>
+          </div>
 
-    
-  </div>
-</div>
-
-
+          {filteredFiles.length > 0 ? (
+            <table className="file-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên tệp</th>
+                  <th>Kích thước (KB)</th>
+                  <th>Ngày tải lên</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredFiles.map((file, index) => (
+                  <tr key={file.id}>
+                    <td>{(index + 1) + (page-1)*size}</td>
+                    <td>{file.name}</td>
+                    <td>{(file.fileSize / 1024).toFixed(2)}</td>
+                    <td>{new Date(file.uploadDate).toLocaleDateString()}</td>
+                    <td>
+                      <button
+                        onClick={() => handleDeleteFile(file.id)}
+                        className="action-button delete-button"
+                      >
+                        Xóa file
+                      </button>
+                      <button
+                        onClick={() => handlePrintFile(file)}
+                        className="action-button print-button"
+                      >
+                        In tài liệu
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Không tìm thấy file nào khớp với lựa chọn.</p>
+          )}
+        </div>
+      </div>
+      </div>
     </div>
   );
 }

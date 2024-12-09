@@ -9,7 +9,7 @@ function ChosenPrinter({ onPrinterSelect }) {
   const [formData, setFormData] = useState({
     coSo: "CS1",
     toaNha: "A1",
-    tang: "Tầng 1",
+    tang: "1",
   });
 
   const [printers, setPrinters] = useState([]);
@@ -31,18 +31,17 @@ function ChosenPrinter({ onPrinterSelect }) {
   const handleSubmit = async () => {
     setError(null); // Xóa lỗi trước đó, có thể xóa
     const { coSo, toaNha, tang } = formData;
-    const floorNumber = tang.replace("Tầng ", ""); // Loại bỏ chữ "Tầng"
 
     try {
       const response = await GetAvailablePrinters(
         token,
         coSo,
         toaNha,
-        floorNumber
+        tang
       );
 
-      setPrinters(response.result || []); // Ghi danh sách máy in
-      console.log("get api", response.result);
+      setPrinters(response.data.result || []); // Ghi danh sách máy in
+      console.log("get api", response.data.result);
 
       // setShowPrinters(true); // Hiển thị danh sách máy in
       setShowModal(true); // Hiển thị modal với danh sách máy in
@@ -125,14 +124,14 @@ function ChosenPrinter({ onPrinterSelect }) {
               value={formData.tang}
               onChange={handleInputChange}
             >
-             <option value="Tầng 1">Tầng 1</option>
-                  <option value="Tầng 2">Tầng 2</option>
-                  <option value="Tầng 3">Tầng 3</option>
-                  <option value="Tầng 4">Tầng 4</option>
-                  <option value="Tầng 5">Tầng 5</option>
-                  <option value="Tầng 6">Tầng 6</option>
-                  <option value="Tầng 7">Tầng 7</option>
-                  <option value="Tầng 8">Tầng 8</option>
+             <option value="1">Tầng 1</option>
+                  <option value="2">Tầng 2</option>
+                  <option value="3">Tầng 3</option>
+                  <option value="4">Tầng 4</option>
+                  <option value="5">Tầng 5</option>
+                  <option value="6">Tầng 6</option>
+                  <option value="7">Tầng 7</option>
+                  <option value="8">Tầng 8</option>
             </select>
           </div>
         </div>

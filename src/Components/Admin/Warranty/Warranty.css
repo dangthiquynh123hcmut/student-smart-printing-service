@@ -9,7 +9,11 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     font-family: Arial, sans-serif;
   }
-  
+  .nav-link-warranty{
+    background: #ffff;
+    color:#007bff;
+    cursor: pointer;
+  }
   .file-table {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -100,6 +104,19 @@
   margin-top: 20px;
 }
 
+.search-input-warranty {
+  display: flex;
+  align-items: center;
+  
+  border: 2px solid #395e94;
+  border-radius: 5px;
+  padding: 5px;
+  width: 30vw;
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
 .search-input {
   width: 300px;
   padding: 10px;
@@ -110,10 +127,10 @@
 }
 
 .search-button {
-  background: linear-gradient(135deg, #54cf70, #37d996);
+  background:  #37d996;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 9px;
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;

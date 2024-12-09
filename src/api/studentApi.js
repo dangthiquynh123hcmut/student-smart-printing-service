@@ -1,9 +1,9 @@
 import axios from "./axiosConfig"; // Đảm bảo đã cấu hình axios
 import { api} from "./baseURL";
 
-export const GetAvailablePrinters = (token, coSo, toaNha, floorNumber) => {
+export const GetAvailablePrinters = (token, coSo, toaNha, tang) => {
   return api.get(
-    `/printers/availableprinters?base=${coSo}&building=${toaNha}&floor=${floorNumber}`,
+    `/printers/availableprinters?base=${coSo}&building=${toaNha}&floor=${tang}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -64,15 +64,16 @@ export const uploadFile = async (token, file) => {
   }
 };
 
-export const getAllFile = async (token) => {
+export const getAllFile = async (token,page,size) => {
   try {
     const response = await axios.get("http://localhost:8080/files/get-all", {
+      params: { page, size }, 
       headers: {
         Authorization: `Bearer ${token}`, 
       },
     });
-    console.log("get all",response)
-    return response.result.content; 
+    console.log("get all",response.result)
+    return response.result; 
   } catch (error) {
     console.error("Error fetching files:", error);
     throw error; 
