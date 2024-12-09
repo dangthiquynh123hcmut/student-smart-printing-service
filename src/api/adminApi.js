@@ -15,9 +15,10 @@ export const postNewPrinterApi = (token, newPrinter) => {
 
 }
 
-export const GetAllReportWarranty = async (token) => {
+export const GetAllReportWarranty = async (token,page, size) => {
     try {
       const response = await axios.get("http://localhost:8080/reportWarranty", {
+        params: { page, size }, 
         headers: {
           Authorization: `Bearer ${token}`, 
         },
@@ -30,15 +31,16 @@ export const GetAllReportWarranty = async (token) => {
     }
   };
 
- export const GetReportWarrantyByMachineID = async (token, id) => {
+ export const GetReportWarrantyByMachineID = async (token, id,page,size) => {
   try {
     const response = await axios.get(`http://localhost:8080/reportWarranty/${id}`, {
+        params: { page, size },
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
-    console.log("Data fetched successfully:", response.result);
+    console.log("Data fetched successfully api:", response.data.result);
     return response.data.result; 
   } catch (error) {
     if (error.response) {

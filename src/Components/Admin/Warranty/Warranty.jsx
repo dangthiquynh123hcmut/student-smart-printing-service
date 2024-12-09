@@ -3,63 +3,43 @@ import {
   GetAllReportWarranty,
   GetReportWarrantyByMachineID,
 } from "../../../api/adminApi";
+import { SearchOutlined } from "@ant-design/icons";
 import "./Warranty.css";
 import { NavLink } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
 
 function Warranty() {
   const [reportData, setReportData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchID, setSearchID] = useState("");
-  const itemsPerPage = 10;
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1); // Current page
+  const [size, setSize] = useState(10); // Page size
+  const [searchID, setSearchID] = useState(""); // Search ID
+  const [totalReport, setTotalReport] = useState(0); // Total reports
+  const [totalPages, setTotalPages] = useState(0); // Total pages
+  const [isFiltered, setIsFiltered] = useState(false); // Check if filtering by ID
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Token không tồn tại. Vui lòng đăng nhập lại.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const data = await GetAllReportWarranty(token);
-        setReportData(data.content);
-        setTotalPages(data.totalPages);
-      } catch (err) {
-        console.error("Failed to fetch reports:", err);
-        setError(err.message || "Đã xảy ra lỗi khi lấy dữ liệu.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReports();
-  }, []);
-
-  const getPaginatedData = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return reportData.slice(startIndex, endIndex);
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  // Fetch all reports
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      const pageReal = page - 1; // Backend pagination starts at 0
+      const data = await GetAllReportWarranty(token, pageReal, size);
+      setTotalReport(data.totalElements);
+      setTotalPages(data.totalPages);
+      setReportData(Array.isArray(data.content) ? data.content : []);
+      setIsFiltered(false); // Reset filter
+    } catch (error) {
+      console.error("Không thể lấy danh sách bảo hành:", error);
+      setError("Đã xảy ra lỗi khi lấy dữ liệu.");
+      setReportData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleSearch = async () => {
-    const token = localStorage.getItem("token");
+  // Fetch report by ID
+  const fetchReportByID = async () => {
     if (!searchID.trim()) {
       alert("Vui lòng nhập ID máy in để tìm kiếm!");
       return;
@@ -67,57 +47,118 @@ function Warranty() {
 
     try {
       setLoading(true);
-      const data = await GetReportWarrantyByMachineID(token, searchID);
-      const dataArray = data.content;
-      console.log("click sreach", dataArray);
-
-      setReportData(dataArray);
-      setTotalPages(data.totalPages);
+      const pageReal = page - 1;
+      const data = await GetReportWarrantyByMachineID(
+        token,
+        searchID,
+        pageReal,
+        size
+      );
+      setReportData(data.content || []);
+      setTotalReport(data.totalElements || data.content.length || 0);
+      setTotalPages(data.totalPages || 1);
+      setIsFiltered(true); // Indicate filtering mode
       setError(null);
     } catch (err) {
-      console.error("Error fetching report by ID:", err);
+      console.error("Không tìm thấy dữ liệu cho ID đã nhập:", err);
       setError("Không tìm thấy dữ liệu cho ID đã nhập.");
       setReportData([]);
-
-      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return <div className="loading">Đang tải dữ liệu...</div>;
-  }
+  // Reset to full report list
+  const handleReset = () => {
+    setSearchID(""); // Clear search ID
+    setPage(1); // Reset page to 1
+    setSize(10); // Reset page size to 10
+    fetchReports(); // Fetch all reports
+  };
+
+  // Fetch data on page or size change
+  useEffect(() => {
+    if (isFiltered && searchID) {
+      fetchReportByID();
+    } else {
+      fetchReports();
+    }
+  }, [page, size]);
+
+  const handlePageChange = (event) => {
+    const newPage = Number(event.target.value);
+    setPage(newPage > 0 ? newPage : 1);
+  };
+
+  const handleSizeChange = (event) => {
+    const newSize = Number(event.target.value);
+    setSize(newSize > 0 ? newSize : 10);
+  };
+
+  // if (loading) {
+  //   return <div className="loading">Đang tải dữ liệu...</div>;
+  // }
 
   return (
     <div className="warranty-container">
       <div id="header">
-        <NavLink to="/">&larr; Trở về trang chủ</NavLink>
+        {searchID ? (
+          <button onClick={handleReset} className="nav-link-warranty">
+            &larr; Trở về báo cáo đầy đủ
+          </button>
+        ) : (
+          <NavLink to="/">&larr; Trở về trang chủ</NavLink>
+        )}
 
         <h1>Báo cáo bảo hành</h1>
       </div>
-
-      {/* Thanh tìm kiếm */}
-      <div className="search-bar">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Nhập ID máy in..."
-          value={searchID}
-          onChange={(e) => setSearchID(e.target.value)}
-        />
-        <button className="search-button" onClick={handleSearch}>
-          <SearchOutlined /> Tìm kiếm
-        </button>
-      </div>
-      {error && (
-        <div className="error">
-          <p>Không tìm thấy máy in này</p>
+      <div className="file-container">
+        <div className="search-container">
+          <div className="search-input-warranty">
+            <SearchOutlined className="search-icon" />
+            <input
+              type="text"
+              placeholder="Nhập ID máy in..."
+              value={searchID}
+              onChange={(e) => setSearchID(e.target.value)}
+              className="search-input-file"
+            />
+          </div>
+          <button onClick={fetchReportByID} className="search-button">
+            Tìm kiếm
+          </button>
         </div>
-      )}
 
-      {reportData.length > 0 ? (
-        <>
+        <div className="file-information">
+          <div className="general-information">
+            <h4>Tổng báo cáo: {totalReport}</h4>
+            <h4>Tổng số trang: {totalPages}</h4>
+          </div>
+          <div className="pagination-controls">
+            <label>
+              Trang:{" "}
+              <input
+                type="number"
+                value={page}
+                onChange={handlePageChange}
+                className="pagination-input"
+                min="1"
+              />
+            </label>
+            <label>
+              Kích thước trang:{" "}
+              <input
+                type="number"
+                value={size}
+                onChange={handleSizeChange}
+                className="pagination-input"
+                min="1"
+              />
+            </label>
+          </div>
+        </div>
+
+        {reportData.length > 0 ? (
           <table className="file-table">
             <thead>
               <tr>
@@ -128,9 +169,9 @@ function Warranty() {
               </tr>
             </thead>
             <tbody>
-              {getPaginatedData().map((report, index) => (
+              {reportData.map((report, index) => (
                 <tr key={report.id || index}>
-                  <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                  <td>{(page - 1) * size + index + 1}</td>
                   <td>{report.idMachine || "Không xác định"}</td>
                   <td>{report.description || "Không có mô tả"}</td>
                   <td>
@@ -142,29 +183,10 @@ function Warranty() {
               ))}
             </tbody>
           </table>
-          <div className="pagination">
-            <button
-              onClick={handlePrevious}
-              disabled={currentPage === 1}
-              className="pagination-button"
-            >
-              &lt;
-            </button>
-            <span className="pagination-info">
-              Trang {currentPage} / {totalPages}
-            </span>
-            <button
-              onClick={handleNext}
-              disabled={currentPage === totalPages}
-              className="pagination-button"
-            >
-              &gt;
-            </button>
-          </div>
-        </>
-      ) : !error ? (
-        <p>Không có báo cáo bảo hành nào được tìm thấy.</p>
-      ) : null}
+        ) : (
+          <p>Không tìm thấy báo cáo nào khớp với lựa chọn.</p>
+        )}
+      </div>
     </div>
   );
 }
