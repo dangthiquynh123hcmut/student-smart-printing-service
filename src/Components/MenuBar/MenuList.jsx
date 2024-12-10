@@ -12,11 +12,15 @@ import {
   BarChartOutlined,
   EyeOutlined,
   FileAddOutlined,
-  FolderOutlined,
+  SettingOutlined,
+  EditOutlinedFolderOutlined,
   SafetyOutlined,
-  UserOutlined
+  UserOutlined,
+  DropboxOutlined,
+  FieldTimeOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
+import MenuItem from "antd/es/menu/MenuItem";
 const {SubMenu} =Menu
 
 function MenuList() {
@@ -70,7 +74,7 @@ function MenuList() {
 
       </Menu.Item>}
 
-      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<BarChartOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
+      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<FieldTimeOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined style={{ fontSize: 22 }} />}>
           <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
         </Menu.Item>
@@ -78,9 +82,6 @@ function MenuList() {
           <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
         </Menu.Item>
       </SubMenu>}
-      {/* <Menu.Item key="userprofile" icon={<UserOutlined style={{ fontSize: 22 }} />}>
-        <NavLink to="/user-profile">Thông tin cá nhân</NavLink>
-      </Menu.Item> */}
 
     </Menu>
   );

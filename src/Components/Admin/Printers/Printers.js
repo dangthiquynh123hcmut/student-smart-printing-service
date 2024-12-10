@@ -145,7 +145,6 @@ function Printers() {
 
 
         postNewPrinterApi(token, newPrinter)
-
             .then((response) => {
                 const data = response.data;
                 setPrinters((prev) => [...prev, data]);
