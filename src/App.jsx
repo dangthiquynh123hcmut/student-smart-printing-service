@@ -19,6 +19,7 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
+import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
 import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
 import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
 // import UpdateUser from "./Components/updateUser/updateUser";
@@ -177,6 +178,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <Configuration/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="price-setting"
+            element={
+              <PrivateRoute token={token} >
+                <PriceSetting/>
               </PrivateRoute>
             }
           />

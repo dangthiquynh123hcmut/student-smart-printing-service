@@ -1,10 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../Authentication/Authenticate';
 import { PlusOutlined } from '@ant-design/icons';
-import { Select,Button, Modal,Form, Input, notification } from 'antd';
+import { Select,Button, Modal,Form, Input, notification,  Flex, Spin } from 'antd';
+import { localApi } from '../../../../api/baseURL';
 import InkImage from './ink-pic.jpeg'
 
 const {Option} = Select
+
+const contentStyle = {
+  padding: 50,
+  // background: 'rgba(0, 0, 0, 0.05)',
+  borderRadius: 4,
+  marginLeft: 450,
+};
+const content = <div style={contentStyle} />;
+
+
 
 function MaterialStorage(){
   const {token} = useContext(AuthContext);
@@ -13,7 +24,11 @@ function MaterialStorage(){
   const [selectedMaterial,setSelectedMaterial] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading,setLoading] = useState(false)
-  const [addMaterial, setAddMaterial] = useState(null)
+  const [addMaterial, setAddMaterial] = useState({
+    name:"",
+    value:""
+  })
+
   const [modifiedValue, setModifiedValue] = useState({
     name:"",
     value:"",
@@ -35,20 +50,18 @@ function MaterialStorage(){
   const getMaterialApi = async(e) =>{    
     setLoading(true)
     try {
-      const response = await fetch("http://localhost:8080/materialStorage", {
-        method: "GET",
-        headers : {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-    },
-    }  
+      const response = await localApi.get(
+        "/materialStorage", 
+        {headers : {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        }},
+ 
   );
-    if (!response.ok) {
-      throw new Error(`Network response was not ok : ${response.status}`);
-    }
-    const data = await response.json();
-    console.log("fetch material success",data.result);
-    setMaterials(Array.isArray(data.result) ? data.result : []);
+
+    
+    console.log("Fetch material success", response.data.result);
+    setMaterials(Array.isArray(response.data.result) ? response.data.result : []);
   }
     catch (error) {
       console.error("Fetch failed:", error);
@@ -85,74 +98,126 @@ function MaterialStorage(){
 
   const modifiedMaterialApi= async()=>{
    
-  try{
-    const response = await fetch("http://localhost:8080/materialStorage/addjustMaterialRequest", {
-      method: "POST",
-      headers : {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name:modifiedValue.name,
-        value: modifiedValue.value
-      }),
-    }  
-  );
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(`${errorData.message}`);
-  }
-  const data = await response.json();
-  console.log("Modified material success",data.result);
-  }
-  catch(error){
-      console.error("Modified failed:", error);
+    try {
+      const response = await localApi.post(
+          "/materialStorage/addjustMaterialRequest", 
+          {
+              name: modifiedValue.name,
+              value: modifiedValue.value
+          }, 
+          {
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+  
+      // Nếu thành công
+      console.log("Modified material success", response.data.result);
+  } catch (error) {
+      // Bắt lỗi từ server hoặc lỗi mạng
+      const errorMessage = error.response?.data?.message || error.message || "Unknown error occurred";
+      console.error("Modified failed:", errorMessage);
+  
       notification.error({
-        message: "Update error",
-        description: `${error.message}`,
-    });
+          message: "Update error",
+          description: errorMessage,
+      });
   }
 }
 
   const handleDeleteMaterial= async()=>{
-    try{
-      const response = await fetch("http://localhost:8080/materialStorage", {
-        method: "DELETE",
-        headers : {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name:selectedMaterial.name,
-        }),
-      }  
-  );
-  if (!response.ok) {
-    throw new Error(`Network response was not ok : ${response.status}`);
-  }
-  const data = await response.json();
-  console.log("Delete material success",data.result);
+    try {
+      const response = await localApi.delete(
+          "/materialStorage", 
+          {
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+              data: { // Dữ liệu gửi kèm với phương thức DELETE
+                  name: selectedMaterial.name,
+              },
+          }
+      );
 
-  }catch(error){
-      console.error("Modified failed:", error);
+      console.log("Delete material success", response.data.result);
+
+      // Fetch lại dữ liệu mới sau khi xóa thành công
+      await getMaterialApi(); 
+      setSelectedMaterial(null)
+      handleCloseModal(); // Đóng modal sau khi xử lý xong
+  } catch (error) {
+      console.error("Delete failed:", error.response?.data?.message || error.message);
       notification.error({
-        message: "Delete error",
-        description: "Error",
-    });
+          message: "Delete error",
+          description: error.response?.data?.message || "An error occurred",
+      });
+    }
   }
+
+
+  const handleSelectAddMaterial = (e) => {
+    if (typeof e === "string") {
+      setAddMaterial((prev) => ({ ...prev, name: e }));
+    }
+    console.log(addMaterial.name)
+  };
   
-  await getMaterialApi(); // Fetch dữ liệu mới sau khi chỉnh sửa
-  handleCloseModal();
-
-}
- const handleSelectAddMaterial = (value)=>{
-  setAddMaterial(value)
- }
-
-  const handleAddMaterial = async () =>{
+  const handleInputChangeAddMaterial = (e) => {
     
-  }
+    const { name, value } = e.target;
+    if (isNaN(value) || value.trim() === "") {
+      notification.error({
+        message: "Vui lòng nhập một giá trị hợp lệ!",
+        description: "Giá trị phải là số",
+      });
+      return;
+    }
+    console.log(value)
+    setAddMaterial((prev) => ({ ...prev, [name]: value }));
+    console.log(addMaterial.value)
+  };
+  
+  
+  
+  const handleAddMaterial = async () => {
+    console.log(addMaterial.name,addMaterial.value)
+    try {
+      const response = await localApi.post(
+        "/materialStorage/createMaterialRequest", 
+        {
+          name: addMaterial.name,  // Sử dụng name từ state
+          value: addMaterial.value,  // Sử dụng value từ state
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log("Add material success", response.data.result);
+  
+      // Fetch lại dữ liệu mới sau khi thêm thành công
+      await getMaterialApi();
+      handleCloseAddModal(); // Đóng modal sau khi xử lý xong
+    } catch (error) {
+      console.error("Add failed:", error.response?.data?.message || error.message);
+      notification.error({
+        message: "Add error",
+        description: error.response?.data?.message || "An error occurred",
+      });
+    }
+  };
+  
 
+  const handleCloseAddModal =() =>{
+    setIsAddModalVisible(false)
+    setAddMaterial({ name: "", value: "" }); 
+  }
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectedMaterial(null);
@@ -165,7 +230,7 @@ function MaterialStorage(){
   },[]);
 
   return (
-    <div id="wrapper">
+    <div className="wrap-report">
       <div id="header">
           <a href="/" className="back-button">
               &larr; Trở về trang chủ
@@ -174,15 +239,24 @@ function MaterialStorage(){
       </div>
 
       <div className="add-button">
-          <button onClick={showAddModal} className="add-printer-button">
-              <PlusOutlined style={{ marginRight: 8 }} />
+          <Button onClick={showAddModal} className="print-button" style={{padding:15, borderRadius:10, height:40}}>
+              <PlusOutlined  />
               Thêm material
-          </button>
+          </Button>
       </div>
 
       <div className="printer-container">
         {loading ? (
-          <p>Đang tải dữ liệu...</p>
+          <Flex gap="middle" vertical>
+          <Flex gap="middle">
+            
+
+            <Spin tip="Loading" size="large">
+              {content}
+            </Spin>
+          </Flex>
+
+        </Flex>
           ):
            (Array.isArray(materials) && materials.map((material) => (
             <div
@@ -236,9 +310,10 @@ function MaterialStorage(){
 
       <Modal title="Add Material"
         visible={addModalVisible}
+        onCancel={handleCloseAddModal}
         footer={[
 
-          <Button key="submit" type="primary" onClick={handleAddMaterial}>
+          <Button key="submit" type="primary" className='print-button' onClick={handleAddMaterial}>
               Thêm
           </Button>,
       ]}
@@ -246,24 +321,31 @@ function MaterialStorage(){
 
       <>
       <img src='https://adsmo.vn/wp-content/uploads/2019/11/in-an.png' style={{"width":"100%"}}/>
-      <Select
-      className='select'
-        placeholder="Chọn Material"
-        style={{ width: '120px' }}
-        value={addMaterial}
-        onChange={handleSelectAddMaterial}
-        
-      >
-        <Option value="A5Page">A5Page</Option>
-        <Option value="A4Page">A4Page</Option>
-        <Option value="A3Page">A3Page</Option>
-        <Option value="A2Page">A2Page</Option>
-        <Option value="A1Page">A1Page</Option>
-        <Option value="A0Page">A0Page</Option>
-        <Option value="BLACK_WHITE_INK">BLACK_WHITE_INK</Option>
-        <Option value="COLOR_INK">COLOR_INK</Option>
+      <label htmlFor="material-select">Chọn Material:</label>
+        <Select
+        id='material-select'
+        className='select'
+          placeholder="Set Material"
+          style={{ width: '200px', marginLeft:"10px"}}
+          value={addMaterial.name}
+          onChange={handleSelectAddMaterial}
+          
+        >
+          <Option value="A5Page">A5Page</Option>
+          <Option value="A4Page">A4Page</Option>
+          <Option value="A3Page">A3Page</Option>
+          <Option value="A2Page">A2Page</Option>
+          <Option value="A1Page">A1Page</Option>
+          <Option value="A0Page">A0Page</Option>
+          <Option value="BLACK_WHITE_INK">BLACK_WHITE_INK</Option>
+          <Option value="COLOR_INK">COLOR_INK</Option>
 
-      </Select>
+        </Select>
+      <Form style={{marginTop:"14px"}}>
+        <Form.Item label="Set value">
+        <Input name="value" value={addMaterial.value} onChange={handleInputChangeAddMaterial} />
+        </Form.Item>
+      </Form>
       </>
 
       </Modal>

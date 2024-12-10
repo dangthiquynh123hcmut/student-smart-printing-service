@@ -61,8 +61,12 @@ function MenuList() {
       {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
       <NavLink to="/configuration">Cấu hình in</NavLink>
       </Menu.Item>} */}
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="priceSetting" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/price-setting">Cập nhật giá in</NavLink>
 
-      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<BarChartOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
+      </Menu.Item>}
+
+      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<FieldTimeOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
         <Menu.Item key="old-report" icon={<EyeOutlined style={{ fontSize: 22 }} />}>
           <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
         </Menu.Item>
@@ -76,7 +80,7 @@ function MenuList() {
       </Menu.Item>
       }
       {(userData?.result.role === "ADMIN")&&
-      <Menu.Item key="material-history" icon={<FieldTimeOutlined style={{ fontSize: 22 }} />} > 
+      <Menu.Item key="material-history" icon={<BarChartOutlined style={{ fontSize: 22 }} />} > 
         <NavLink to="/materialHistory"> Material History</NavLink>
       </Menu.Item>
       }
