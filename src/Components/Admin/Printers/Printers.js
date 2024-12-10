@@ -1,12 +1,22 @@
 import "./Printers.css";
 import printerImage from '../../Assets/printer.avif';
 import { useState, useEffect } from "react";
-import { Input, Pagination, Modal, Button, Form, notification, Switch, Select } from "antd";
+import { Input, Pagination, Modal, Button, Form, notification, Switch, Select,Flex, Spin } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import { postNewPrinterApi, editPrinterInfo, deletePrinter, addPrinterMaterial, getAllPrinter } from "../../../api/adminApi";
+import { api } from "../../../api/baseURL";
 
+
+const contentStyle = {
+    padding: 50,
+    // background: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 4,
+    marginLeft: 450,
+  };
+  const content = <div style={contentStyle} />;
 function Printers() {
     const [printers, setPrinters] = useState([]);
+    const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 8;
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -90,7 +100,75 @@ function Printers() {
 
     const currentProducts = filteredPrinters.slice(indexOfFirstProduct, indexOfLastProduct);
 
+    const handleMaintainRequest= async () =>{
+        try {
+            const response = await api.post(
+                "/printers/maintenancePrint", // Endpoint
+                {
+                  idMachine: selectedProduct.id, // Body (payload)
+                  description: 'Đang bảo trì'
+                },
+                {
+                  headers: { // Headers
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                  }
+                }
+              );
+              //close modal first
+            setIsEditModalVisible(false)
+            notification.success({
+                message: "Cập nhật trạng thái thành công",
+                description: "Success",
+            });       
+            
+        } catch (error) {
+            console.log("id machine:",selectedProduct.id)
+            const errorMessage = error.response?.data?.message || error.message || "Unknown error occurred";
+            console.error("Modified failed:", errorMessage);
+        
+            notification.error({
+                message: "Update error",
+                description: errorMessage,
+            });
+        }
+    }
 
+    const handleFinishMaitain = async ()=>{
+        try {
+            setLoading(true)
+            console.log(selectedProduct)
+            const response = await api.post(
+                "/printers/completeMaintenancePrint", // Endpoint
+                {
+                  idMachine: selectedProduct.id, // Body (payload)
+                  description: 'Hoàn tất bảo trì'
+                },
+                {
+                  headers: { // Headers
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                  }
+                }
+              );
+              //close modal first
+            setIsEditModalVisible(false)
+            notification.success({
+                message: "Cập nhật trạng thái thành công",
+                description: "Success",
+            });       
+            
+        } catch (error) {
+            console.log("id machine:",selectedProduct.id)
+            const errorMessage = error.response?.data?.message || error.message || "Unknown error occurred";
+            console.error("Modified failed:", errorMessage);
+        
+            notification.error({
+                message: "Update error",
+                description: errorMessage,
+            });
+        }
+    }
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -101,9 +179,14 @@ function Printers() {
         setIsModalVisible(true);
     };
 
+    const handleCloseEditModal =()=>{
+        setIsEditModalVisible(false)
+        setSelectedProduct(null)
+    }
+
     const handleCloseModal = () => {
         setIsModalVisible(false);
-        setSelectedProduct(null);
+        // setSelectedProduct(null);
     };
 
     const showAddModal = () => {
@@ -165,7 +248,7 @@ function Printers() {
     const showEditModal = () => {
         setEditedPrinter(selectedProduct || {});
         setIsEditModalVisible(true);
-        // handleCloseModal();
+        handleCloseModal();
     };
     const showAddMaterialModal = () => {
         setAddedPrinter(selectedProduct || {});
@@ -180,7 +263,7 @@ function Printers() {
     const handleSubmitEditPrinter = () => {
         const { id, status } = editedPrinter;
 
-
+        setLoading(true)
         editPrinterInfo(token, id, status)
             .then((response) => {
                 const updatedPrinter = response.data;
@@ -241,6 +324,7 @@ function Printers() {
     };
 
     const handleAddMaterialPrinter = () => {
+        setLoading(true)
         const data = {
             printerId: addedPrinter.id,
             materialType: materialType,
@@ -269,17 +353,19 @@ function Printers() {
     };
 
     useEffect(() => {
-
+        setLoading(true);
         getAllPrinter(token)
-
             .then((res) => {
                 setPrinters(res.data.result);
             })
             .catch((error) => {
                 console.error("Error fetching printers:", error);
+            })
+            .finally(() => {
+                setLoading(false); // Đảm bảo được gọi sau khi request hoàn tất
             });
-    }, [isEdit, isAddMaterial]);
-
+    }, [isEdit, isEditModalVisible, isAddMaterial]);
+    
     const resetFilters = () => {
         setSelectedBase("");
         setSelectedBuilding("");
@@ -385,17 +471,35 @@ function Printers() {
             </div>
 
             <div className="printer-container">
-                {currentProducts && currentProducts.map((product) => (
-                    <div
-                        className={`printer ${product.status ? 'active' : 'inactive'}`}
-                        key={product.id}
-                        onClick={() => showModal(product)}
-                    >
-                        <img src={printerImage} alt="Ảnh máy in" />
-                        <h3>Máy in {product.name}</h3>
-                        <p>{product.address.base}, tòa {product.address.building}, tầng {product.address.floor}</p>
-                    </div>
-                ))}
+                {
+                    loading ? (
+                        <Flex gap="middle" vertical>
+                        <Flex gap="middle">
+                            
+
+                            <Spin tip="Loading" size="large">
+                            {content}
+                            </Spin>
+                        </Flex>
+
+                        </Flex>
+
+                    ):(currentProducts && currentProducts.map((product) => (
+                        <div
+                            className={`printer ${product.status ? 'active' : 'inactive'}`}
+                            key={product.id}
+                            onClick={() => showModal(product)}
+                        >
+                            <img src={printerImage} alt="Ảnh máy in" />
+                            <h3>Máy in {product.name}</h3>
+                            <p>{product.address.base}, tòa {product.address.building}, tầng {product.address.floor}</p>
+                        </div>
+                    ))
+                )
+                }
+
+
+                
             </div>
 
             <div className="pagination">
@@ -525,16 +629,22 @@ function Printers() {
             <Modal
                 title="Chỉnh sửa Máy In"
                 visible={isEditModalVisible}
-                onCancel={handleCloseModal}
-                footer={[
-                    <Button key="addMaterial" onClick={showAddMaterialModal}>
-                        Thêm vật liệu
-                    </Button>,
+                onCancel={handleCloseEditModal}
+                footer={
+                    <>
                     <Button key="submit" type="primary" onClick={handleSubmitEditPrinter}>
                         Xong
-                    </Button>,
-                ]}
-            >
+                    </Button>
+                    <Button onClick={handleMaintainRequest}>
+                        Bảo trì máy in
+                    </Button>
+                    <Button onClick={handleFinishMaitain}>
+                        Hoàn tất bảo trì
+                    </Button>
+                    </>
+                }
+                >
+
                 <Form layout="vertical">
                     <Form.Item label="Trạng thái hoạt động">
                         <Switch
@@ -543,6 +653,16 @@ function Printers() {
                         />
                     </Form.Item>
                 </Form>
+                {/* Nút thêm vật liệu */}
+                <div style={{ textAlign: "right", marginBottom: "16px" }}>
+                    <Button 
+                    key="addMaterial" 
+                    onClick={showAddMaterialModal} 
+                    style={{ backgroundColor: "#52c41a", color: "white", borderColor: "#52c41a" }}
+                    >
+                    Thêm vật liệu
+                    </Button>
+                </div>
             </Modal>
             <Modal
                 title="Thêm vật liệu"
@@ -557,7 +677,7 @@ function Printers() {
                 <Form layout="vertical">
                     <Form.Item label="Chọn vật liệu">
                         <Select
-                            placeholder="A0"
+                            placeholder="A0, A1, A2..."
                             style={{ width: 200 }}
                             onChange={value => setMaterialType(value)}
                         >
