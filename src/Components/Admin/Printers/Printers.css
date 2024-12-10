@@ -1,7 +1,7 @@
 #wrapper {
     width: 100%;
-    padding: 5px 5px 10px 30px;
-    margin-top: 20px;
+    margin-top: 0;
+    padding-top: 20px;
 }
 
 .back-button {
@@ -11,10 +11,45 @@
 .back-button:hover {
     text-decoration: none;
 }
+
+.search-wrapper {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding-top: 20px;
+}
+
+.filter-and-button-wrapper {
+    display: flex;
+    align-items: center; 
+    flex-wrap: nowrap;
+    justify-content: space-between; 
+    margin-top: 10px; 
+    padding: 20px;
+}
+
+
+.filter-wrapper {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 10px; 
+    justify-content: flex-start; 
+}
+
+
+@media (max-width: 600px) {
+    .filter-wrapper {
+        flex-direction: column; 
+        align-items: flex-start;
+    }
+}
+
+.add-button {
+    margin-left: auto; 
+}
 .add-button {
     display: flex;           
-    justify-content: flex-end; 
-    padding: 20px;       
+    justify-content: flex-end;    
 }
 
 .add-printer-button {
@@ -27,7 +62,7 @@
     padding: 8px 16px;        
     cursor: pointer;           
     transition: background-color 0.3s ease; 
-    font-size: large;  
+    font-size: medium;  
 }
 
 .add-printer-button:hover {
@@ -40,10 +75,11 @@
 
 .printer-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 products per row */
-    gap: 20px; /* Space between products */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px; 
     /* margin-top: 10px;  */
     padding-right: 20px;
+    padding-left: 20px;
 }
 
 .printer {
@@ -53,7 +89,6 @@
     justify-content: center;
     align-items: center;
     flex: 0 1 calc(25% - 15px); 
-    margin-bottom: 20px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     /* border: solid 3px whitesmoke; */
     text-align: center; 
@@ -114,25 +149,7 @@
 .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #ccc;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-}
-
-.pagination button:disabled {
-    background-color: #4f46e5;
-    cursor: not-allowed;
+    margin-bottom: 10px;
 }
 
 

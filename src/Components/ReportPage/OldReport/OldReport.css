@@ -4,8 +4,8 @@
 }
 
 h2 {
-    border-bottom: 4px solid; /* Thickness of the underline */
-  border-image: linear-gradient(to right, #395e94, #62cde0); /* Gradient colors */
+    /* border-bottom: 4px solid; Thickness of the underline */
+  /* border-image: linear-gradient(to right, #395e94, #62cde0); Gradient colors */
   border-image-slice: 1;
 }
 .table-list-report{

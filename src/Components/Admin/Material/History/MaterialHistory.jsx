@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import SearchIcon from "@mui/icons-material/Search";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { saveAs } from "file-saver";
-import { localApi } from "../../../../api/baseURL";
+import { api } from "../../../../api/baseURL";
 import { AuthContext } from '../../../Authentication/Authenticate';
 import './MaterialHistory.css'
 import { NavLink } from 'react-router-dom';
@@ -113,7 +113,7 @@ const PaginatedTable = () => {
             console.log("input is null")
         }
         else{
-          const response = await localApi.get(
+          const response = await api.get(
             `/HistoryMaterial/${e.target.value}`,
             {
               headers:{
@@ -141,7 +141,7 @@ const PaginatedTable = () => {
   //api get history
   const getAllHistoryMat = async()=>{
     try {
-      const response= await localApi.get(
+      const response= await api.get(
         "/HistoryMaterial",
         {
           headers:{

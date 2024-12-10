@@ -19,9 +19,13 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
-import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+
+import File from "./Components/File/File";
+import Warranty from "./Components/Admin/Warranty/Warranty";
+import { UserProfile } from "./Components/Profile/Profile";
 import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
 import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
+import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
@@ -88,6 +92,14 @@ function App() {
             }
           />
           <Route
+            path="file"
+            element={
+              <PrivateRoute token={token} >
+                <File />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="print"
             element={
               <PrivateRoute token={token} >
@@ -110,6 +122,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <Payment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="warranty"
+            element={
+              <PrivateRoute token={token} >
+                <Warranty />
               </PrivateRoute>
             }
           />
@@ -186,6 +206,14 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <PriceSetting/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-profile"
+            element={
+              <PrivateRoute token={token} >
+                <UserProfile/>
               </PrivateRoute>
             }
           />

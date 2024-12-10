@@ -1,117 +1,94 @@
 import "./Payment.css";
+import React from 'react';
 import { useState, useEffect } from "react";
-import { notification, Button } from "antd";
-import html2pdf from 'html2pdf.js';
+import { notification, Button, Pagination } from "antd";
+import vnpayimg from "../Assets/vnpay.png";
+import { getPaymentInfo, getBalanceHistory, getBalanceInfo } from "../../api/studentApi";
+import { parseISO, format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 function Payment() {
   const [bill, setBill] = useState([]);
-  const [formData, setFormData] = useState({
-    email: "",
-    paperNumber: 1,
-    paperSize: "A4",
-    paymentMethod: '',
-    date: new Date(),
-    price: 0,
+  const [balance, setBalance] = useState(0);
+  const [payment, setPayment] = useState({
+    bankCode: "NCB",
+    amount: 0,
   });
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái cho trang hiện tại
+  const itemsPerPage = 5; // Số hóa đơn trên mỗi trang
 
-  const handleInputChange = (e) => {
+  const token = localStorage.getItem("token");
+
+  const handlePaymentInfo = (e) => {
     const { name, value } = e.target;
-    
-    const updatedFormData = { ...formData, [name]: value };
-
-    const pricePerPaper =
-    updatedFormData.paperSize === "A4" ? 500 :
-    updatedFormData.paperSize === "A3" ? 1000 :
-    updatedFormData.paperSize === "A2" ? 2000 :
-    updatedFormData.paperSize === "A1" ? 5000 : 0;
-
-  const totalAmount = updatedFormData.paperNumber * pricePerPaper;
-
-  // Cập nhật `price` trong `formData` và set lại `formData`
-  setFormData({ ...updatedFormData, price: totalAmount });
+    setPayment({ ...payment, [name]: value });
   };
 
-  const handlePaymentMethodChange = (e) => {
-    setFormData({ ...formData, paymentMethod: e.target.value });
-  };
-
-  const handleSubmit = () => {
-
-    if (!formData.email || !formData.paymentMethod) {
-      notification.error({
-        message: "Vui lòng điền đầy đủ thông tin",
-        description: "Error",
-      });
-      return;
-    }
-
-    fetch('https://671d199b09103098807c4344.mockapi.io/api/bill', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(response => response.json())
-      .then(() => {
-        notification.success({
-          message: "Thanh toán thành công",
-          description: "Success",
-        });
-        setFormData({
-          email: "",
-          paperNumber: 1,
-          paperSize: "A4",
-          paymentMethod: "",
-          date: new Date(),
-          price: 0,
-        });
+  const fetchBill = () => {
+    getBalanceHistory(token)
+      .then((response) => {
+        setBill(response.data.result.content);
       })
-      .catch(() => {
-        notification.success({
-          message: "Thanh toán thất bại",
-          description: "Error",
-        });
+      .catch(error => {
+        console.error('Error fetching bill:', error);
       });
-
-  };
-
-  const generatePDF = (item) => {
-    const billContent = `
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2>HÓA ĐƠN THANH TOÁN</h2>
-      </div>
-      <div style="padding-left: 20px;">
-        <p><strong>ID hóa đơn:</strong> ${item.id}</p>
-        <p><strong>Email:</strong> ${item.email}</p>
-        <p><strong>Ngày thanh toán:</strong> ${new Date(item.date).toLocaleDateString("vi-VN")}</p>
-        <p><strong>Loại giấy:</strong> ${item.paperSize}</p>
-        <p><strong>Số lượng:</strong> ${item.paperNumber}</p>
-        <p><strong>Thanh toán qua phương thức:</strong> ${item.paymentMethod}</p>
-        <p><strong>Tổng tiền:</strong> ${item.price} VNĐ</p>
-      </div>
-    `;
-
-    const opt = {
-      margin: 1,
-      filename: `HoaDon_${item.id}.pdf`,
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    };
-
-    html2pdf().from(billContent).set(opt).save();
   };
 
   useEffect(() => {
-    fetch('https://671d199b09103098807c4344.mockapi.io/api/bill')
-      .then(res => res.json())
-      .then(bill => {
-        setBill(bill);
-      })
-      .catch(error => {
-        console.error('Error fetching bill:', error)
+    fetchBill();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handlePayment = (amount, bankCode) => {
+    if (amount<10000) {
+      notification.error({
+        message: "Không thể giao dịch",
+        description: "Số tiền giao dịch tối thiểu là 10.000đ",
       });
-  }, [formData]);
+      return;
+    }
+    getPaymentInfo(token, amount, bankCode)
+      .then((res) => {
+        if (res.data.result.paymentUrl) {
+          navigate('/file');
+          window.open(res.data.result.paymentUrl, '_blank');
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: "Không nhận được URL thanh toán từ API.",
+          });
+        }
+      })
+      .catch((error) => {
+        notification.error({
+          message: "Lỗi kết nối",
+          description: "Có lỗi xảy ra khi kết nối với API thanh toán.",
+        });
+        console.error(error);
+      });
+  };
+
+  // Tính toán hóa đơn cho trang hiện tại
+  const indexOfLastBill = currentPage * itemsPerPage;
+  const indexOfFirstBill = indexOfLastBill - itemsPerPage;
+  const sortedBills = bill.sort((a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  });
+  const currentBills = sortedBills.slice(indexOfFirstBill, indexOfLastBill);
+
+  useEffect (()=>{
+    const token = localStorage.getItem("token");
+
+    getBalanceInfo(token)
+      .then((res)=>{
+        setBalance(res.data.result.balance);
+      })
+      .catch((error) => {
+        console.error("Error get balance:", error);
+      });
+  },[]);
+
 
   return (
     <div id="wrapper">
@@ -125,45 +102,28 @@ function Payment() {
       <div className="payment-container">
         <div className="row">
           <div className="box payment-info">
-            <h3>Thông tin thanh toán</h3>
-            <div className="personal-info">
-              <label>
-                Email
-                <input type="text" name="email" value={formData.email} onChange={handleInputChange} checked />
-              </label>
-              <label>
-                Số lượng giấy
-                <input type="number" name="paperNumber" step="1" min="1" value={formData.paperNumber} onChange={handleInputChange} />
-              </label>
-              <label>
-                Kích cỡ
-                <select name="paperSize" value={formData.paperSize} onChange={handleInputChange}>
-                  <option value="A4">A4</option>
-                  <option value="A3">A3</option>
-                  <option value="A2">A2</option>
-                  <option value="A1">A1</option>
-                </select>
-              </label>
-              <div className="payment-button">
-                <button onClick={handleSubmit}>Thanh toán</button>
-              </div>
+            <div>
+              <img src={require('../Assets/printer.gif')} alt="GIF Example" />
             </div>
           </div>
 
           <div className="box payment-method">
             <h3>Phương thức thanh toán</h3>
-            <div className="card-option">
-              <label className="card momo">
-                <input type="radio" name="paymentMethod" value="MOMO" onChange={handlePaymentMethodChange} />
-                <img src="https://play-lh.googleusercontent.com/dQbjuW6Jrwzavx7UCwvGzA_sleZe3-Km1KISpMLGVf1Be5N6hN6-tdKxE5RDQvOiGRg" alt="Momo img" className="payment-img" />
-                <p>Thanh toán qua MOMO</p>
+            <div className="user-payment">
+              <img src={vnpayimg} alt="vnpay-img" />
+              <label>
+                Mã ngân hàng
+                <input type="text" name="bankCode" placeholder="NCB" value={payment.bankCode} onChange={handlePaymentInfo} />
               </label>
-
-              <label className="card ocb">
-                <input type="radio" name="paymentMethod" value="OCB" onChange={handlePaymentMethodChange} />
-                <img src="https://play-lh.googleusercontent.com/AUZSfk4Zv0Y1QTwbPfjZkJKwWDMW7g9koW-CaxBgkkIKuVJZYZDDL8iizRKTvq-V6-o" alt="OCB img" className="payment-img" />
-                <p>Thanh toán qua OCB</p>
+              <label>
+                Số tiền
+                <input type="number" name="amount" placeholder="0đ" step="1" min="1" value={payment.amount} onChange={handlePaymentInfo} />
               </label>
+            </div>
+            <div className="payment-button">
+              <button onClick={() => handlePayment(payment.amount, payment.bankCode)}>
+                Thanh toán
+              </button>
             </div>
           </div>
         </div>
@@ -171,42 +131,44 @@ function Payment() {
         <div className="box billing-history">
           <h3>Lịch sử hóa đơn</h3>
           <div id="billing-history-table">
+          <h4>Số dư: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance)}</h4>
             <table>
               <thead>
                 <tr>
-                  <th>Số hóa đơn</th>
-                  <th>Email</th>
-                  <th>Giá tiền</th>
+                  <th>STT</th>
+                  <th>Số tiền giao dịch</th>
                   <th>Ngày</th>
-                  <th>Loại giấy</th>
-                  <th>Số lượng giấy</th>
-                  <th>Thanh toán qua phương thức</th>
-                  <th>Tải hóa đơn</th>
                 </tr>
               </thead>
               <tbody>
-                {bill.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.email}</td>
-                      <td>{item.price} VNĐ</td>
-                      <td>{new Date(item.date).toLocaleDateString("vi-VN")}</td>
-                      <td>{item.paperSize}</td>
-                      <td>{item.paperNumber}</td>
-                      <td>{item.paymentMethod}</td>
-                      <td>
-                        <Button onClick={() => generatePDF(item)}>Tải hóa đơn</Button>
-                      </td>
+                {currentBills.length > 0 ? (
+                  currentBills.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                      <td>{item.balance}</td>
+                      <td>{format(parseISO(item.updatedAt), 'dd/MM/yyyy')}</td> {/* Định dạng ngày */}
                     </tr>
-                  );
-                })}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">Không có hóa đơn nào.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
+          </div>
+          <div className="pagination-container">
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={bill.length}
+              onChange={(page) => setCurrentPage(page)} // Cập nhật trang hiện tại
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default Payment;

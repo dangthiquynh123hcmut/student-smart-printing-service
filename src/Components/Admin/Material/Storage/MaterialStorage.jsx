@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../Authentication/Authenticate';
 import { PlusOutlined } from '@ant-design/icons';
 import { Select,Button, Modal,Form, Input, notification,  Flex, Spin } from 'antd';
-import { localApi } from '../../../../api/baseURL';
+import { api } from '../../../../api/baseURL';
 import InkImage from './ink-pic.jpeg'
 
 const {Option} = Select
@@ -50,7 +50,7 @@ function MaterialStorage(){
   const getMaterialApi = async(e) =>{    
     setLoading(true)
     try {
-      const response = await localApi.get(
+      const response = await api.get(
         "/materialStorage", 
         {headers : {
             'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function MaterialStorage(){
   const modifiedMaterialApi= async()=>{
    
     try {
-      const response = await localApi.post(
+      const response = await api.post(
           "/materialStorage/addjustMaterialRequest", 
           {
               name: modifiedValue.name,
@@ -129,7 +129,7 @@ function MaterialStorage(){
 
   const handleDeleteMaterial= async()=>{
     try {
-      const response = await localApi.delete(
+      const response = await api.delete(
           "/materialStorage", 
           {
               headers: {
@@ -185,7 +185,7 @@ function MaterialStorage(){
   const handleAddMaterial = async () => {
     console.log(addMaterial.name,addMaterial.value)
     try {
-      const response = await localApi.post(
+      const response = await api.post(
         "/materialStorage/createMaterialRequest", 
         {
           name: addMaterial.name,  // Sử dụng name từ state

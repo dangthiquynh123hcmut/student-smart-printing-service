@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getPricePaper, createNewPrice, editPricePaper } from "../../../api/adminApi";
-import axios from "axios";
-import { Pagination, Modal, Input, Select, Button } from "antd";
+import {
+  getPricePaper,
+  createNewPrice,
+  editPricePaper,
+} from "../../../api/adminApi";
+import { Pagination, Modal, Input, Select, Button, notification } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 import "./PriceSetting.css";
 
@@ -19,14 +22,14 @@ const PriceSetting = () => {
     faceType: false,
     pricePage: "",
   });
-  const [isOpenEditModal, setIsOpenEditModal] = useState(false); 
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [editingPrice, setEditingPrice] = useState({
     id: "",
     colorType: "",
     pageType: "",
     faceType: false,
     pricePage: "",
-  }); 
+  });
 
   const token = localStorage.getItem("token");
 
@@ -85,56 +88,73 @@ const PriceSetting = () => {
       .then(() => {
         fetchPrices();
         handleCloseAddModal();
+        notification.success({
+          message: "Thêm giá in thành công",
+          description: "Success",
+        });
       })
       .catch((error) => {
-        console.error("Error adding price:", error);
+        handleCloseAddModal();
+        notification.error({
+          message: "Lỗi",
+          description: "Đã xảy ra lỗi.",
+        });
       });
   };
 
-const handleOpenEditModal = (item) => {
-  setIsOpenEditModal(true);
-  setEditingPrice({
-    colorType: item.colorType,
-    pageType: item.pageType,
-    faceType: item.faceType,
-    pricePage: item.pricePage,
-  });
-};
-
-
-const handleCloseEditModal = () => {
-  setIsOpenEditModal(false);
-  setEditingPrice({
-    id: "",
-    colorType: "",
-    pageType: "",
-    faceType: false,
-    pricePage: "",
-  });
-};
-
-
-const handleEditPrice = () => {
-  if (!editingPrice.colorType || !editingPrice.pageType || !editingPrice.pricePage) {
-    alert("Vui lòng điền đầy đủ thông tin!");
-    return;
-  }
-
-  editPricePaper(token,{
-    colorType: editingPrice.colorType,
-    pageType: editingPrice.pageType,
-    faceType: editingPrice.faceType,
-    pricePage: editingPrice.pricePage,
-  })
-    .then(() => {
-      fetchPrices(); 
-      handleCloseEditModal();
-    })
-    .catch((error) => {
-      console.error("Error editing price:", error);
+  const handleOpenEditModal = (item) => {
+    setIsOpenEditModal(true);
+    setEditingPrice({
+      colorType: item.colorType,
+      pageType: item.pageType,
+      faceType: item.faceType,
+      pricePage: item.pricePage,
     });
-};
+  };
 
+  const handleCloseEditModal = () => {
+    setIsOpenEditModal(false);
+    setEditingPrice({
+      id: "",
+      colorType: "",
+      pageType: "",
+      faceType: false,
+      pricePage: "",
+    });
+  };
+
+  const handleEditPrice = () => {
+    if (
+      !editingPrice.colorType ||
+      !editingPrice.pageType ||
+      !editingPrice.pricePage
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
+    editPricePaper(token, {
+      colorType: editingPrice.colorType,
+      pageType: editingPrice.pageType,
+      faceType: editingPrice.faceType,
+      pricePage: editingPrice.pricePage,
+    })
+      .then(() => {
+        fetchPrices();
+        handleCloseEditModal();
+        notification.success({
+          message: "Thay đổi giá in thành công",
+          description: "Success",
+        });
+      })
+      .catch((error) => {
+        handleCloseEditModal();
+        notification.error({
+          message: "Lỗi",
+          description: "Đã xảy ra lỗi.",
+        });
+      });
+  };
 
   return (
     <div id="wrapper">
@@ -189,13 +209,8 @@ const handleEditPrice = () => {
               ))}
             </tbody>
           </table>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          >
+        </div>
+        <div className="pagination-container">
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
@@ -203,7 +218,7 @@ const handleEditPrice = () => {
               onChange={handlePageChange}
             />
           </div>
-        </div>
+
         <Modal
           title="Thêm giá in mới"
           visible={isOpenAddModal}
@@ -237,6 +252,7 @@ const handleEditPrice = () => {
             <Option value="A3Page">Giấy A3</Option>
             <Option value="A2Page">Giấy A2</Option>
             <Option value="A1Page">Giấy A1</Option>
+            <Option value="A0Page">Giấy A0</Option>
           </Select>
           <label>Mặt in:</label>
           <Select
@@ -292,6 +308,7 @@ const handleEditPrice = () => {
             <Option value="A3Page">Giấy A3</Option>
             <Option value="A2Page">Giấy A2</Option>
             <Option value="A1Page">Giấy A1</Option>
+            <Option value="A0Page">Giấy A0</Option>
           </Select>
           <label>Mặt in:</label>
           <Select

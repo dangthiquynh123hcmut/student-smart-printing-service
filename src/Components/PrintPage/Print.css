@@ -1,13 +1,13 @@
 #wrapper0 {
   width: 100%;
   padding: 20px;
-    
-   
+  /* margin-left: 30px; */
 }
 
-/* #header{
-  width: 100%;
-} */
+#header{
+  /* width: 100%; */
+  margin-left: 20px;
+}
 .file-upload-container {
     width: 100%;
     margin: 20px auto;
@@ -38,21 +38,8 @@
     margin-left: 10px; 
   }
   
-  .file-actions {
-    display: flex;
-    gap: 10px; 
-  }
   
-  .file-choose-button {
-    background-color: #337ead;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-  }
-  
-  .upload-button {
+  /* .upload-button {
     background-color: #28a745;
     color: white;
     padding: 8px 15px;
@@ -65,8 +52,8 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
-  .file-dropzone {
+   */
+  /* .file-dropzone {
     margin-top: 1px;
     border: 2px dashed #007bff;
     border-radius: 8px;
@@ -76,32 +63,38 @@
     transition: background-color 0.3s ease;
     margin-left: 10px;
     margin-right: 10px;
-  }
+  } */
   
-  .file-dropzone:hover {
+  /* .file-dropzone:hover {
     background-color: #e9e9e9;
-  }
+  } */
   #wrapper1 {
-  padding: 2vw;
+  padding: 1vw;
   position: relative; 
 }
-.chooseFile{
+/* .chooseFile{
   margin-bottom: 20px;
-}
+} */
 .input-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-.input-group1 {
+/* .input-group1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   width: 32%;
-}
+} */
 
+/* .choosen-file{
+  margin-bottom: 10px;
+} */
+.choosen-file p{
+  margin-bottom: 10px;
+}
 .quantity-input-container {
   flex: 1;
   margin-right: 10vw;
@@ -112,15 +105,17 @@
   margin-right: 0;
 }
 
-.quantity-input {
+/* .quantity-input {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
   border: 2px solid #ccc;
-}
+} */
 .node{
   margin-left: 4px;
   border: 2px solid #ccc;
+  width: 200px;
+  padding: 10px;
 }
 .radio-button-container {
   margin-left: 10px;
@@ -162,13 +157,13 @@
   align-items: center;
   z-index: 1000;
 }
-.search-container {
+/* .search-container {
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
-}
+} */
 
-.search-filter {
+/* .search-filter {
   display: flex; 
   align-items: center; 
 }
@@ -191,7 +186,7 @@
 
 .search-container h2 {
   margin-right: 10px; 
-}
+} */
 
 
 .table-container {
@@ -272,3 +267,65 @@
   background-color: #ff7875;
 } */
 
+.field-container {
+  margin-bottom: 20px;
+  margin-right: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.form-input,
+.form-select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Đảm bảo tất cả các ô đều có cùng độ rộng */
+  width: 200px; /* Đặt giới hạn độ rộng để đảm bảo giao diện gọn gàng */
+  box-sizing: border-box; /* Bao gồm padding và border trong kích thước tổng */
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Khoảng cách giữa các ô */
+}
+
+.quantity-input-container {
+  flex: 1;
+  min-width: 200px; /* Đảm bảo các ô co giãn linh hoạt nhưng vẫn đồng đều */
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.remove-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #d9363e;
+}
+
+.file-input {
+  margin-top: 10px;
+}

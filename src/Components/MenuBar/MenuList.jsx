@@ -14,6 +14,9 @@ import {
   FileAddOutlined,
   SettingOutlined,
   EditOutlined,
+  FolderOutlined,
+  SafetyOutlined,
+  UserOutlined,
   DropboxOutlined,
   FieldTimeOutlined
 } from "@ant-design/icons";
@@ -35,6 +38,9 @@ function MenuList() {
         <NavLink to="/">Trang chủ</NavLink>
       </Menu.Item>}
 
+      {!(userData?.result.role === "ADMIN") && <Menu.Item key="file" icon={<FolderOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/file">Tệp</NavLink>
+      </Menu.Item>}
 
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="print" icon={<PrinterOutlined style={{ fontSize: 22 }} />}>
         <NavLink to="/print">In ấn</NavLink>
@@ -49,20 +55,23 @@ function MenuList() {
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="payment" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/payment">Thanh toán</NavLink>
       </Menu.Item>}
-      {/* {!(userData?.result.role === "ADMIN") && <Menu.Item key="updateUser" icon={<EditOutlined />}>
-      <NavLink to="/updateUser">Chỉnh sửa thông tin</NavLink>
-      </Menu.Item>} */}
+     
 
 
       {(userData?.result.role === "ADMIN") && <Menu.Item key="printers" icon={<PrinterOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/printers">Quản lý máy in</NavLink>
+      </Menu.Item>}
 
+      
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="warranty" icon={<SafetyOutlined style={{ fontSize: 22 }} />}>
+      <NavLink to="/warranty">Bảo hành máy in</NavLink>
       </Menu.Item>}
       {/* {userData?.admin && <Menu.Item key="Configuration" icon={<SettingOutlined />}>
       <NavLink to="/configuration">Cấu hình in</NavLink>
       </Menu.Item>} */}
       {(userData?.result.role === "ADMIN") && <Menu.Item key="priceSetting" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
       <NavLink to="/price-setting">Cập nhật giá in</NavLink>
+
 
       </Menu.Item>}
 
@@ -84,7 +93,6 @@ function MenuList() {
         <NavLink to="/materialHistory"> Material History</NavLink>
       </Menu.Item>
       }
-
     </Menu>
   );
 }

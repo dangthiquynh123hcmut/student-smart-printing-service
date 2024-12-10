@@ -1,9 +1,8 @@
 import "./Printers.css";
-import axios from "axios";
-import printerImage from './printer.jpg';
+import printerImage from '../../Assets/printer.avif';
 import { useState, useEffect } from "react";
-import { Modal, Button, Input, Form, notification, Switch, Select } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { Input, Pagination, Modal, Button, Form, notification, Switch, Select } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
 import { postNewPrinterApi, editPrinterInfo, deletePrinter, addPrinterMaterial, getAllPrinter } from "../../../api/adminApi";
 
 function Printers() {
@@ -56,8 +55,42 @@ function Printers() {
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = printers.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(printers.length / productsPerPage);
+    // const currentProducts = printers.slice(indexOfFirstProduct, indexOfLastProduct);
+    // const totalPages = Math.ceil(printers.length / productsPerPage);
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedBase, setSelectedBase] = useState("");
+    const [selectedBuilding, setSelectedBuilding] = useState("");
+    const [selectedFloor, setSelectedFloor] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("");
+
+    const baseOptions = [...new Set(printers.map(printer => printer.address.base))];
+    const buildingOptions = [...new Set(printers.map(printer => printer.address.building))];
+    const floorOptions = [...new Set(printers.map(printer => printer.address.floor))];
+
+    const statusOptions = [
+        { value: "", label: "Tất cả" },
+        { value: "active", label: "Đang hoạt động" },
+        { value: "inactive", label: "Tạm dừng" },
+    ];
+
+    // Hàm xử lý tìm kiếm
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    // Lọc danh sách máy in theo tên và vị trí
+    const filteredPrinters = printers.filter(printer =>
+        printer.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedBase ? printer.address.base === selectedBase : true) &&
+        (selectedBuilding ? printer.address.building === selectedBuilding : true) &&
+        (selectedFloor ? printer.address.floor === selectedFloor : true) &&
+        (selectedStatus ? (selectedStatus === "active" ? printer.status : !printer.status) : true)
+    );
+
+    const currentProducts = filteredPrinters.slice(indexOfFirstProduct, indexOfLastProduct);
+
+
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -110,7 +143,9 @@ function Printers() {
             return;
         }
 
-        postNewPrinterApi(token, newPrinter)            .then((response) => {
+
+        postNewPrinterApi(token, newPrinter)            
+            .then((response) => {
                 const data = response.data;
                 setPrinters((prev) => [...prev, data]);
                 handleCloseAddModal();
@@ -138,14 +173,15 @@ function Printers() {
         setIsEditModalVisible(false);
     };
     const resetModal = () => {
-        setMaterialType(null); 
-        setAmount(0); 
+        setMaterialType(null);
+        setAmount(0);
     };
 
     const handleSubmitEditPrinter = () => {
         const { id, status } = editedPrinter;
 
-        editPrinterInfo(token, id, status)            
+
+        editPrinterInfo(token, id, status)
             .then((response) => {
                 const updatedPrinter = response.data;
                 setPrinters((prev) => prev.map((printer) => (printer.id === updatedPrinter.id ? updatedPrinter : printer)));
@@ -181,7 +217,9 @@ function Printers() {
     };
 
     const handleDeletePrinterConfirmed = () => {
+
         deletePrinter(token, selectedProduct.id)
+
             .then(() => {
                 setPrinters(prevPrinters => prevPrinters.filter(printer => printer.id !== selectedProduct.id));
                 notification.success({
@@ -209,7 +247,9 @@ function Printers() {
             amount: amount,
         };
 
-        addPrinterMaterial (token, data)
+
+        addPrinterMaterial(token, data)
+
             .then((response) => {
                 notification.success({
                     message: "Thêm vật liệu thành công",
@@ -229,7 +269,9 @@ function Printers() {
     };
 
     useEffect(() => {
+
         getAllPrinter(token)
+
             .then((res) => {
                 setPrinters(res.data.result);
             })
@@ -237,6 +279,13 @@ function Printers() {
                 console.error("Error fetching printers:", error);
             });
     }, [isEdit, isAddMaterial]);
+
+    const resetFilters = () => {
+        setSelectedBase("");
+        setSelectedBuilding("");
+        setSelectedFloor("");
+        setSelectedStatus("");
+    };
 
     return (
         <div id="wrapper">
@@ -246,12 +295,93 @@ function Printers() {
                 </a>
                 <h1>Quản lý máy in</h1>
             </div>
+            <div className="search-wrapper">
+                <Input
+                    placeholder="Nhập tên máy in"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    style={{
+                        borderRadius: "5px",
+                        padding: "10px",
+                        width: "40%",
+                    }}
+                    prefix={<SearchOutlined />}
+                />
+            </div>
+            <div className="filter-and-button-wrapper">
+                <div className="filter-wrapper">
+                    <div>
+                        {/* <p>Cơ sở</p> */}
+                        <Select
+                            placeholder="Chọn cơ sở"
+                            value={selectedBase || undefined}
+                            onChange={value => {
+                                setSelectedBase(value);
+                                setSelectedBuilding("");
+                                setSelectedFloor("");
+                            }}
+                        >
+                            {baseOptions.map(base => (
+                                <Option key={base} value={base}>{base}</Option>
+                            ))}
+                        </Select>
+                    </div>
 
-            <div className="add-button">
-                <button onClick={showAddModal} className="add-printer-button">
-                    <PlusOutlined style={{ marginRight: 8 }} />
-                    Thêm máy in
-                </button>
+                    <div>
+                        {/* <p>Tòa</p> */}
+                        <Select
+                            placeholder="Chọn tòa"
+                            value={selectedBuilding || undefined}
+                            onChange={value => {
+                                setSelectedBuilding(value);
+                                setSelectedFloor("");
+                            }}
+                        >
+                            {buildingOptions.map(building => (
+                                <Option key={building} value={building}>{building}</Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <div>
+                        {/* <p>Tầng</p> */}
+                        <Select
+                            placeholder="Chọn tầng"
+                            value={selectedFloor || undefined}
+                            onChange={setSelectedFloor}
+                        >
+                            {floorOptions.map(floor => (
+                                <Option key={floor} value={floor}>{floor}</Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <div>
+                        {/* <p>Trạng thái</p> */}
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            value={selectedStatus || undefined}
+                            onChange={setSelectedStatus}
+                        >
+                            {statusOptions.map(status => (
+                                <Option key={status.value} value={status.value}>
+                                    {status.label}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div>
+                        <Button color="default" variant="solid" onClick={resetFilters} className="reset-button">
+                            Reset
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="add-button" style={{ marginLeft: "auto" }}>
+                    <button onClick={showAddModal} className="add-printer-button">
+                        Thêm máy in
+                    </button>
+                </div>
             </div>
 
             <div className="printer-container">
@@ -269,15 +399,13 @@ function Printers() {
             </div>
 
             <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        onClick={() => handlePageChange(index + 1)}
-                        disabled={currentPage === index + 1}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                <Pagination
+                    current={currentPage}
+                    pageSize={productsPerPage}
+                    total={printers.length}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                />
             </div>
 
             <Modal
@@ -294,63 +422,35 @@ function Printers() {
                 ]}
             >
                 {selectedProduct && (
-                    <>
-                        <img src={printerImage} alt="Ảnh máy in" style={{ width: "100%", height: "auto" }} />
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                alignItems: "center",
-                                margin: "10px 0",
-                            }}
-                        >
-                            <p style={{ margin: 0 }}>
-                                <span
-                                    className={`status-box ${selectedProduct.status ? "status-active" : "status-inactive"
-                                        }`}
-                                >
-                                    {selectedProduct.status ? "Đang hoạt động" : "Tạm dừng"}
-                                </span>
-                            </p>
-                        </div>
+                    <div style={{ display: "flex", alignItems: "flex-start" }}>
+                        <img
+                            src={printerImage}
+                            alt="Ảnh máy in"
+                            style={{ width: "150px", height: "auto", marginRight: "20px" }}
+                        />
+                        <div style={{ flex: 1 }}>
+                            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", margin: "10px 0" }}>
+                                <p style={{ margin: 0 }}>
+                                    <span className={`status-box ${selectedProduct.status ? "status-active" : "status-inactive"}`}>
+                                        {selectedProduct.status ? "Đang hoạt động" : "Tạm dừng"}
+                                    </span>
+                                </p>
+                            </div>
 
-                        <p>
-                            <strong>Kiểu in:</strong> {selectedProduct.model}
-                        </p>
-                        <p>
-                            <strong>Vị trí:</strong> {selectedProduct.address.base}, tòa {selectedProduct.address.building}, tầng {selectedProduct.address.floor}
-                        </p>
-                        <p>
-                            <strong>Mực in trắng đen: </strong> {selectedProduct.blackWhiteInkStatus}
-                        </p>
-                        <p>
-                            <strong>Mực in màu: </strong> {selectedProduct.colorInkStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a0: </strong> {selectedProduct.a0paperStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a1: </strong> {selectedProduct.a1paperStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a2: </strong> {selectedProduct.a2paperStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a3: </strong> {selectedProduct.a3paperStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a4: </strong> {selectedProduct.a4paperStatus}
-                        </p>
-                        <p>
-                            <strong>Số giấy a5: </strong> {selectedProduct.a5paperStatus}
-                        </p>
-                        <p>
-                            <strong>Sức chứa: </strong> {selectedProduct.capacity}
-                        </p>
-                        <p>
-                            <strong>Ngày bảo hành: </strong> {new Date(selectedProduct.warrantyDate).toLocaleDateString("vi-VN")}
-                        </p>
-                    </>
+                            <p><strong>Kiểu in:</strong> {selectedProduct.model}</p>
+                            <p><strong>Vị trí:</strong> {selectedProduct.address.base}, tòa {selectedProduct.address.building}, tầng {selectedProduct.address.floor}</p>
+                            <p><strong>Mực in trắng đen:</strong> {selectedProduct.blackWhiteInkStatus}</p>
+                            <p><strong>Mực in màu:</strong> {selectedProduct.colorInkStatus}</p>
+                            <p><strong>Số giấy A0:</strong> {selectedProduct.a0paperStatus}</p>
+                            <p><strong>Số giấy A1:</strong> {selectedProduct.a1paperStatus}</p>
+                            <p><strong>Số giấy A2:</strong> {selectedProduct.a2paperStatus}</p>
+                            <p><strong>Số giấy A3:</strong> {selectedProduct.a3paperStatus}</p>
+                            <p><strong>Số giấy A4:</strong> {selectedProduct.a4paperStatus}</p>
+                            <p><strong>Số giấy A5:</strong> {selectedProduct.a5paperStatus}</p>
+                            <p><strong>Sức chứa:</strong> {selectedProduct.capacity}</p>
+                            <p><strong>Ngày bảo hành:</strong> {new Date(selectedProduct.warrantyDate).toLocaleDateString("vi-VN")}</p>
+                        </div>
+                    </div>
                 )}
             </Modal>
 
