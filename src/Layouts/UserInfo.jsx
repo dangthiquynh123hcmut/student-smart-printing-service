@@ -41,14 +41,19 @@ function UserInfo() {
       <Menu.Item key="1">
         <NavLink to="/user-profile">Thông tin cá nhân</NavLink>
       </Menu.Item>
-      {(userData?.result.role === "ADMIN") && <Menu.Item key="2">Quản lý tài khoản</Menu.Item>}
+
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="2"><NavLink to="/user-adminis">Quản lý tài khoản</NavLink></Menu.Item>}
+
       {(userData?.result.role === "ADMIN") && <Menu.Item key="3">Tạo tài khoản</Menu.Item>}
+
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="4">
         <NavLink to="/payment">Nạp tiền</NavLink>
       </Menu.Item>}
+
       <Menu.Item key="5" onClick={handleLogout}>
         <NavLink to="/login">Thoát</NavLink>
       </Menu.Item>
+
     </Menu>
   );
 

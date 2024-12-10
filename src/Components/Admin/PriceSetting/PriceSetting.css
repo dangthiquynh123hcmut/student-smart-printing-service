@@ -50,7 +50,7 @@
 }
 
 .add-price-button {
-    background-color: #007bff;
+    background-color: #37D996;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -60,7 +60,7 @@
 }
 
 .add-price-button:hover {
-    background-color: #0056b3;
+    background-color: #37b480;
 }
 
 .price-table {
@@ -73,7 +73,7 @@
 
 .price-table th, .price-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 15px;
 }
 
 .price-table td:last-child {
@@ -81,8 +81,9 @@
 }
 
 .price-table th {
-    background-color: #f4f4f4;
+    background-color: #5DB7DB;
     text-align: center;
+    color: white;
 }
 
 .price-table tbody tr:hover {

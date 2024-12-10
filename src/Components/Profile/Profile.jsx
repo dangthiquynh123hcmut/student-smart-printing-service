@@ -88,7 +88,7 @@ export function UserProfile() {
     } catch (error) {
       notification.error({
         message: "Lỗi",
-        description: "Cập nhật thông tin thất bại.",
+        description: `Cập nhật thất bại: ${error.message || error}`,
       });
     }
   };
@@ -118,7 +118,7 @@ export function UserProfile() {
     } catch (error) {
       notification.error({
         message: "Lỗi",
-        description: "Cập nhật mật khẩu thất bại.",
+        description: `${error.message || error}`,
       });
     }
   };

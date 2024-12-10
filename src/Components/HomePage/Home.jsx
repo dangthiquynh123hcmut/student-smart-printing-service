@@ -29,7 +29,7 @@ export default function Home() {
         />
         <div className="banner-text">
           <h1>TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG TP HỒ CHÍ MINH</h1>
-          <h2>SMART PRINTING SYSTEM</h2>
+          <h1 style={{marginTop: "15px"}}>SMART PRINTING SYSTEM</h1>
         </div>
       </div>
 

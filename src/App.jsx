@@ -25,6 +25,7 @@ import { UserProfile } from "./Components/Profile/Profile";
 import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
 import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
 import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+import { UserAdminis } from "./Components/Admin/UserAdminis/UserAdminis";
 
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
@@ -214,6 +215,15 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <UserProfile/>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="user-adminis"
+            element={
+              <PrivateRoute token={token} >
+                <UserAdminis/>
               </PrivateRoute>
             }
           />
