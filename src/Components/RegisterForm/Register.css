@@ -1,17 +1,9 @@
-.register-form{
-    background: url("https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png") no-repeat;
-    /* display: flex; */
-    /* flex-direction: row; */
-    background-size: 100%;
-    background-position: right;
-    
-    /* padding-left: 30%; */
-    /* color: white */
-    /* background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat; */
+.register{
+    background-color: #71d2ef;
 }
-/* .imageBK{
-
-    min-width: 500px;
-    min-width: 500px;
-    background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat;
-} */
+:where(.css-dev-only-do-not-override-142vneq).ant-form-item {
+    margin-bottom: 10px;
+}
+:where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label, :where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-24.ant-form-item-label, :where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-xl-24.ant-form-item-label {
+    padding-bottom: 4px;
+}

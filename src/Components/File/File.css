@@ -40,11 +40,11 @@
     margin: 10px;
     
   } */
-  .uploaded-files h2 {
+  .file-upload-container h2 {
     text-align: center;
     
   }
-  .uploaded-files p {
+  .file-upload-container p {
     /* text-align: center; */
     margin-top: 10px;
   }
@@ -60,6 +60,16 @@
     margin-right: 10px;
   } 
   
+  .files-info {
+    /* display: flex; */
+    /* yalign-items: center; */
+    /* justify-content: space-between; */
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
   
   .upload-button:disabled {
     background-color: #ccc;

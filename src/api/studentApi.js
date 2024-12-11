@@ -64,7 +64,7 @@ export const uploadFile = async (token, file) => {
   }
 };
 
-export const getAllFile = async (token,page,size) => {
+export const getAllFile = async (token,page,size=10) => {
   try {
     const response = await axios.get("http://localhost:8080/files/get-all", {
       params: { page, size }, 

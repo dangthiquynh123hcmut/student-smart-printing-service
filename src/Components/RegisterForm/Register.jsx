@@ -1,29 +1,16 @@
 import React from "react";
-import { Button, Form, Input, notification, DatePicker } from "antd";
-import { useState } from "react";
-// import { createUserApi } from "../../api/API";
+import { Button, Form, Input, notification, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
+import img from "../Assets/logobk.png";
+import { NavLink } from "react-router-dom";
 import "./Register.css";
+
 const RegisterPage = () => {
   const navigate = useNavigate();
 
-
-  const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
-  });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-
   const onFinish = async (formValues) => {
-    const { firstname, email, password, lastname,id,date,username } = formValues;
-    console.log(formValues)
+    const { email, username, password, firstname, lastname, id, date } = formValues;
+    console.log(formValues);
     try {
       const response = await fetch("http://localhost:8080/users", {
         method: "POST",
@@ -32,170 +19,224 @@ const RegisterPage = () => {
         },
         body: JSON.stringify({
           email: email,
+          username: username,
           password: password,
           firstName: firstname,
-          lastName:lastname,
-          mssv:id,
-          birthDate:date,
-          username:username,
+          lastName: lastname,
+          mssv: id,
+          birthDate: date,
         }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // Lấy chi tiết lỗi từ phản hồi API
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Unknown error occurred");
       }
-
+  
       const data = await response.json();
-      console.log(data);
       notification.success({
-          message: "Register SUCCESS",
-          description: "Success",
+        message: "Register SUCCESS",
+        description: "Success",
       });
   
       navigate("/login");
-
     } catch (error) {
       console.error("Error:", error);
+  
+      // Hiển thị thông báo lỗi cụ thể từ API hoặc lỗi mặc định
       notification.error({
-              message: "Register Failed",
-              description: "Try Again, @hcmut.edu.vn",
+        message: "Register Failed",
+        description: error.message || "Try Again, @hcmut.edu.vn",
       });
     }
-
-
   };
+  
 
   return (
-    <div className="register-form" style={{ padding: "50px"  }}>
-      <Form
-        name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
+    <div
+      className="register"
+      style={{
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        // overflowY: "auto",
+      }}
+    >
+      <Row
+        className="wrapper"
         style={{
-          maxWidth: 600,
-          // backdropFilter: 'blur(10px)',
-
-          
+          height: "80vh", // Chiếm 80% chiều cao
+          width: "70%",
+          maxWidth: "1200px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Bóng mờ
+           overflowY: "auto", 
         }}
-        onFinish={onFinish}
-        autoComplete="off"
-        layout="vertical"
       >
-        <Form.Item
-          label="Email"
-          name="email"
-          // value={formValues.email} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your email!",
-            },
-          ]}
+        {/* Cột bên trái */}
+        <Col
+          xs={24}
+          sm={24}
+          md={12}
+          style={{
+            // display: "flex",
+            paddingTop:"12vh",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#f5f5f5",
+            overflow: "hidden",
+          }}
         >
-          <Input placeholder="Email should have @hcmut.edu.vn"/>
-        </Form.Item>
-        <Form.Item
-          label="Username"
-          name="username"
-          // value={formValues.username} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input placeholder="At least 8 characters"/>
-        </Form.Item>
-        <Form.Item
-          label="Password"
-          name="password"
-          // value={formValues.password} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
-        <Input.Password placeholder="At least 8 characters"/>
-        </Form.Item>
-        <Form.Item
-          label="First Name"
-          name="firstname"
-          // value={formValues.firstname} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your First name!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+          <img
+            src={img}
+            alt="Register Visual"
+            style={{ width: "100%", marginBottom: "10px", }}
+          />
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "2.5rem", // Tăng kích thước chữ
+              color: "#007BFF", // Màu xanh dương
+              fontWeight: "bold",
+              margin:"8px",
+            }}
+          >
+            Dịch vụ in thông minh
+          </h1>
+        </Col>
 
-        <Form.Item
-          label="Last Name"
-          name="lastname"
-          // value={formValues.lastname} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your Last name!",
-            },
-          ]}
+        {/* Cột bên phải */}
+        <Col
+          xs={24}
+          sm={24}
+          md={12}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop:"10px",
+            overflowY: "auto",
+          }}
         >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Id"
-          name="id"
-          // value={formValues.id} // Bind value to state
-          // onChange={handleChange}
-          rules={[
-            {
-              required: true,
-              message: "Please input your ID!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Date of birth"
-          name="date"
-          // value={formValues.date} // Bind value to state
-          // onChange={handleChange}
-          
-          rules={[
-            {
-              required: true,
-              message: "Please select your date: year-month-date!",
-            },
-          ]}
-        >
-          <Input placeholder="Ex: 2000-01-01"/>
-        </Form.Item>
-
-
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-      {/* <div className="imageBK"></div> */}
+          <h1 style={{ textAlign: "center",fontSize: "2.5rem", }}>Đăng kí</h1>
+          <Form
+            name="basic"
+            style={{
+              maxWidth: "400px",
+              width: "100%",
+              paddingLeft: "15px",
+              paddingRight: "15px",
+            }}
+            onFinish={onFinish}
+            autoComplete="off"
+            layout="vertical"
+          >
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Email không được bỏ trống!",
+                },
+              ]}
+            >
+              <Input placeholder="Email phải có @hcmut.edu.vn" />
+            </Form.Item>
+            <Form.Item
+              label="Tên đăng nhâp"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Tên đăng nhập phải có ít nhất 8 kí tự!",
+                },
+              ]}
+            >
+              <Input placeholder="Phải có ít nhất 8 kí tự" />
+            </Form.Item>
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Mật khẩu phải có ít nhất 8 kí tự",
+                },
+              ]}
+            >
+              <Input.Password placeholder="Phải có ít nhất 8 kí tự" />
+            </Form.Item>
+            <Form.Item
+              label="Tên"
+              name="firstname"
+              rules={[
+                {
+                  required: true,
+                  message: "Tên không được bỏ trống!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Họ"
+              name="lastname"
+              rules={[
+                {
+                  required: true,
+                  message: "Họ không được bỏ trống!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="MSSV"
+              name="id"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập MSSV!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Ngày sinh"
+              name="date"
+              rules={[
+                {
+                  required: true,
+                  message: "Nhập ngày sinh theo định dạng: Năm-tháng-ngày!",
+                },
+              ]}
+            >
+              <Input placeholder="Vd: 2000-01-01" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+                Đăng kí
+              </Button>
+            </Form.Item>
+            <div
+              className="login-link"
+              style={{
+                textAlign: "center",
+                 marginBottom: "10px",
+              }}
+            >
+              <p>
+                Bạn có tài khoản? <NavLink to="/login">Đăng nhập</NavLink>
+              </p>
+            </div>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 };
