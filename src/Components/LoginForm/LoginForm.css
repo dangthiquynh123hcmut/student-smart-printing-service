@@ -50,41 +50,6 @@
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-.input-box input {
-  width: 100%;
-  padding: 10px 40px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.input-box .icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-}
-
-.member-forgot {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-.checkbox-input{
-  margin-right: 6px;
-}
-button[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-=======
 .input-box {
   position: relative; 
   margin-bottom: 20px;
@@ -106,7 +71,6 @@ button[type="submit"] {
 }
 
 .input-box .icon {
->>>>>>> origin/main
   font-size: 16px;
   color: rgba(0, 0, 0, 0.5); /* Màu sắc cho biểu tượng */
   margin-right: 5px;
