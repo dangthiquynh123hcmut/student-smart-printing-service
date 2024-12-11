@@ -128,3 +128,19 @@ export const getAllPrinter = (token) => {
     })
 }
 
+export const getAllUsers = (token) => {
+    return api.get("/users", {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
+
+export const deleteUserById = (token, id) => {
+    return api.delete(`/users/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
+

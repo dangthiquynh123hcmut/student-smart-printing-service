@@ -19,11 +19,13 @@ import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
 import OldReport from "./Components/ReportPage/OldReport/OldReport";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
-
 import File from "./Components/File/File";
 import Warranty from "./Components/Admin/Warranty/Warranty";
-
+import { UserProfile } from "./Components/Profile/Profile";
+import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
+import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
 import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+import { UserAdminis } from "./Components/Admin/UserAdminis/UserAdminis";
 
 // import UpdateUser from "./Components/updateUser/updateUser";
 //authenticate
@@ -164,6 +166,26 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+          path="materialStorage"
+          element={
+            <PrivateRoute token={token}>
+              <MaterialStorage/>
+            </PrivateRoute>
+          }          
+          />
+
+          <Route
+          path="materialHistory"
+          element={
+            <PrivateRoute token={token}>
+              <MaterialHistory/>
+            </PrivateRoute>
+          }          
+          />
+
+
+
             {/* <Route
             path="adHome"
             element={
@@ -185,6 +207,23 @@ function App() {
             element={
               <PrivateRoute token={token} >
                 <PriceSetting/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-profile"
+            element={
+              <PrivateRoute token={token} >
+                <UserProfile/>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="user-adminis"
+            element={
+              <PrivateRoute token={token} >
+                <UserAdminis/>
               </PrivateRoute>
             }
           />

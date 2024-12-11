@@ -50,6 +50,7 @@
   margin-bottom: 20px;
 }
 
+<<<<<<< HEAD
 .input-box input {
   width: 100%;
   padding: 10px 40px;
@@ -83,7 +84,32 @@ button[type="submit"] {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+=======
+.input-box {
+  position: relative; 
+  margin-bottom: 20px;
+}
+
+.input-box .custom-input {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 40px;
   font-size: 16px;
+  color: #000000;
+}
+
+.input-box .custom-input::placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.input-box .icon {
+>>>>>>> origin/main
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5); /* Màu sắc cho biểu tượng */
+  margin-right: 5px;
 }
 
 button[type="submit"]:hover {

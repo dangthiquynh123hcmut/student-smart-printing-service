@@ -6,6 +6,7 @@ import {
 } from "../../../api/adminApi";
 import { Pagination, Modal, Input, Select, Button, notification } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
+import { SearchOutlined } from '@ant-design/icons';
 import "./PriceSetting.css";
 
 const { Option } = Select;
@@ -14,7 +15,7 @@ const PriceSetting = () => {
   const [price, setPrice] = useState([]);
   const [currentItems, setCurrentItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(7);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [newPrice, setNewPrice] = useState({
     colorType: "",
@@ -30,6 +31,18 @@ const PriceSetting = () => {
     faceType: false,
     pricePage: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    // Lọc dữ liệu dựa trên từ khóa tìm kiếm
+    const filteredPrices = price.filter(item =>
+      (item.colorType && item.colorType.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.pageType && item.pageType.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.pricePage && item.pricePage.toString().includes(searchTerm))
+    );
+    setCurrentItems(filteredPrices.slice(startIndex, endIndex));
+  }, [currentPage, price, itemsPerPage, searchTerm]);
 
   const token = localStorage.getItem("token");
 
@@ -151,7 +164,7 @@ const PriceSetting = () => {
         handleCloseEditModal();
         notification.error({
           message: "Lỗi",
-          description: "Đã xảy ra lỗi.",
+          description: `${error.message || error}`,
         });
       });
   };
@@ -167,6 +180,17 @@ const PriceSetting = () => {
       <div className="outer">
         <div className="price-setting container">
           <h3>Thông tin giá in</h3>
+          <Input
+            placeholder="Tìm kiếm theo tên loại giấy hoặc giá tiền..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Đặt lại trang hiện tại khi tìm kiếm
+            }}
+            style={{ marginBottom: "20px" }}
+            prefix={<SearchOutlined />}
+            size="large"
+          />
           <div className="price-header">
             <button className="add-price-button" onClick={handleOpenAddModal}>
               Thêm giá in
@@ -211,13 +235,17 @@ const PriceSetting = () => {
           </table>
         </div>
         <div className="pagination-container">
-            <Pagination
-              current={currentPage}
-              pageSize={itemsPerPage}
-              total={price.length}
-              onChange={handlePageChange}
-            />
-          </div>
+          <Pagination
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={price.length}
+            onChange={handlePageChange}
+          />
+        </div>
 
         <Modal
           title="Thêm giá in mới"
