@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { notification, Input } from "antd";
@@ -12,12 +13,14 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 const LoginForm = () => {
   const { setToken } = useContext(AuthContext);
+
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
 
+  // Function to handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
@@ -26,6 +29,9 @@ const LoginForm = () => {
     }));
   };
 
+  //check token exsit
+
+  // Handle form submission
   const onFinish = async (e) => {
     e.preventDefault();
     const { email, password } = formValues;
@@ -73,6 +79,7 @@ const LoginForm = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       notification.success({
         message: "Login SUCCESS",
         description: "Success",
@@ -81,6 +88,7 @@ const LoginForm = () => {
       setToken(data.result.token); // Cập nhật token trong AuthContext
       navigate("/");
     } catch (error) {
+      console.error("Error:", error);
       notification.error({
         message: "Login Failed",
         description: "Username or password wrong",
@@ -141,5 +149,9 @@ const LoginForm = () => {
     </div>
   );
 };
+
+// LoginForm.prototype = {
+//   setToken: PropTypes.func.isRequired,
+// };
 
 export default LoginForm;

@@ -65,7 +65,7 @@ const RegisterPage = () => {
       }}
     >
       <Row
-        className="wrapper"
+        className="wrapper-register"
         style={{
           height: "80vh", // Chiếm 80% chiều cao
           width: "70%",
