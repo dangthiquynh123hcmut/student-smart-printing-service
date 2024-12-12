@@ -71,15 +71,15 @@
     background-color: #337ead;
     color: #000;
     border: none;
-    padding: 8px 15px;
+    padding: 5px 5px;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
-    font-size: 25px; 
+    font-size: 18px; 
   }
   
   .pagination-button:disabled {
-    background-color: #070707;
+    background-color: #f4eeee9d;
     cursor: not-allowed;
   }
   

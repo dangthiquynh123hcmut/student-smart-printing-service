@@ -1,17 +1,56 @@
-.register-form{
-    background: url("https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png") no-repeat;
-    /* display: flex; */
-    /* flex-direction: row; */
-    background-size: 100%;
-    background-position: right;
-    
-    /* padding-left: 30%; */
-    /* color: white */
-    /* background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat; */
-}
-/* .imageBK{
-
-    min-width: 500px;
-    min-width: 500px;
-    background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg/640px-Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_khoa_v%C3%A0o_Xu%C3%A2n.jpg") no-repeat;
+/* .register{
+    background-color: #71d2ef;
 } */
+:where(.css-dev-only-do-not-override-142vneq).ant-form-item {
+    margin-bottom: 10px;
+}
+:where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label, :where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-24.ant-form-item-label, :where(.css-dev-only-do-not-override-142vneq).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-xl-24.ant-form-item-label {
+    padding-bottom: 4px;
+}
+
+.wrapper-register {
+    width: 420px;
+    background: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    color: black;
+    border-radius: 10px;
+    /* padding: 30px 40px; */
+  }
+  
+  .wrapper-register h1 {
+    font-size: 32;
+    text-align: center;
+  }
+  
+  .wrapper-register .input-box {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin: 30px 0;
+  }
+  .wrapper-register .member-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+  }
+
+  .wrapper-register button {
+    width: 100%;
+    height: 45px;
+    border-radius: 45px;
+    background: #0166FF;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .wrapper-register .register-link {
+    margin: 20px 0 15px;
+    text-align: center;
+  }
