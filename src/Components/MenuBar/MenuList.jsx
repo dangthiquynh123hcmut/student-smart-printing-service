@@ -81,7 +81,7 @@ function MenuList() {
           <Menu.Item key="/create-staff" icon={<TeamOutlined style={{ fontSize: 22 }} />}>
             <NavLink to="/create-staff">Thêm nhân viên</NavLink>
           </Menu.Item>
-          <SubMenu
+          {/* <SubMenu
             key="/report"
             className="submenu"
             icon={<BarChartOutlined style={{ fontSize: 22 }} />}
@@ -93,7 +93,7 @@ function MenuList() {
             <Menu.Item key="/createReport" icon={<FileAddOutlined style={{ fontSize: 22 }} />}>
               <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
             </Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
         </>
       )}
     </Menu>
