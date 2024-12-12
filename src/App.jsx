@@ -24,6 +24,7 @@ import { UserProfile } from "./Components/Profile/Profile";
 import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
 import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
 import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+import CreateStaff from "./Components/Admin/CreateStaff/CreateStaff";
 import { UserAdminis } from "./Components/Admin/UserAdminis/UserAdminis";
 
 // import UpdateUser from "./Components/updateUser/updateUser";
@@ -48,19 +49,12 @@ function PrivateRoute({ children, token }) {
   console.log("time remain",timeUntilExpiry)
   return timeUntilExpiry > 0 ? children : <Navigate to="/login" />
 
-
-  // return token ? children : <Navigate to="/login" />;
 }
 function App() {
-  // const [userData, setUserData] = useState(null); // State to store user data
-  // const [token, setToken] = useState(null);
+  
 
   const { token, userData,setToken } = useContext(AuthContext);
-  // const { isExpired,reEvaluateToken} = useJwt(token)
-  // console.log(token);
-
-
-  // remember authentication
+ 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -73,15 +67,6 @@ function App() {
           }
         />
         <Route path="/register" element={<RegisterPage />} />
-        {/* <Route path="/" element={<RootLayout />}> */}
-          {/* <Route
-            index
-            element={
-              <PrivateRoute token={token} >
-                {<Home />}
-              </PrivateRoute>
-            }
-          /> */}
           <Route path="/" element={<RootLayout userData={userData} />}>
           <Route
             index
@@ -141,14 +126,6 @@ function App() {
               </PrivateRoute>
             }
           />
-            {/* <Route
-            path="updateUser"
-            element={
-              <PrivateRoute token={token} >
-                <UpdateUser />
-              </PrivateRoute>
-            }
-          /> */}
           <Route
             path="AdHistory"
             element={
@@ -174,17 +151,6 @@ function App() {
             </PrivateRoute>
           }          
           />
-
-
-
-            {/* <Route
-            path="adHome"
-            element={
-              <PrivateRoute token={token} >
-                <AdHome/>
-              </PrivateRoute>
-            }
-          /> */}
           <Route
             path="configuration"
             element={
@@ -218,7 +184,14 @@ function App() {
               </PrivateRoute>
             }
           />
-
+           <Route
+            path="create-staff"
+            element={
+              <PrivateRoute token={token} >
+                <CreateStaff/>
+              </PrivateRoute>
+            }
+          />
         </Route>
       </>
     )

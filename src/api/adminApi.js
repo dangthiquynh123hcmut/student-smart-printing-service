@@ -15,6 +15,21 @@ export const postNewPrinterApi = (token, newPrinter) => {
 
 }
 
+export const createStaff = (token, newStaff) => {
+    console.log(JSON.stringify(newStaff))
+    return api.post(
+        "/users/createAdmin",
+        JSON.stringify(newStaff),
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+       
+    );
+}
+
 export const GetAllReportWarranty = async (token,page) => {
     try {
       const response = await axios.get("http://localhost:8080/reportWarranty", {

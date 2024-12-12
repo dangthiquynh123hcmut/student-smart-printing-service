@@ -5,7 +5,7 @@ import { Input, Pagination, Modal, Button, Form, notification, Switch, Select,Fl
 import { SearchOutlined } from '@ant-design/icons';
 import { postNewPrinterApi, editPrinterInfo, deletePrinter, addPrinterMaterial, getAllPrinter } from "../../../api/adminApi";
 import { api } from "../../../api/baseURL";
-
+import { NavLink } from "react-router-dom";
 
 const contentStyle = {
     padding: 50,
@@ -376,10 +376,8 @@ function Printers() {
 
     return (
         <div id="wrapper">
-            <div id="header">
-                <a href="/" className="back-button">
-                    &larr; Trở về trang chủ
-                </a>
+            <div className="header-file">
+                <NavLink to="/">&larr; Trở về trang chủ</NavLink>
                 <h1>Quản lý máy in</h1>
             </div>
             <div className="search-wrapper">

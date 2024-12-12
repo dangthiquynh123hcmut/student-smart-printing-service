@@ -16,7 +16,8 @@ import {
   UserOutlined,
   DropboxOutlined,
   FieldTimeOutlined,
-  FolderOutlined
+  FolderOutlined,
+  TeamOutlined
 } from "@ant-design/icons";
 import "./MenuList.css";
 import MenuItem from "antd/es/menu/MenuItem";
@@ -76,7 +77,24 @@ function MenuList() {
       <Menu.Item key="material-history" icon={<BarChartOutlined style={{ fontSize: 22 }} />} > 
         <NavLink to="/materialHistory"> Material History</NavLink>
       </Menu.Item>
-      </>
+      
+          <Menu.Item key="/create-staff" icon={<TeamOutlined style={{ fontSize: 22 }} />}>
+            <NavLink to="/create-staff">Thêm nhân viên</NavLink>
+          </Menu.Item>
+          <SubMenu
+            key="/report"
+            className="submenu"
+            icon={<BarChartOutlined style={{ fontSize: 22 }} />}
+            title="Quản lí báo cáo"
+          >
+            <Menu.Item key="/oldReport" icon={<EyeOutlined style={{ fontSize: 22 }} />}>
+              <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
+            </Menu.Item>
+            <Menu.Item key="/createReport" icon={<FileAddOutlined style={{ fontSize: 22 }} />}>
+              <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
+            </Menu.Item>
+          </SubMenu>
+        </>
       )}
     </Menu>
   );
