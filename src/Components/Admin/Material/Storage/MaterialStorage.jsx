@@ -3,7 +3,7 @@ import { AuthContext } from '../../../Authentication/Authenticate';
 import { PlusOutlined } from '@ant-design/icons';
 import { Select,Button, Modal,Form, Input, notification,  Flex, Spin } from 'antd';
 import { api } from '../../../../api/baseURL';
-import InkImage from './ink-pic.jpeg'
+import InkImage from '../../../Assets/ink-pic.jpeg'
 
 const {Option} = Select
 
@@ -231,7 +231,7 @@ function MaterialStorage(){
 
   return (
     <div className="wrap-report">
-      <div id="header">
+      <div >
           <a href="/" className="back-button">
               &larr; Trở về trang chủ
           </a>

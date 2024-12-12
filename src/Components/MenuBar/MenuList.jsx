@@ -75,15 +75,10 @@ function MenuList() {
 
       </Menu.Item>}
 
-      {(userData?.result.role === "ADMIN") && <SubMenu key="report" className="submenu" icon={<FieldTimeOutlined style={{ fontSize: 22 }} />} title="Quản lí báo cáo">
-        <Menu.Item key="old-report" icon={<EyeOutlined style={{ fontSize: 22 }} />}>
-          <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
-        </Menu.Item>
-        <Menu.Item key="create-report" icon={<FileAddOutlined style={{ fontSize: 22 }} />}>
-          <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
-        </Menu.Item>
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="report" className="submenu" icon={<EyeOutlined style={{ fontSize: 22 }} />} >
+        <NavLink to="/AdHistory">Lịch sử in</NavLink>
 
-      </SubMenu>}
+      </Menu.Item>}
 
       {(userData?.result.role === "ADMIN")&&
       <Menu.Item key="material-storage" icon={<DropboxOutlined style={{ fontSize: 22 }} />} > 

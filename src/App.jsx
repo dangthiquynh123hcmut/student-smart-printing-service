@@ -15,8 +15,7 @@ import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
 import Printers from "./Components/Admin/Printers/Printers"
-import CreateReport from "./Components/ReportPage/CreateReport/CreateReport";
-import OldReport from "./Components/ReportPage/OldReport/OldReport";
+import AdHistory from "./Components/Admin/AdHistory/AdHistory";
 import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
 import File from "./Components/File/File";
@@ -151,18 +150,10 @@ function App() {
             }
           /> */}
           <Route
-            path="createReport"
+            path="AdHistory"
             element={
               <PrivateRoute token={token} >
-                <CreateReport/>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="oldReport"
-            element={
-              <PrivateRoute token={token} >
-                <OldReport/>
+                <AdHistory/>
               </PrivateRoute>
             }
           />
