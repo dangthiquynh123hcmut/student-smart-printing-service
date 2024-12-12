@@ -77,7 +77,7 @@ function CircularWithValueLabel() {
   return <CircularProgressWithLabel value={progress} />;
 }
 
-const PaginatedTable = () => {
+const MaterialHistory = () => {
   const {token} = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [size, setSize]=useState(10); //number item per page
@@ -170,11 +170,11 @@ const PaginatedTable = () => {
   // Hàm xuất dữ liệu
   const handleExport = () => {
     const csvContent =
-      "ID,City,Banner,Area,State,Average Basket\n" +
+      "ID,ID Machine,Name,Value,Description,Date use\n" +
       data
         .map(
           (row) =>
-            `${row.id},${row.city},${row.banner},${row.area},${row.state},${row.avBasket}`
+            `${row.id},${row.id_machine},${row.name},${row.value},${row.description},${row.dateUse}`
         )
         .join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -319,4 +319,4 @@ const PaginatedTable = () => {
   );
 };
 
-export default PaginatedTable;
+export default MaterialHistory;
