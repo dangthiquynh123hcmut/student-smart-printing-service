@@ -1,6 +1,6 @@
-.register{
+/* .register{
     background-color: #71d2ef;
-}
+} */
 :where(.css-dev-only-do-not-override-142vneq).ant-form-item {
     margin-bottom: 10px;
 }

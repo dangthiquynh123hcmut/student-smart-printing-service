@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import img from "../Assets/logobk.png";
 import { NavLink } from "react-router-dom";
 import "./Register.css";
+import BKimg from "../Assets/login.jpg";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
 
   const onFinish = async (formValues) => {
-    const { email, username, password, firstname, lastname, id, date } = formValues;
+    const { email, username, password, firstname, lastname, id, date } =
+      formValues;
     console.log(formValues);
     try {
       const response = await fetch("http://localhost:8080/users", {
@@ -27,23 +29,23 @@ const RegisterPage = () => {
           birthDate: date,
         }),
       });
-  
+
       if (!response.ok) {
         // Lấy chi tiết lỗi từ phản hồi API
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown error occurred");
       }
-  
+
       const data = await response.json();
       notification.success({
         message: "Register SUCCESS",
         description: "Success",
       });
-  
+
       navigate("/login");
     } catch (error) {
       console.error("Error:", error);
-  
+
       // Hiển thị thông báo lỗi cụ thể từ API hoặc lỗi mặc định
       notification.error({
         message: "Register Failed",
@@ -51,17 +53,25 @@ const RegisterPage = () => {
       });
     }
   };
-  
 
   return (
     <div
       className="register"
+      // style={{
+      //   height: "100vh",
+      //   display: "flex",
+      //   alignItems: "center",
+      //   justifyContent: "center",
+      //   // overflowY: "auto",
+      // }}
       style={{
         height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // overflowY: "auto",
+        backgroundImage: `url(${BKimg})`,
+        backgroundSize: "cover", 
+        backgroundPosition: "center", 
       }}
     >
       <Row
@@ -71,7 +81,7 @@ const RegisterPage = () => {
           width: "70%",
           maxWidth: "1200px",
           boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Bóng mờ
-           overflowY: "auto", 
+          overflowY: "auto",
         }}
       >
         {/* Cột bên trái */}
@@ -81,7 +91,7 @@ const RegisterPage = () => {
           md={12}
           style={{
             // display: "flex",
-            paddingTop:"12vh",
+            paddingTop: "12vh",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
@@ -92,7 +102,7 @@ const RegisterPage = () => {
           <img
             src={img}
             alt="Register Visual"
-            style={{ width: "100%", marginBottom: "10px", }}
+            style={{ width: "100%", marginBottom: "10px" }}
           />
           <h1
             style={{
@@ -100,7 +110,7 @@ const RegisterPage = () => {
               fontSize: "2.5rem", // Tăng kích thước chữ
               color: "#007BFF", // Màu xanh dương
               fontWeight: "bold",
-              margin:"8px",
+              margin: "8px",
             }}
           >
             Dịch vụ in thông minh
@@ -117,11 +127,11 @@ const RegisterPage = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            marginTop:"10px",
+            marginTop: "10px",
             overflowY: "auto",
           }}
         >
-          <h1 style={{ textAlign: "center",fontSize: "2.5rem", }}>Đăng kí</h1>
+          <h1 style={{ textAlign: "center", fontSize: "2.5rem" }}>Đăng kí</h1>
           <Form
             name="basic"
             style={{
@@ -219,7 +229,11 @@ const RegisterPage = () => {
               <Input placeholder="Vd: 2000-01-01" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ width: "100%" }}
+              >
                 Đăng kí
               </Button>
             </Form.Item>
@@ -227,7 +241,7 @@ const RegisterPage = () => {
               className="login-link"
               style={{
                 textAlign: "center",
-                 marginBottom: "10px",
+                marginBottom: "10px",
               }}
             >
               <p>
