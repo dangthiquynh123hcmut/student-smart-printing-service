@@ -1,12 +1,11 @@
 import { UserOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Button } from "antd";
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import "./Layout.css";
 import { AuthContext } from "../Components/Authentication/Authenticate";
 import { NavLink } from "react-router-dom";
 
 function UserInfo() {
-  const [openProfile, setOpenProfile] = useState(false);
   const { setToken, userData, fetchUserData } = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -44,7 +43,7 @@ function UserInfo() {
 
       {(userData?.result.role === "ADMIN") && <Menu.Item key="2"><NavLink to="/user-adminis">Quản lý tài khoản</NavLink></Menu.Item>}
 
-      {(userData?.result.role === "ADMIN") && <Menu.Item key="3">Tạo tài khoản</Menu.Item>}
+      {(userData?.result.role === "ADMIN") && <Menu.Item key="3"><NavLink to="/create-staff">Tạo tài khoản</NavLink></Menu.Item>}
 
       {!(userData?.result.role === "ADMIN") && <Menu.Item key="4">
         <NavLink to="/payment">Nạp tiền</NavLink>

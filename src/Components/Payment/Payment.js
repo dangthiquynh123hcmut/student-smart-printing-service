@@ -1,23 +1,26 @@
 import "./Payment.css";
-import React from 'react';
-import { useState, useEffect } from "react";
-import { notification, Button, Pagination } from "antd";
+import React, { useState, useEffect } from "react";
+import { notification, Button, Pagination, DatePicker, Spin } from "antd";
 import vnpayimg from "../Assets/vnpay.png";
 import { getPaymentInfo, getBalanceHistory, getBalanceInfo } from "../../api/studentApi";
 import { parseISO, format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
+const { RangePicker } = DatePicker;
+
 function Payment() {
   const [bill, setBill] = useState([]);
+  const [filteredBill, setFilteredBill] = useState([]);
   const [balance, setBalance] = useState(0);
-  const [payment, setPayment] = useState({
-    bankCode: "NCB",
-    amount: 0,
-  });
-  const [currentPage, setCurrentPage] = useState(1); // Trạng thái cho trang hiện tại
-  const itemsPerPage = 5; // Số hóa đơn trên mỗi trang
+  const [payment, setPayment] = useState({ bankCode: "NCB", amount: 0 });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const [loading, setLoading] = useState(false);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
 
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const handlePaymentInfo = (e) => {
     const { name, value } = e.target;
@@ -25,23 +28,54 @@ function Payment() {
   };
 
   const fetchBill = () => {
-    getBalanceHistory(token)
+    setLoading(true);
+    getBalanceHistory(token, 0, 1000)
       .then((response) => {
-        setBill(response.data.result.content);
+        const allBills = response.data.result.content;
+        setBill(allBills);
+        setFilteredBill(allBills);
       })
       .catch(error => {
         console.error('Error fetching bill:', error);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     fetchBill();
   }, []);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (!bill || !Array.isArray(bill)) return;
+    let filtered = bill;
+    if (dateRange[0] && dateRange[1]) {
+      filtered = bill.filter(item => {
+        const updatedAt = new Date(item.updatedAt);
+        const endDate = new Date(dateRange[1]);
+        endDate.setDate(endDate.getDate() + 1);
+        return updatedAt >= dateRange[0] && updatedAt < endDate;
+      });
+    }
+
+    const sortedBills = filtered.sort((a, b) => {
+      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.updatedAt);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+    setFilteredBill([...sortedBills]);
+    setCurrentPage(1);
+  }, [dateRange, sortOrder, bill]);
+
+
+  const paginatedBills = filteredBill.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
 
   const handlePayment = (amount, bankCode) => {
-    if (amount<10000) {
+    if (amount < 10000) {
       notification.error({
         message: "Không thể giao dịch",
         description: "Số tiền giao dịch tối thiểu là 10.000đ",
@@ -69,26 +103,28 @@ function Payment() {
       });
   };
 
-  // Tính toán hóa đơn cho trang hiện tại
-  const indexOfLastBill = currentPage * itemsPerPage;
-  const indexOfFirstBill = indexOfLastBill - itemsPerPage;
-  const sortedBills = bill.sort((a, b) => {
-    return new Date(b.updatedAt) - new Date(a.updatedAt);
-  });
-  const currentBills = sortedBills.slice(indexOfFirstBill, indexOfLastBill);
-
-  useEffect (()=>{
-    const token = localStorage.getItem("token");
-
+  useEffect(() => {
     getBalanceInfo(token)
-      .then((res)=>{
+      .then((res) => {
         setBalance(res.data.result.balance);
       })
       .catch((error) => {
-        console.error("Error get balance:", error);
+        console.error("Error getting balance:", error);
       });
-  },[]);
+  }, []);
 
+  const handleDateRangeChange = (dates) => {
+    if (!dates || dates.length === 0) {
+      setDateRange([null, null]);
+    } else {
+      setDateRange(dates);
+    }
+  };
+
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+  };
 
   return (
     <div id="wrapper">
@@ -102,9 +138,7 @@ function Payment() {
       <div className="payment-container">
         <div className="row">
           <div className="box payment-info">
-            <div>
-              <img src={require('../Assets/printer.gif')} alt="GIF Example" />
-            </div>
+            <img src={require('../Assets/printer.gif')} alt="GIF Example" />
           </div>
 
           <div className="box payment-method">
@@ -120,49 +154,68 @@ function Payment() {
                 <input type="number" name="amount" placeholder="0đ" step="1" min="1" value={payment.amount} onChange={handlePaymentInfo} />
               </label>
             </div>
-            <div className="payment-button">
-              <button onClick={() => handlePayment(payment.amount, payment.bankCode)}>
-                Thanh toán
-              </button>
-            </div>
+            <Button className="custom-button" type="primary" onClick={() => handlePayment(payment.amount, payment.bankCode)}>
+              Thanh toán
+            </Button>
           </div>
         </div>
 
         <div className="box billing-history">
           <h3>Lịch sử hóa đơn</h3>
-          <div id="billing-history-table">
           <h4>Số dư: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance)}</h4>
-            <table>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Số tiền giao dịch</th>
-                  <th>Ngày</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentBills.length > 0 ? (
-                  currentBills.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
-                      <td>{item.balance}</td>
-                      <td>{format(parseISO(item.updatedAt), 'dd/MM/yyyy')}</td> {/* Định dạng ngày */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="3">Không có hóa đơn nào.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="filter-sort-container">
+            <div className="filter-section">
+              <span className="filter-label">Lọc theo ngày:</span>
+              <RangePicker onChange={handleDateRangeChange} />
+            </div>
+
+            <div className="sort-section">
+              <span className="sort-label">Sắp xếp theo ngày:</span>
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                <option value="asc">Tăng dần</option>
+                <option value="desc">Giảm dần</option>
+              </select>
+            </div>
           </div>
+
+
+          {loading ? (
+            <Spin tip="Đang tải..." />
+          ) : (
+            <div id="billing-history-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Số tiền giao dịch</th>
+                    <th>Ngày</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedBills.length > 0 ? (
+                    paginatedBills.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                        <td>{item.balance}</td>
+                        <td>{format(parseISO(item.updatedAt), 'dd/MM/yyyy')}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3">Không có hóa đơn nào.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           <div className="pagination-container">
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
-              total={bill.length}
-              onChange={(page) => setCurrentPage(page)} // Cập nhật trang hiện tại
+              total={filteredBill.length}
+              onChange={(page) => setCurrentPage(page)}
             />
           </div>
         </div>

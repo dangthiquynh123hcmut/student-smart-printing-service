@@ -376,7 +376,7 @@ function Printers() {
 
     return (
         <div id="wrapper">
-            <div className="header-file">
+            <div id="header">
                 <NavLink to="/">&larr; Trở về trang chủ</NavLink>
                 <h1>Quản lý máy in</h1>
             </div>

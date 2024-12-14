@@ -1,20 +1,22 @@
 import "./UserAdminis.css";
-import { Pagination, notification, Modal, Input } from "antd"; // Import Input
+import { Pagination, notification, Modal, Input, Spin } from "antd"; // Import Spin
 import { getAllUsers, deleteUserById } from "../../../api/adminApi";
 import { useEffect, useState } from "react";
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from "@ant-design/icons";
 
 export function UserAdminis() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isDelete, setIsDelete] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // Thêm state cho tìm kiếm
-  const pageSize = 9; // Số lượng người dùng hiển thị trên mỗi trang
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true); // Thêm trạng thái loading
+  const pageSize = 9;
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsers = () => {
-      getAllUsers(token)
+      setLoading(true); // Bắt đầu trạng thái loading
+      getAllUsers(token, 0, 100)
         .then((res) => {
           if (res.status === 200) {
             setUsers(res.data.result.content);
@@ -23,8 +25,13 @@ export function UserAdminis() {
         .catch((error) => {
           notification.error({
             message: "Lỗi",
-            description: `Không thể lấy thông tin người dùng: ${error.message || error}`,
+            description: `Không thể lấy thông tin người dùng: ${
+              error.message || error
+            }`,
           });
+        })
+        .finally(() => {
+          setLoading(false); // Kết thúc trạng thái loading
         });
     };
     fetchUsers();
@@ -37,7 +44,7 @@ export function UserAdminis() {
       okType: "danger",
       cancelText: "Không",
       onOk() {
-        deleteUserById(token, userId) // Gọi hàm xóa người dùng
+        deleteUserById(token, userId)
           .then((res) => {
             if (res.status === 200) {
               setUsers(users.filter((user) => user.id !== userId));
@@ -51,7 +58,9 @@ export function UserAdminis() {
           .catch((error) => {
             notification.error({
               message: "Lỗi",
-              description: `Không thể xóa người dùng: ${error.message || error}`,
+              description: `Không thể xóa người dùng: ${
+                error.message || error
+              }`,
             });
           });
       },
@@ -59,8 +68,7 @@ export function UserAdminis() {
   };
 
   const paginatedUsers = users
-    .filter(user => {
-
+    .filter((user) => {
       const fullName = `${user.lastName} ${user.firstName}`.toLowerCase();
       return (
         fullName.includes(searchTerm.toLowerCase()) ||
@@ -83,57 +91,81 @@ export function UserAdminis() {
 
       <div className="outer">
         <div className="containerr">
-          {/* Trường nhập tìm kiếm */}
           <Input
             placeholder="Tìm kiếm..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); 
+              setCurrentPage(1);
             }}
             style={{ marginBottom: "20px" }}
             prefix={<SearchOutlined />}
             size="large"
           />
-          <div className="table-responsive">
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Tên người dùng</th>
-                  <th>Ngày sinh</th>
-                  <th>Vai trò</th>
-                  <th>Mã số</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedUsers.map((user, index) => (
-                  <tr key={user.id} onClick={() => handleDeleteUser(user.id, user.firstName)}>
-                    <td>{(currentPage - 1) * pageSize + index + 1}</td>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{`${user.lastName} ${user.firstName}`}</td>
-                    <td>{user.birthDate}</td>
-                    <td>{user.role}</td>
-                    <td>{user.mssv}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={users.length}
-            onChange={(page) => setCurrentPage(page)}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          />
+          {loading ? (
+            <div style={{ textAlign: "center", marginTop: "50px" }}>
+              <Spin size="large" tip="Đang tải dữ liệu..." />
+            </div>
+          ) : (
+            <>
+              <div className="table-responsive">
+                <table className="user-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Tên người dùng</th>
+                      <th>Ngày sinh</th>
+                      <th>Vai trò</th>
+                      <th>Mã số</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedUsers.map((user, index) => {
+                      const fullName =
+                        !user.firstName && !user.lastName ? (
+                          <i>Chưa có tên</i>
+                        ) : (
+                          `${user.lastName || ""} ${
+                            user.firstName || ""
+                          }`.trim()
+                        );
+
+                      return (
+                        <tr
+                          key={user.id}
+                          onClick={() =>
+                            handleDeleteUser(user.id, user.firstName)
+                          }
+                        >
+                          <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                          <td>{user.username}</td>
+                          <td>{user.email}</td>
+                          <td>{fullName}</td>
+                          <td>{user.birthDate}</td>
+                          <td>{user.role}</td>
+                          <td>{user.mssv}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={users.length}
+                onChange={(page) => setCurrentPage(page)}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                  position: "sticky",
+                }}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

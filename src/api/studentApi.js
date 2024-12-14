@@ -31,11 +31,15 @@ export const getPaymentInfo = (token, amount, bankCode) => {
   });
 };
 
-export const getBalanceHistory = (token) => {
+export const getBalanceHistory = (token, page, size) => {
   return api.get("/wallet/get-history", {
     headers: {
       Authorization: `Bearer ${token}`, 
     },
+    params: {
+      page: page,
+      size: size,
+    }
   });
 };
 

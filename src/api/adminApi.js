@@ -143,10 +143,14 @@ export const getAllPrinter = (token) => {
     })
 }
 
-export const getAllUsers = (token) => {
+export const getAllUsers = (token, page, size) => {
     return api.get("/users", {
         headers: {
             'Authorization': `Bearer ${token}`
+        },
+        params: {
+            page: page,
+            size: size,
         }
     })
 }
