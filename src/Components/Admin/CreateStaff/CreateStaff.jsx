@@ -48,7 +48,7 @@ function CreateStaff() {
   };
   
   return (
-    <div className="creat-staff">
+    <div className="create-staff-container">
       <div className="header-staff">
         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Thêm nhân viên</h1>
