@@ -113,7 +113,8 @@
 }
 
 .custom-button {
-    margin-top: 10px;
+    display: block;
+    margin: 30px auto 0 auto;
     background: #7bb651;
 }
 
@@ -169,6 +170,7 @@
 .filter-sort-container {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
   }
   
   .filter-section, .sort-section {

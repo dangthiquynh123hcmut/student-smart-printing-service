@@ -154,9 +154,11 @@ function Payment() {
                 <input type="number" name="amount" placeholder="0đ" step="1" min="1" value={payment.amount} onChange={handlePaymentInfo} />
               </label>
             </div>
-            <Button className="custom-button" type="primary" onClick={() => handlePayment(payment.amount, payment.bankCode)}>
-              Thanh toán
-            </Button>
+            <div className="outer-button">
+              <Button className="custom-button" type="primary" onClick={() => handlePayment(payment.amount, payment.bankCode)}>
+                Thanh toán
+              </Button>
+            </div>
           </div>
         </div>
 

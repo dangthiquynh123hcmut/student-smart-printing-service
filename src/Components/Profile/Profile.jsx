@@ -9,6 +9,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import avatar from "../Assets/default-avatar.png";
 import axios from "axios";
 import { getBalanceInfo } from "../../api/studentApi";
+import { NavLink } from "react-router-dom";
 
 export function UserProfile() {
   dayjs.extend(customParseFormat);
@@ -137,6 +138,10 @@ export function UserProfile() {
 
   return (
     <div id="wrapper">
+      <div id="header">
+        <NavLink to="/">&larr; Trở về trang chủ</NavLink>
+        <h1>Thông tin người dùng</h1>
+      </div>
       <div className="outer">
         <div className="profile-container" style={{ padding: "20px" }}>
           <h2>Thông tin cá nhân</h2>
