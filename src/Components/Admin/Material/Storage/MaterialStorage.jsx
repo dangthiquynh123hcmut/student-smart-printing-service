@@ -235,7 +235,7 @@ function MaterialStorage(){
           <a href="/" className="back-button">
               &larr; Trở về trang chủ
           </a>
-          <h1>Material Storage</h1>
+          <h1>Vật liệu in</h1>
       </div>
 
       <div className="add-button">

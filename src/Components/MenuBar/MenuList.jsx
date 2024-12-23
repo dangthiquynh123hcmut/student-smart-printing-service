@@ -66,17 +66,17 @@ function MenuList() {
           <Menu.Item key="/price-setting" icon={<DollarOutlined style={{ fontSize: 22 }} />}>
             <NavLink to="/price-setting">Cập nhật giá in</NavLink>
           </Menu.Item>
-        <Menu.Item key="report" className="submenu" icon={<EyeOutlined style={{ fontSize: 22 }} />} >
+        <Menu.Item key="/AdHistory" className="submenu" icon={<EyeOutlined style={{ fontSize: 22 }} />} >
           <NavLink to="/AdHistory">Lịch sử in</NavLink>
         </Menu.Item>
 
-      <Menu.Item key="material-storage" icon={<DropboxOutlined style={{ fontSize: 22 }} />} > 
-        <NavLink to="/materialStorage"> Material Storage </NavLink>
-      </Menu.Item>
-      
-      <Menu.Item key="material-history" icon={<BarChartOutlined style={{ fontSize: 22 }} />} > 
-        <NavLink to="/materialHistory"> Material History</NavLink>
-      </Menu.Item>
+        <Menu.Item key="/materialStorage" icon={<DropboxOutlined style={{ fontSize: 22 }} />} > 
+          <NavLink to="/materialStorage">Vật liệu in</NavLink>
+        </Menu.Item>
+        
+        <Menu.Item key="/materialHistory" icon={<BarChartOutlined style={{ fontSize: 22 }} />} > 
+          <NavLink to="/materialHistory">Lịch sử vật liệu in</NavLink>
+        </Menu.Item>
       
           <Menu.Item key="/create-staff" icon={<TeamOutlined style={{ fontSize: 22 }} />}>
             <NavLink to="/create-staff">Thêm nhân viên</NavLink>

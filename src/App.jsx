@@ -42,11 +42,11 @@ function PrivateRoute({ children, token }) {
   if(!token) return <Navigate to="/login" />
   const currentTime = Date.now(); // Current time in milliseconds
   const timeOut= decodeToken(token)
-  console.log("timeout",timeOut.exp)
-  console.log("time current", Date.now())
+  // console.log("timeout",timeOut.exp)
+  // console.log("time current", Date.now())
   console.log(token)
   const timeUntilExpiry = timeOut.exp - currentTime/1000;
-  console.log("time remain",timeUntilExpiry)
+  // console.log("time remain",timeUntilExpiry)
   return timeUntilExpiry > 0 ? children : <Navigate to="/login" />
 
 }

@@ -305,7 +305,7 @@ const AdHistory = () => {
     <Box className="wrap-report" >
       <Typography variant="h9" gutterBottom>
         <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
-        <h1>History</h1>
+        <h1>Lịch sử in</h1>
       </Typography>
       {/* Thanh tìm kiếm, xuất dữ liệu và số hàng mỗi trang */}
       <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", marginBottom: 2,marginTop:2 }}>

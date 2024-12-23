@@ -191,7 +191,7 @@ const MaterialHistory = () => {
     <Box className="wrap-report" >
       <Typography variant="h9" gutterBottom>
         <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
-        <h1>Material History</h1>
+        <h1>Lịch sử vật liệu in</h1>
       </Typography>
 
       {/* Thanh tìm kiếm, xuất dữ liệu và số hàng mỗi trang */}
