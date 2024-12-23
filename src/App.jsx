@@ -16,7 +16,6 @@ import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
 import Printers from "./Components/Admin/Printers/Printers"
 import AdHistory from "./Components/Admin/AdHistory/AdHistory";
-import AdHome from "./Components/Admin/AdHome/AdHome"
 import Configuration from "./Components/Admin/Configuration/Configuration"
 import File from "./Components/File/File";
 import Warranty from "./Components/Admin/Warranty/Warranty";
@@ -27,8 +26,6 @@ import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
 import CreateStaff from "./Components/Admin/CreateStaff/CreateStaff";
 import { UserAdminis } from "./Components/Admin/UserAdminis/UserAdminis";
 
-// import UpdateUser from "./Components/updateUser/updateUser";
-//authenticate
 import { AuthContext } from "./Components/Authentication/Authenticate";
 //decode token
 import { decodeToken } from "react-jwt";
@@ -42,8 +39,6 @@ function PrivateRoute({ children, token }) {
   if(!token) return <Navigate to="/login" />
   const currentTime = Date.now(); // Current time in milliseconds
   const timeOut= decodeToken(token)
-  // console.log("timeout",timeOut.exp)
-  // console.log("time current", Date.now())
   console.log(token)
   const timeUntilExpiry = timeOut.exp - currentTime/1000;
   // console.log("time remain",timeUntilExpiry)
@@ -72,7 +67,7 @@ function App() {
             index
             element={
               <PrivateRoute token={token}>
-                {userData?.result.role === "ADMIN" ? <AdHome /> : <Home />}
+                <Home />
               </PrivateRoute>
             }
           />
