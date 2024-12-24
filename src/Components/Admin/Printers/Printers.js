@@ -551,7 +551,7 @@ function Printers() {
                             <p><strong>Số giấy A4:</strong> {selectedProduct.a4paperStatus}</p>
                             <p><strong>Số giấy A5:</strong> {selectedProduct.a5paperStatus}</p>
                             <p><strong>Sức chứa:</strong> {selectedProduct.capacity}</p>
-                            <p><strong>Ngày bảo hành:</strong> {new Date(selectedProduct.warrantyDate).toLocaleDateString("vi-VN")}</p>
+                            <p><strong>Ngày cập nhật:</strong> {new Date(selectedProduct.updateDate).toLocaleDateString("vi-VN")}</p>
                         </div>
                     </div>
                 )}

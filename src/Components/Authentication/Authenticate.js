@@ -10,7 +10,9 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState(
+        JSON.parse(localStorage.getItem("userData")) || null // Lấy userData từ localStorage nếu có
+    );
     // const isTokenExpired = (token) => {
     //     try {
     //       return isExpired;
@@ -84,7 +86,8 @@ export const AuthProvider = ({ children }) => {
                 }
                 const data = await response.json();
                 console.log("token hash success:",data);
-                setUserData(data)
+                setUserData(data);
+                localStorage.setItem("userData", JSON.stringify(data)); // Lưu userData vào localStorage
 
             }catch(error){
                 console.error("Token hash Error:", error);

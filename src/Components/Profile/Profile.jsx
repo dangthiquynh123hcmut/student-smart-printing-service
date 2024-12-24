@@ -237,7 +237,7 @@ export function UserProfile() {
               </Form.Item>
             </Form.Item>
 
-            {!(userData.result.role === "ADMIN") && (
+            {!(userData?.result.role === "ADMIN") && (
               <div>
                 Số dư:{" "}
                 {new Intl.NumberFormat("vi-VN", {
