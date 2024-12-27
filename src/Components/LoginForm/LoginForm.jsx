@@ -5,11 +5,8 @@ import { notification, Input } from "antd";
 import "./LoginForm.css";
 import { AuthContext } from "../Authentication/Authenticate";
 
-import { FaUser, FaLock } from "react-icons/fa"; // Sử dụng FaLock cho mật khẩu
+import { FaUser, FaLock } from "react-icons/fa"; 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-// import PropTypes from "prop-types";
-
-// import { loginApi} from "../../api/API";
 
 const LoginForm = () => {
   const { setToken } = useContext(AuthContext);
@@ -20,7 +17,6 @@ const LoginForm = () => {
     password: "",
   });
 
-  // Function to handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
@@ -29,39 +25,10 @@ const LoginForm = () => {
     }));
   };
 
-  //check token exsit
-
-  // Handle form submission
   const onFinish = async (e) => {
     e.preventDefault();
     const { email, password } = formValues;
-    // try{
-    //   const res = await loginApi(email, password);
-
-    //   // debugger;
-    //   if (res && res.code === 0) {
-    //     //depend on backend return res => will be set again
-    //     notification.success({
-    //       message: "Login SUCCESS",
-    //       description: "Success",
-    //     });
-    //     localStorage.setItem("token", res.result.token);
-    //     setToken(res.result.token);  // Cập nhật token trong AuthContext
-    //     console.log(">>Success:", res);
-    //     navigate("/");
-    //     console.log("still login")
-    //   } else {
-    //     alert("fail");
-    //     notification.error({
-    //       message: "Login Failed",
-    //       description: res?.code ?? "error",
-    //     });
-    //   }
-    // }catch (error){
-    //   alert("Login error:", error);
-
-    // }
-
+    
     try {
       const response = await fetch("http://localhost:8080/auth/token", {
         method: "POST",
@@ -81,11 +48,11 @@ const LoginForm = () => {
       const data = await response.json();
       console.log(data);
       notification.success({
-        message: "Login SUCCESS",
-        description: "Success",
+        message: "Đăng nhập thành công",
+        // description: "Success",
       });
       localStorage.setItem("token", data.result.token);
-      setToken(data.result.token); // Cập nhật token trong AuthContext
+      setToken(data.result.token); 
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
@@ -94,8 +61,6 @@ const LoginForm = () => {
         description: "Username or password wrong",
       });
     }
-
-    // console.log(">>Success:", res);
   };
 
   return (
@@ -103,45 +68,44 @@ const LoginForm = () => {
       <div className="wrapper">
         <form action="" onSubmit={onFinish}>
           {" "}
-          {/*onSubmit={handleSubmit} */}
-          <h1>Login</h1>
+          <h1>Đăng nhập</h1>
           <div className="input-box">
             <Input
               type="text"
-              placeholder="Username"
+              placeholder="Tên đăng nhập"
               name="email"
               value={formValues.email}
               onChange={handleChange}
               required
-              prefix={<FaUser className="icon" />} // Thêm biểu tượng người dùng
+              prefix={<FaUser className="icon" />} 
               className="custom-input"
             />
           </div>
           <div className="input-box">
             <Input.Password
-              placeholder="Password"
+              placeholder="Mật khẩu"
               name="password"
               value={formValues.password}
               onChange={handleChange}
               required
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              } // Biểu tượng ẩn/hiện
-              prefix={<FaLock className="icon" />} // Thêm biểu tượng khóa
+              } 
+              prefix={<FaLock className="icon" />} 
               className="custom-input"
             />
           </div>
           <div className="member-forgot">
             <label>
               <input type="checkbox" />
-              Remember me
+              Nhớ mật khẩu
             </label>
-            <a href="#">Forgot password?</a>
+            <a href="#">Quên mật khẩu?</a>
           </div>
-          <button type="submit">Login</button>
+          <button type="submit">Đăng nhập</button>
           <div className="register-link">
             <p>
-              Don't have an account? <NavLink to="/register">Register</NavLink>
+              Chưa có tài khoản? <NavLink to="/register">Đăng kí</NavLink>
             </p>
           </div>
         </form>
@@ -149,9 +113,5 @@ const LoginForm = () => {
     </div>
   );
 };
-
-// LoginForm.prototype = {
-//   setToken: PropTypes.func.isRequired,
-// };
 
 export default LoginForm;

@@ -11,8 +11,8 @@ function File() {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1); // Giá trị số trang
-  const [totalFiles, setTotalFiles] = useState(0); // Tổng số file
+  const [page, setPage] = useState(1); 
+  const [totalFiles, setTotalFiles] = useState(0); 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -67,9 +67,15 @@ function File() {
       try {
         const response = await uploadFile(token, file);
         console.log(`File ${file.name} uploaded successfully:`, response);
-        await fetchFiles(); // Gọi lại API sau khi upload thành công
+        notification.success({
+           message:`File ${file.name} tải lên thành công`,
+        });
+        await fetchFiles(); 
       } catch (error) {
-        console.error(`Failed to upload file ${file.name}:`, error);
+        notification.error({
+          message: "Tải file thất bại",
+          description: "Kích thước file quá lớn",
+        });
       }
     }
 
@@ -85,12 +91,11 @@ function File() {
       cancelText: "Không",
       onOk: async () => {
         try {
-          const response = await deleteFile(token, fileId);
-          notification.success({
-            message: "Delete SUCCESS",
-            description: "File đã được xóa thành công.",
-          });
-          await fetchFiles(); // Gọi lại API sau khi xóa
+           await deleteFile(token, fileId);
+          // notification.success({
+          //   message:  "File đã được xóa thành công.",
+          // });
+          await fetchFiles();
         } catch (error) {
           notification.error({
             message: "Delete FAILED",
@@ -216,7 +221,7 @@ function File() {
                         onClick={() => handlePrintFile(file)}
                         className="action-button print-button"
                       >
-                        In tài liệu
+                        In file
                       </button>
                     </td>
                   </tr>
@@ -229,11 +234,10 @@ function File() {
         </div>
 
         <div className="pagination">
-            {/* Phân trang */}
           <Pagination
             current={page}
             total={totalFiles}
-            pageSize={10} // Số file mỗi trang
+            pageSize={10}
             onChange={(current) => setPage(current)}
           />
         </div>

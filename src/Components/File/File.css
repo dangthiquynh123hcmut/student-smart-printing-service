@@ -36,10 +36,6 @@
     border: none;
   }
 
-  /* .uploaded-files {
-    margin: 10px;
-    
-  } */
   .file-upload-container h2 {
     text-align: center;
     
@@ -61,9 +57,6 @@
   } 
   
   .files-info {
-    /* display: flex; */
-    /* yalign-items: center; */
-    /* justify-content: space-between; */
     background-color: #fff;
     padding: 10px;
     border: 1px solid #ccc;
@@ -81,14 +74,10 @@
     justify-content: space-between;
     background-color: #fff;
     padding:0 10px;
-    /* border: 1px solid #ccc; */
-    /* border-radius: 4px; */
-    /* margin-bottom: 10px; */
   }
   .file-table {
     width: 100%;
     border-collapse: collapse;
-    /* margin-top: 20px; */
     border-radius: 10px;
   }
   
@@ -102,10 +91,9 @@
   
   .file-table th {
     background-color: #f2f2f2;
-    /* text-align: center; Căn giữa tên các cột */
   }
   .file-table td { 
-    vertical-align: middle; /* Đảm bảo nội dung căn giữa theo chiều dọc */
+    vertical-align: middle;
   }
   
    .file-actions {
@@ -113,8 +101,8 @@
     gap: 10px; 
   }
   .action-button {
-    display: inline-block; /* Đặt nút nằm ngang */
-    margin: 0 5px;
+    display: inline-block; 
+    margin: 3px 5px;
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -132,23 +120,13 @@
   }
   
   .file-table th:first-child, .file-table td:first-child {
-    text-align: center; /* Căn giữa nội dung cột STT */
-    width: 50px; /* Đặt độ rộng hợp lý cho cột STT */
+    text-align: center; 
+    width: 50px; 
   }
   
   .file-search-container {
     margin: 20px;
-
-    /* display: flex; */
-    /* justify-content: flex-end; */
   }
-  
-  /* .search-input {
-    padding: 8px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  } */
   .search-input-file{
     width: 35vw;
   }
@@ -156,7 +134,6 @@
   .file-container {
     width: 90%;
     margin: 0 auto;
-    /* text-align: center; */
   }
   
   .search-container {

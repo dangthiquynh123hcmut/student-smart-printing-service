@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PrinterOutlined } from "@ant-design/icons";
-import { GetAvailablePrinters } from "../../api/studentApi"; // Đường dẫn tệp API
+import { GetAvailablePrinters } from "../../api/studentApi";
 import "./ChosenPrinter.css";
 import printerImage from "../Assets/printer-img.jpg";
 import { notification } from "antd";
@@ -15,7 +15,7 @@ function ChosenPrinter({ onPrinterSelect }) {
   const [printers, setPrinters] = useState([]);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [selectedPrinter, setSelectedPrinter] = useState(null); // Trạng thái lưu máy in đã chọn
+  const [selectedPrinter, setSelectedPrinter] = useState(null);
 
   const token = localStorage.getItem("token"); 
   console.log(token);
@@ -29,7 +29,7 @@ function ChosenPrinter({ onPrinterSelect }) {
   };
 
   const handleSubmit = async () => {
-    setError(null); // Xóa lỗi trước đó, có thể xóa
+    setError(null); 
     const { coSo, toaNha, tang } = formData;
 
     try {
@@ -40,36 +40,31 @@ function ChosenPrinter({ onPrinterSelect }) {
         tang
       );
 
-      setPrinters(response.data.result || []); // Ghi danh sách máy in
-      console.log("get api", response.data.result);
-
-      // setShowPrinters(true); // Hiển thị danh sách máy in
-      setShowModal(true); // Hiển thị modal với danh sách máy in
-      setError(""); // Xóa lỗi
+      setPrinters(response.data.result || []); 
+      console.log("get api", response.data.result);  
+      setShowModal(true);
+      setError(""); 
     } catch (err) {
       console.error(err);
       setError("Không thể lấy danh sách máy in. Vui lòng thử lại.");
-      // setShowPrinters(false);
-      setPrinters([]); // Reset danh sách
+      setPrinters([]); 
     }
   };
 
   const handlePrinterSelection = (printer) => {
     console.log("Máy in được chọn:", printer);
 
-    // Hiển thị thông báo thành công
     notification.success({
       message: "Chọn máy in thành công",
       description: `Bạn đã chọn máy in: ${printer.name}`,
 
-      placement: "topRight", // Vị trí hiển thị thông báo
+      placement: "topRight", 
     });
-    onPrinterSelect(printer.id); // Gửi idPrinter qua callback
+    onPrinterSelect(printer.id); 
 
-    setShowModal(false); // Đóng modal sau khi chọn máy in
-    setSelectedPrinter(printer.name); // Lưu tên máy in
+    setShowModal(false); 
+    setSelectedPrinter(printer.name); 
   };
-
   
   return (
     <div className="file-upload-container">
@@ -125,13 +120,7 @@ function ChosenPrinter({ onPrinterSelect }) {
               onChange={handleInputChange}
             >
              <option value="1">Tầng 1</option>
-                  <option value="2">Tầng 2</option>
-                  <option value="3">Tầng 3</option>
-                  <option value="4">Tầng 4</option>
-                  <option value="5">Tầng 5</option>
-                  <option value="6">Tầng 6</option>
-                  <option value="7">Tầng 7</option>
-                  <option value="8">Tầng 8</option>
+             <option value="2">Tầng 2</option>
             </select>
           </div>
         </div>
@@ -151,8 +140,6 @@ function ChosenPrinter({ onPrinterSelect }) {
           <button className="preview-button" onClick={handleSubmit}>
             Chọn máy in
           </button>
-
-          {/* <button className="send-button">In tệp</button> */}
         </div>
 
         {showModal && (
@@ -171,7 +158,6 @@ function ChosenPrinter({ onPrinterSelect }) {
                   <div className="printer-grid">
                     {printers.map((printer, index) => (
                       <div className="printer-card" key={index}>
-                        {/* Thêm ảnh máy in */}
                         <img
                           src={printerImage}
                           alt="Printer"
