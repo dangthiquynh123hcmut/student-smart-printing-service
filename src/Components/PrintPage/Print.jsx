@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState} from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import "./Print.css";
 import ChosenPrinter from "./ChosenPrinter";
@@ -12,16 +11,12 @@ import { useContext } from "react";
 
 
 function Print() {
-  const [files, setFiles] = useState([]);
-  const [file1, setFile] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("");
-  const [uploadTriggered, setUploadTriggered] = useState(false);
   const [selectedPrinterId, setSelectedPrinterId] = useState(null);
   const { userData } = useContext(AuthContext);
 
   const handlePrinterSelect = (idPrinter) => {
     setSelectedPrinterId(idPrinter);
-    console.log("Selected Printer ID:", idPrinter); // Xử lý hoặc sử dụng `idPrinter` tại đây
+    console.log("Selected Printer ID:", idPrinter);
   };
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,16 +30,8 @@ function Print() {
     sideOfPage: "false",
   });
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  };
-
   const handleRemoveFile = () => {
-    setFile(null); // Xóa file đã chọn
-    navigate("/file"); // Điều hướng lại sang trang File
+    navigate("/file"); 
   };
 
   const handleInputChange = (event) => {
@@ -61,9 +48,7 @@ function Print() {
     if (!file) {
       notification.success({
         message: "Bạn vui lòng chọn máy in và tài liệu cần in trước",
-        // description: `Bạn đã chọn máy in: ${printer.name}`,
-  
-        placement: "topRight", // Vị trí hiển thị thông báo
+        placement: "topRight", 
       });
       return;
     }
@@ -80,22 +65,19 @@ function Print() {
 
     try {
       console.log("printData", printData)
-      const response = await implementPrint(printData, token); // Gọi API
-      // console.log("In tập tin thành công:", response);
-      // alert("In tập tin thành công!");
+      const response = await implementPrint(printData, token); 
+      console.log(response);
       notification.success({
         message: response,
-        // description: `Bạn đã chọn máy in: ${printer.name}`,
-  
-        placement: "topRight", // Vị trí hiển thị thông báo
+        placement: "topRight",
       });
+      if( response==="Print registration successful") navigate("/history"); 
 
     } catch (error) {
       console.error("Lỗi khi in tập tin:", error);
-      // alert("Không thể in tập tin. Vui lòng thử lại!");
       notification.error({
-        message: "Error",
-        description: error.message || "Something went wrong",
+        message: "Máy in chưa được chọn",
+        // description: error.message || "Something went wrong",
         placement: "topRight",
       });
       
@@ -109,8 +91,6 @@ function Print() {
         <h1>In ấn</h1>
       </div>
       <ChosenPrinter onPrinterSelect={handlePrinterSelect} />
-      {/* {selectedPrinterId && <p>Máy in đã chọn có ID: {selectedPrinterId}</p>} */}
-
       <div className="file-upload-container">
         <div className="file-upload-header">
           <div className="file-image">
