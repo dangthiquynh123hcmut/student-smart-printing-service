@@ -19,9 +19,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import SearchIcon from "@mui/icons-material/Search";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { saveAs } from "file-saver";
-import { api } from "../../api/baseURL";
-import { AuthContext } from '../Authentication/Authenticate';
-import "./History.css"
+import { api } from "../../../api/baseURL";
+import { AuthContext } from '../../Authentication/Authenticate';
+import '../Material/History/MaterialHistory.css'
+import "../Material/Storage/MaterialStorage.css"
 import { NavLink } from 'react-router-dom';
 import { alignProperty } from '@mui/material/styles/cssUtils';
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -222,7 +223,7 @@ const AdHistory = () => {
   const getAllHistory = async()=>{
     try {
         const response = await api.get(
-          "/history/search", {
+          "/history/adminSearch", {
 
             params: {
               fileId:"",
@@ -282,9 +283,6 @@ const AdHistory = () => {
 
   // Hàm xuất dữ liệu
   const handleExport = () => {
-    if(loading){
-      return
-    }
     const csvContent =
       "Date;File;Process;MSSV;Machine\n" +
       data
@@ -305,7 +303,7 @@ const AdHistory = () => {
 
   return (
     <Box className="wrap-report" >
-      <Typography variant="h10" gutterBottom>
+      <Typography variant="h9" gutterBottom>
         <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
         <h1>Lịch sử in</h1>
       </Typography>

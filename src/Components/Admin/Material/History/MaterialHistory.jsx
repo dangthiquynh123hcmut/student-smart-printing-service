@@ -169,12 +169,15 @@ const MaterialHistory = () => {
 
   // Hàm xuất dữ liệu
   const handleExport = () => {
+    if(loading){
+      return
+    }
     const csvContent =
-      "ID,ID Machine,Name,Value,Description,Date use\n" +
+      "ID;ID Machine;Name;Value;Description;Date use\n" +
       data
         .map(
           (row) =>
-            `${row.id},${row.id_machine},${row.name},${row.value},${row.description},${row.dateUse}`
+            `${row.id};${row.id_machine};${row.name};${row.value};${row.description};${row.dateUse}`
         )
         .join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });

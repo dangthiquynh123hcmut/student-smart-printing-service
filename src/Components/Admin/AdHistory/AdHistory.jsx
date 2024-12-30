@@ -283,12 +283,15 @@ const AdHistory = () => {
 
   // Hàm xuất dữ liệu
   const handleExport = () => {
+    if(loading){
+      return
+    }
     const csvContent =
-      "Date,File,Process,MSSV,Machine\n" +
+      "Date;File;Process;MSSV;Machine\n" +
       data
         .map(
           (row) =>
-            `${row.date},${row.file.name},${row.process},${row.user.mssv},${row.printMachine.name}`
+            `${row.date};${row.file.name};${row.process};${row.user.mssv};${row.printMachine.name}`
         )
         .join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
