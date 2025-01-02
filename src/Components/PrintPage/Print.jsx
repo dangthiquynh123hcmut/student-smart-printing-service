@@ -84,14 +84,14 @@ function Print() {
   };
 
   return (
-    <div id="wrapper0">
+    <div className="wrapper0">
       <div id="header">
         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>In ấn</h1>
       </div>
       <ChosenPrinter onPrinterSelect={handlePrinterSelect} />
-      <div className="file-upload-container">
-        <div className="file-upload-header">
+      <div className="configure-container">
+        <div className="configure-header">
           <div className="file-image">
             <SettingOutlined style={{ fontSize: "24px", color: "#000" }} />
             <h2>Cấu hình in</h2>

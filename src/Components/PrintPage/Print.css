@@ -1,21 +1,22 @@
-#wrapper0 {
+.wrapper0 {
   width: 100%;
-  padding: 20px;
+  padding: 3vw;
 }
 
+
 #header{
-  margin-left: 20px;
+  margin-left: 2vw;
 }
-.file-upload-container {
+.configure-container {
     width: 100%;
     margin: 20px auto;
-    border: 2px solid #0e0a0a8c;
+    border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px 0px;
     background-color: #fff;
   }
 
-.file-upload-header {
+.configure-header {
     display: flex;
     align-items: center; 
     justify-content: space-between; 
@@ -24,7 +25,7 @@
     padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
-    border-bottom: 2px solid #0e0a0a8c;
+    border-bottom: 2px solid #ccc;
   }
   
   .file-image {
@@ -171,7 +172,6 @@
   font-weight: bold;
 }
 
-
 .field-container {
   margin-bottom: 20px;
   margin-right: 40px;
@@ -233,4 +233,10 @@
 
 .file-input {
   margin-top: 10px;
+}
+
+@media (max-width: 767px){
+  .wrapper0 {
+    padding: 1vw;
+  }
 }

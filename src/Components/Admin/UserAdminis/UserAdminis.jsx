@@ -152,6 +152,35 @@ export function UserAdminis() {
                 </table>
               </div>
 
+              <div className="user-list">
+                {paginatedUsers.map((user,index) => (
+                  <div
+                    key={user.id}
+                    className="user-list-item"
+                    onClick={() => handleDeleteUser(user.id, user.firstName)}
+                  >
+                    <div>
+                      <span>STT:</span> {(currentPage - 1) * pageSize + index + 1} 
+                    </div>
+                    <div>
+                      <span>Tên:</span> {user.lastName} {user.firstName}
+                    </div>
+                    <div>
+                      <span>Username:</span> {user.username}
+                    </div>
+                    <div>
+                      <span>Email:</span> {user.email}
+                    </div>
+                    <div>
+                      <span>Vai trò:</span> {user.role}
+                    </div>
+                    <div>
+                      <span>Mã số:</span> {user.mssv}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}

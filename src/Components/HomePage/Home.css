@@ -40,3 +40,16 @@
   margin: 5px 0 0;
   color: #fff;
 }
+
+@media (max-width: 767px){
+  .first-h1{
+    display: none;
+  }
+  .banner-text h1 {
+    font-size: 4.5vw;
+    margin: 0;
+    color: #fff; 
+    text-align: center;
+    padding-bottom: 1vh;
+  }
+}
