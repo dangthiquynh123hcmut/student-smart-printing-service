@@ -29,7 +29,6 @@ function File() {
       setTotalFiles(data.totalElements);
       setUploadedFiles(Array.isArray(data.content) ? data.content : []);
     } catch (error) {
-      //console.error("Không thể lấy danh sách file:", error);
       setUploadedFiles([]);
     }
     setLoading(false);
@@ -72,8 +71,7 @@ function File() {
 
     for (const file of files) {
       try {
-        const response = await uploadFile(token, file);
-        //console.log(`File ${file.name} uploaded successfully:`, response);
+         await uploadFile(token, file);
         notification.success({
           message: `File ${file.name} tải lên thành công`,
         });
@@ -108,13 +106,11 @@ function File() {
         }
       },
       onCancel: () => {
-        //console.log("Hủy xóa file");
       },
     });
   };
 
   const handlePrintFile = (file) => {
-    //console.log("In file:", file);
     navigate("/print", { state: { file } });
   };
 
@@ -190,7 +186,7 @@ function File() {
               <SearchOutlined className="search-icon" />
               <input
                 type="text"
-                placeholder="Tìm kiếm file theo tên"
+                placeholder="Tìm kiếm theo tên"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="search-input-file"

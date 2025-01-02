@@ -18,7 +18,6 @@ function ChosenPrinter({ onPrinterSelect }) {
   const [selectedPrinter, setSelectedPrinter] = useState(null);
 
   const token = localStorage.getItem("token");
-  //console.log(token);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,34 +35,28 @@ function ChosenPrinter({ onPrinterSelect }) {
       const response = await GetAvailablePrinters(token, coSo, toaNha, tang);
 
       setPrinters(response.data.result || []);
-      //console.log("get api", response.data.result);
       setShowModal(true);
       setError("");
     } catch (err) {
-      //console.error(err);
       setError("Không thể lấy danh sách máy in. Vui lòng thử lại.");
       setPrinters([]);
     }
   };
 
   const handlePrinterSelection = (printer) => {
-    //console.log("Máy in được chọn:", printer);
-
     notification.success({
       message: "Chọn máy in thành công",
       description: `Bạn đã chọn máy in: ${printer.name}`,
-
       placement: "topRight",
     });
     onPrinterSelect(printer.id);
-
     setShowModal(false);
     setSelectedPrinter(printer.name);
   };
 
   return (
-    <div className="file-upload-container">
-      <div className="file-upload-header">
+    <div className="configure-container">
+      <div className="configure-header">
         <div className="file-image">
           <PrinterOutlined style={{ fontSize: "24px", color: "#000" }} />
           <h2>Chọn máy in</h2>

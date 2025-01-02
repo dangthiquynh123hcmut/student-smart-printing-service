@@ -228,10 +228,10 @@ const AdHistory = () => {
         },
       });
 
-      console.log("response getAllhistory:",response);
+      // console.log("response getAllhistory:",response);
       setData(response.data.result?.data);
       setTotalPage(response.data.result.totalPage);
-      console.log(response.data.result?.totalPage)
+      // console.log(response.data.result?.totalPage)
     } catch (error) {
       //console.log("Can't get api", error.code)
     } finally {
