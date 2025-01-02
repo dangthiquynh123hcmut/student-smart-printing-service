@@ -177,7 +177,7 @@ const MaterialHistory = () => {
       data
         .map(
           (row) =>
-            `${row.id};${row.id_machine};${row.name};${row.value};${row.description};${row.dateUse}`
+            `${row?.id};${row?.id_machine};${row?.name};${row?.value};${row?.description};${row?.dateUse}`
         )
         .join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
