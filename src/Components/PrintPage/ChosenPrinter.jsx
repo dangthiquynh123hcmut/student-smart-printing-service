@@ -17,8 +17,8 @@ function ChosenPrinter({ onPrinterSelect }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedPrinter, setSelectedPrinter] = useState(null);
 
-  const token = localStorage.getItem("token"); 
-  console.log(token);
+  const token = localStorage.getItem("token");
+  //console.log(token);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,43 +29,38 @@ function ChosenPrinter({ onPrinterSelect }) {
   };
 
   const handleSubmit = async () => {
-    setError(null); 
+    setError(null);
     const { coSo, toaNha, tang } = formData;
 
     try {
-      const response = await GetAvailablePrinters(
-        token,
-        coSo,
-        toaNha,
-        tang
-      );
+      const response = await GetAvailablePrinters(token, coSo, toaNha, tang);
 
-      setPrinters(response.data.result || []); 
-      console.log("get api", response.data.result);  
+      setPrinters(response.data.result || []);
+      //console.log("get api", response.data.result);
       setShowModal(true);
-      setError(""); 
+      setError("");
     } catch (err) {
-      console.error(err);
+      //console.error(err);
       setError("Không thể lấy danh sách máy in. Vui lòng thử lại.");
-      setPrinters([]); 
+      setPrinters([]);
     }
   };
 
   const handlePrinterSelection = (printer) => {
-    console.log("Máy in được chọn:", printer);
+    //console.log("Máy in được chọn:", printer);
 
     notification.success({
       message: "Chọn máy in thành công",
       description: `Bạn đã chọn máy in: ${printer.name}`,
 
-      placement: "topRight", 
+      placement: "topRight",
     });
-    onPrinterSelect(printer.id); 
+    onPrinterSelect(printer.id);
 
-    setShowModal(false); 
-    setSelectedPrinter(printer.name); 
+    setShowModal(false);
+    setSelectedPrinter(printer.name);
   };
-  
+
   return (
     <div className="file-upload-container">
       <div className="file-upload-header">
@@ -110,7 +105,6 @@ function ChosenPrinter({ onPrinterSelect }) {
             </select>
           </div>
 
-          
           <div className="field-container">
             <label className="form-label">Tầng</label>
             <select
@@ -119,8 +113,8 @@ function ChosenPrinter({ onPrinterSelect }) {
               value={formData.tang}
               onChange={handleInputChange}
             >
-             <option value="1">Tầng 1</option>
-             <option value="2">Tầng 2</option>
+              <option value="1">Tầng 1</option>
+              <option value="2">Tầng 2</option>
             </select>
           </div>
         </div>

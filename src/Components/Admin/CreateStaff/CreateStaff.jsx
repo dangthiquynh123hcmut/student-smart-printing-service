@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { NavLink,useNavigate } from "react-router-dom";
-import { Form, Input, Button, DatePicker, message,notification } from "antd";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Form, Input, Button, DatePicker, message, notification } from "antd";
 import { createStaff } from "../../../api/adminApi";
 import "./CreateStaff.css";
 
 function CreateStaff() {
-    const navigate = useNavigate();
-  const [loading, setLoading] = useState(false); 
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    const token = localStorage.getItem("token"); 
-  
+    const token = localStorage.getItem("token");
+
     if (!token) {
       message.error("Không tìm thấy token. Vui lòng đăng nhập lại.");
       return;
     }
-  
+
     const newStaff = {
       email: values.email,
       username: values.username,
@@ -25,28 +25,27 @@ function CreateStaff() {
       mssv: values.mssv,
       date: values.date.format("YYYY-MM-DD"),
     };
-  
+
     try {
       setLoading(true);
       const response = await createStaff(token, newStaff);
-        console.log(response)
-        notification.success({
-            message: "Thêm nhân viên thành công",
-            description: "Thành công",
-          });
-          navigate("/user-adminis");
-    }catch (error) {
-        console.error("Error:", error);
-        notification.error({
-          message: "Tạo tài khoản thất bại",
-          description: error.response.data.message,
-        });
-      } 
-    finally {
+      //console.log(response)
+      notification.success({
+        message: "Thêm nhân viên thành công",
+        description: "Thành công",
+      });
+      navigate("/user-adminis");
+    } catch (error) {
+      //console.error("Error:", error);
+      notification.error({
+        message: "Tạo tài khoản thất bại",
+        description: error.response.data.message,
+      });
+    } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="create-staff-container">
       <div className="header-staff">
@@ -72,7 +71,9 @@ function CreateStaff() {
           <Form.Item
             label="Tên đăng nhập"
             name="username"
-            rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+            ]}
           >
             <Input placeholder="Tên đăng nhập phải từ 8 đến 20 kí tự" />
           </Form.Item>

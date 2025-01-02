@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 function UserInfo() {
   const { setToken, userData, fetchUserData } = useContext(AuthContext);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logOutApi();
     localStorage.removeItem("token");
     setToken(null);
@@ -30,7 +30,7 @@ function UserInfo() {
       } else {
       }
     } catch (error) {
-      console.error("Logout token failed", error);
+      ////console.error("Logout token failed", error);
     }
   };
 
@@ -40,18 +40,27 @@ function UserInfo() {
         <NavLink to="/user-profile">Thông tin cá nhân</NavLink>
       </Menu.Item>
 
-      {(userData?.result.role === "ADMIN") && <Menu.Item key="2"><NavLink to="/user-adminis">Quản lý tài khoản</NavLink></Menu.Item>}
+      {userData?.result.role === "ADMIN" && (
+        <Menu.Item key="2">
+          <NavLink to="/user-adminis">Quản lý tài khoản</NavLink>
+        </Menu.Item>
+      )}
 
-      {(userData?.result.role === "ADMIN") && <Menu.Item key="3"><NavLink to="/create-staff">Tạo tài khoản</NavLink></Menu.Item>}
+      {userData?.result.role === "ADMIN" && (
+        <Menu.Item key="3">
+          <NavLink to="/create-staff">Tạo tài khoản</NavLink>
+        </Menu.Item>
+      )}
 
-      {!(userData?.result.role === "ADMIN") && <Menu.Item key="4">
-        <NavLink to="/payment">Nạp tiền</NavLink>
-      </Menu.Item>}
+      {!(userData?.result.role === "ADMIN") && (
+        <Menu.Item key="4">
+          <NavLink to="/payment">Nạp tiền</NavLink>
+        </Menu.Item>
+      )}
 
       <Menu.Item key="5" onClick={handleLogout}>
         <NavLink to="/login">Thoát</NavLink>
       </Menu.Item>
-
     </Menu>
   );
 
@@ -60,7 +69,7 @@ function UserInfo() {
       <UserOutlined className="user-icon" />
       <ul className="info-list">
         <li style={{ fontWeight: "bold", color: "white" }}>
-        {userData?.result.lastName} {userData?.result.firstName}
+          {userData?.result.lastName} {userData?.result.firstName}
         </li>
         <li style={{ color: "white" }}>{userData?.result.role}</li>
       </ul>

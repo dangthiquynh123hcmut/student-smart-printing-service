@@ -16,7 +16,7 @@ function Print() {
 
   const handlePrinterSelect = (idPrinter) => {
     setSelectedPrinterId(idPrinter);
-    console.log("Selected Printer ID:", idPrinter);
+    ////console.log("Selected Printer ID:", idPrinter);
   };
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ function Print() {
     }));
   };
    const userId = userData.result.id;
-   console.log("user data", userData)
+   ////console.log("user data", userData)
 
   const handleSubmit = async () => {
     if (!file) {
@@ -64,9 +64,9 @@ function Print() {
     };
 
     try {
-      console.log("printData", printData)
+      ////console.log("printData", printData)
       const response = await implementPrint(printData, token); 
-      console.log(response);
+      ////console.log(response);
       notification.success({
         message: response,
         placement: "topRight",
@@ -74,7 +74,7 @@ function Print() {
       if( response==="Print registration successful") navigate("/history"); 
 
     } catch (error) {
-      console.error("Lỗi khi in tập tin:", error);
+      ////console.error("Lỗi khi in tập tin:", error);
       notification.error({
         message: "Máy in chưa được chọn",
         placement: "topRight",

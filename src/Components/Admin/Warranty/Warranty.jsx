@@ -30,7 +30,7 @@ function Warranty() {
       setFilteredData(Array.isArray(data.content) ? data.content : []); // Dữ liệu ban đầu để lọc
       setIsFiltered(false); // Reset trạng thái lọc
     } catch (error) {
-      console.error("Không thể lấy danh sách bảo hành:", error);
+      //console.error("Không thể lấy danh sách bảo hành:", error);
       setError("Đã xảy ra lỗi khi lấy dữ liệu.");
       setReportData([]);
       setFilteredData([]);
@@ -49,14 +49,18 @@ function Warranty() {
     try {
       setLoading(true);
       const pageReal = page - 1;
-      const data = await GetReportWarrantyByMachineID(token, searchID, pageReal);
+      const data = await GetReportWarrantyByMachineID(
+        token,
+        searchID,
+        pageReal
+      );
       setReportData(data.content || []);
       setFilteredData(data.content || []);
       setTotalReport(data.totalElements || data.content.length || 0);
       setIsFiltered(true); // Bật trạng thái lọc
       setError(null);
     } catch (err) {
-      console.error("Không tìm thấy dữ liệu cho ID đã nhập:", err);
+      //console.error("Không tìm thấy dữ liệu cho ID đã nhập:", err);
       setTotalReport(0);
       setError("Không tìm thấy dữ liệu cho ID đã nhập.");
       setReportData([]);
@@ -82,9 +86,11 @@ function Warranty() {
     if (value) {
       const filtered = reportData.filter(
         (report) =>
-          (report.idMachine && report.idMachine.toLowerCase().includes(value)) ||
+          (report.idMachine &&
+            report.idMachine.toLowerCase().includes(value)) ||
           (report.name && report.name.toLowerCase().includes(value)) ||
-          (report.description && report.description.toLowerCase().includes(value))
+          (report.description &&
+            report.description.toLowerCase().includes(value))
       );
       setFilteredData(filtered);
     } else {

@@ -132,7 +132,7 @@ export function UserProfile() {
         setBalance(res.data.result.balance);
       })
       .catch((error) => {
-        console.error("Error get balance:", error);
+        //console.error("Error get balance:", error);
       });
   }, []);
 

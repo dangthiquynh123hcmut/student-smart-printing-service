@@ -1,11 +1,10 @@
-
 import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { notification, Input } from "antd";
 import "./LoginForm.css";
 import { AuthContext } from "../Authentication/Authenticate";
 
-import { FaUser, FaLock } from "react-icons/fa"; 
+import { FaUser, FaLock } from "react-icons/fa";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 const LoginForm = () => {
@@ -28,7 +27,7 @@ const LoginForm = () => {
   const onFinish = async (e) => {
     e.preventDefault();
     const { email, password } = formValues;
-    
+
     try {
       const response = await fetch("http://localhost:8080/auth/token", {
         method: "POST",
@@ -46,16 +45,16 @@ const LoginForm = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       notification.success({
         message: "Đăng nhập thành công",
         // description: "Success",
       });
       localStorage.setItem("token", data.result.token);
-      setToken(data.result.token); 
+      setToken(data.result.token);
       navigate("/");
     } catch (error) {
-      console.error("Error:", error);
+      //console.error("Error:", error);
       notification.error({
         message: "Login Failed",
         description: "Username or password wrong",
@@ -77,7 +76,7 @@ const LoginForm = () => {
               value={formValues.email}
               onChange={handleChange}
               required
-              prefix={<FaUser className="icon" />} 
+              prefix={<FaUser className="icon" />}
               className="custom-input"
             />
           </div>
@@ -90,8 +89,8 @@ const LoginForm = () => {
               required
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              } 
-              prefix={<FaLock className="icon" />} 
+              }
+              prefix={<FaLock className="icon" />}
               className="custom-input"
             />
           </div>

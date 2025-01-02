@@ -29,7 +29,7 @@ function File() {
       setTotalFiles(data.totalElements);
       setUploadedFiles(Array.isArray(data.content) ? data.content : []);
     } catch (error) {
-      console.error("Không thể lấy danh sách file:", error);
+      //console.error("Không thể lấy danh sách file:", error);
       setUploadedFiles([]);
     }
     setLoading(false);
@@ -73,7 +73,7 @@ function File() {
     for (const file of files) {
       try {
         const response = await uploadFile(token, file);
-        console.log(`File ${file.name} uploaded successfully:`, response);
+        //console.log(`File ${file.name} uploaded successfully:`, response);
         notification.success({
           message: `File ${file.name} tải lên thành công`,
         });
@@ -108,13 +108,13 @@ function File() {
         }
       },
       onCancel: () => {
-        console.log("Hủy xóa file");
+        //console.log("Hủy xóa file");
       },
     });
   };
 
   const handlePrintFile = (file) => {
-    console.log("In file:", file);
+    //console.log("In file:", file);
     navigate("/print", { state: { file } });
   };
 

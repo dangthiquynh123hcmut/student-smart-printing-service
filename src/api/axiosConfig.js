@@ -1,11 +1,10 @@
 import axios from "axios";
 // const DB_URL = import.meta.env.REACT_APP_DB_URL;
 const db_url = process.env.REACT_APP_DB_URL;
-console.log("dxawdaw", db_url);
+//console.log("dxawdaw", db_url);
 const instance = axios.create({
   baseURL: db_url,
-  adapter: 'fetch'
-
+  adapter: "fetch",
 });
 // Add a request interceptor
 instance.interceptors.request.use(

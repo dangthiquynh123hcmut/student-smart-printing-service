@@ -14,15 +14,15 @@ import Print from "./Components/PrintPage/Print";
 import History from "./Components/HistoryPage/History";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Payment from "./Components/Payment/Payment";
-import Printers from "./Components/Admin/Printers/Printers"
+import Printers from "./Components/Admin/Printers/Printers";
 import AdHistory from "./Components/Admin/AdHistory/AdHistory";
-import Configuration from "./Components/Admin/Configuration/Configuration"
+import Configuration from "./Components/Admin/Configuration/Configuration";
 import File from "./Components/File/File";
 import Warranty from "./Components/Admin/Warranty/Warranty";
 import { UserProfile } from "./Components/Profile/Profile";
 import MaterialStorage from "./Components/Admin/Material/Storage/MaterialStorage";
 import MaterialHistory from "./Components/Admin/Material/History/MaterialHistory";
-import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting"
+import PriceSetting from "./Components/Admin/PriceSetting/PriceSetting";
 import CreateStaff from "./Components/Admin/CreateStaff/CreateStaff";
 import { UserAdminis } from "./Components/Admin/UserAdminis/UserAdminis";
 
@@ -34,35 +34,24 @@ import RootLayout from "./Layouts/RootLayout";
 import RegisterPage from "./Components/RegisterForm/Register";
 // import UserInfo from "./Layouts/UserInfo";
 
-
 function PrivateRoute({ children, token }) {
-  if(!token) return <Navigate to="/login" />
+  if (!token) return <Navigate to="/login" />;
   const currentTime = Date.now(); // Current time in milliseconds
-  const timeOut= decodeToken(token)
-  console.log(token)
-  const timeUntilExpiry = timeOut.exp - currentTime/1000;
-  // console.log("time remain",timeUntilExpiry)
-  return timeUntilExpiry > 0 ? children : <Navigate to="/login" />
-
+  const timeOut = decodeToken(token);
+  //console.log(token)
+  const timeUntilExpiry = timeOut.exp - currentTime / 1000;
+  // //console.log("time remain",timeUntilExpiry)
+  return timeUntilExpiry > 0 ? children : <Navigate to="/login" />;
 }
 function App() {
-  
+  const { token, userData, setToken } = useContext(AuthContext);
 
-  const { token, userData,setToken } = useContext(AuthContext);
- 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route
-          path="/login"
-          element={
-            <LoginForm
-              
-            />
-          }
-        />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterPage />} />
-          <Route path="/" element={<RootLayout userData={userData} />}>
+        <Route path="/" element={<RootLayout userData={userData} />}>
           <Route
             index
             element={
@@ -74,7 +63,7 @@ function App() {
           <Route
             path="file"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <File />
               </PrivateRoute>
             }
@@ -82,7 +71,7 @@ function App() {
           <Route
             path="print"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <Print />
               </PrivateRoute>
             }
@@ -91,16 +80,16 @@ function App() {
           <Route
             path="history"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <History />
               </PrivateRoute>
             }
           />
-        
+
           <Route
             path="payment"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <Payment />
               </PrivateRoute>
             }
@@ -108,7 +97,7 @@ function App() {
           <Route
             path="warranty"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <Warranty />
               </PrivateRoute>
             }
@@ -116,7 +105,7 @@ function App() {
           <Route
             path="printers"
             element={
-              <PrivateRoute token={token} >
+              <PrivateRoute token={token}>
                 <Printers />
               </PrivateRoute>
             }
@@ -124,49 +113,49 @@ function App() {
           <Route
             path="AdHistory"
             element={
-              <PrivateRoute token={token} >
-                <AdHistory/>
+              <PrivateRoute token={token}>
+                <AdHistory />
               </PrivateRoute>
             }
           />
           <Route
-          path="materialStorage"
-          element={
-            <PrivateRoute token={token}>
-              <MaterialStorage/>
-            </PrivateRoute>
-          }          
+            path="materialStorage"
+            element={
+              <PrivateRoute token={token}>
+                <MaterialStorage />
+              </PrivateRoute>
+            }
           />
 
           <Route
-          path="materialHistory"
-          element={
-            <PrivateRoute token={token}>
-              <MaterialHistory/>
-            </PrivateRoute>
-          }          
+            path="materialHistory"
+            element={
+              <PrivateRoute token={token}>
+                <MaterialHistory />
+              </PrivateRoute>
+            }
           />
           <Route
             path="configuration"
             element={
-              <PrivateRoute token={token} >
-                <Configuration/>
+              <PrivateRoute token={token}>
+                <Configuration />
               </PrivateRoute>
             }
           />
           <Route
             path="price-setting"
             element={
-              <PrivateRoute token={token} >
-                <PriceSetting/>
+              <PrivateRoute token={token}>
+                <PriceSetting />
               </PrivateRoute>
             }
           />
           <Route
             path="user-profile"
             element={
-              <PrivateRoute token={token} >
-                <UserProfile/>
+              <PrivateRoute token={token}>
+                <UserProfile />
               </PrivateRoute>
             }
           />
@@ -174,16 +163,16 @@ function App() {
           <Route
             path="user-adminis"
             element={
-              <PrivateRoute token={token} >
-                <UserAdminis/>
+              <PrivateRoute token={token}>
+                <UserAdminis />
               </PrivateRoute>
             }
           />
-           <Route
+          <Route
             path="create-staff"
             element={
-              <PrivateRoute token={token} >
-                <CreateStaff/>
+              <PrivateRoute token={token}>
+                <CreateStaff />
               </PrivateRoute>
             }
           />

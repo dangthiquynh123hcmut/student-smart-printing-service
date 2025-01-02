@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import {
   Pagination,
   Table,
@@ -12,22 +12,20 @@ import {
   Button,
   MenuItem,
 } from "@mui/material";
-import PropTypes from 'prop-types';
-import CircularProgress from '@mui/material/CircularProgress';
+import PropTypes from "prop-types";
+import CircularProgress from "@mui/material/CircularProgress";
 import SearchIcon from "@mui/icons-material/Search";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { saveAs } from "file-saver";
 import { api } from "../../../../api/baseURL";
-import { AuthContext } from '../../../Authentication/Authenticate';
-import './MaterialHistory.css'
-import { NavLink } from 'react-router-dom';
-import { alignProperty } from '@mui/material/styles/cssUtils';
-
-
+import { AuthContext } from "../../../Authentication/Authenticate";
+import "./MaterialHistory.css";
+import { NavLink } from "react-router-dom";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 function CircularProgressWithLabel(props) {
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+    <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress variant="determinate" {...props} />
       <Box
         sx={{
@@ -35,16 +33,16 @@ function CircularProgressWithLabel(props) {
           left: 0,
           bottom: 0,
           right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          position: "absolute",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Typography
           variant="caption"
           component="div"
-          sx={{ color: 'text.secondary' }}
+          sx={{ color: "text.secondary" }}
         >
           {`${Math.round(props.value)}%`}
         </Typography>
@@ -67,7 +65,9 @@ function CircularWithValueLabel() {
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
     }, 800);
     return () => {
       clearInterval(timer);
@@ -78,99 +78,85 @@ function CircularWithValueLabel() {
 }
 
 const MaterialHistory = () => {
-  const {token} = useContext(AuthContext);
+  const token = localStorage.getItem("token");
   const [currentPage, setCurrentPage] = useState(1);
-  const [size, setSize]=useState(10); //number item per page
+  const [size, setSize] = useState(10); //number item per page
   const [searchQuery, setSearchQuery] = useState("");
-  const [data,setData ] =useState();
+  const [data, setData] = useState();
   const [totalpage, setTotalPage] = useState();
-  const [loading, setLoading] =useState(true)
+  const [loading, setLoading] = useState(true);
 
   // Hàm thay đổi trang
   const handleChangePage = async (event, page) => {
     setCurrentPage(page);
-    setLoading(true)
-    await getAllHistoryMat()
+    setLoading(true);
+    await getAllHistoryMat();
   };
 
-  const changeSizeUpdatePage= async (e)=>{
-    setLoading(true)
+  const changeSizeUpdatePage = async (e) => {
+    setLoading(true);
     setSize(Number(e.target.value));
     setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số hàng
     // await getAllHistoryMat();
-  }
+  };
   // Hàm tìm kiếm
 
+  const getHistoryById = async (e) => {
+    if (e.key === "Enter") {
+      try {
+        setLoading(true);
+        if (e.target.value === "") {
+          // setSize(10);
+          // setCurrentPage(1)
+          await getAllHistoryMat();
+          //console.log("input is null")
+        } else {
+          const response = await api.get(`/HistoryMaterial/${e.target.value}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-  const getHistoryById= async (e)=>{
-      if(e.key==="Enter"){
-        try {
-          setLoading(true)
-        if(e.target.value===""){
-            // setSize(10);
-            // setCurrentPage(1)
-            await getAllHistoryMat()
-            console.log("input is null")
-        }
-        else{
-          const response = await api.get(
-            `/HistoryMaterial/${e.target.value}`,
-            {
-              headers:{
-                'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-              },
-    
-            }
-          )
-    
-          console.log("get history by id",response);
+          //console.log("get history by id",response);
           setData(response.data.result);
         }
-
-        
       } catch (error) {
-        console.log("Can't get api history", error.code)
-      }
-      finally{
-        setLoading(false)
+        //console.log("Can't get api history", error.code)
+      } finally {
+        setLoading(false);
       }
     }
-  }
+  };
 
   //api get history
-  const getAllHistoryMat = async()=>{
+  const getAllHistoryMat = async () => {
     try {
-      const response= await api.get(
-        "/HistoryMaterial",
-        {
-          headers:{
-            'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-          },
-          params:{
-            page:currentPage-1,
-            size:size
-          }
-        }
-      )
-      console.log("response getAllhistorymat:",response);
+      const response = await api.get("/HistoryMaterial", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page: currentPage - 1,
+          size: size,
+        },
+      });
+      //console.log("response getAllhistorymat:",response);
       setData(response.data.result?.content);
       setTotalPage(response.data.result.totalPages);
-      console.log(response.data.result?.totalPages)
+      //console.log(response.data.result?.totalPages)
     } catch (error) {
-      console.log("Can't get api", error.code)
-    }finally {
+      //console.log("Can't get api", error.code)
+    } finally {
       setLoading(false); // Ẩn trạng thái loading
     }
-  }
-
-
+  };
 
   // Hàm xuất dữ liệu
   const handleExport = () => {
-    if(loading){
-      return
+    if (loading) {
+      return;
     }
     const csvContent =
       "ID;ID Machine;Name;Value;Description;Date use\n" +
@@ -188,30 +174,35 @@ const MaterialHistory = () => {
   useEffect(() => {
     getAllHistoryMat();
   }, [currentPage, size]); // Gọi lại API mỗi khi currentPage hoặc size thay đổi
-  
 
   return (
-    <Box className="wrap-report" >
+    <Box className="wrap-report">
       <Typography variant="h9" gutterBottom>
-        <NavLink to='/'>&larr; Trở về trang chủ</NavLink>
+        <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Lịch sử vật liệu in</h1>
       </Typography>
 
       {/* Thanh tìm kiếm, xuất dữ liệu và số hàng mỗi trang */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2, }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 2,
+        }}
+      >
         <TextField
           variant="outlined"
           size="small"
           placeholder="Search by id..."
-          className='MuiInputBase-root'
-
+          className="MuiInputBase-root"
           onKeyDown={getHistoryById}
           InputProps={{
             startAdornment: <SearchIcon sx={{ marginRight: 1 }} />,
           }}
-          sx={{ 
-            flex: 1, marginRight: 2,
-
+          sx={{
+            flex: 1,
+            marginRight: 2,
           }}
         />
 
@@ -220,16 +211,15 @@ const MaterialHistory = () => {
           color="primary"
           startIcon={<FileDownloadIcon />}
           onClick={handleExport}
-          style={{background:"linear-gradient(135deg, #2c49c8, #3f98d3)"}}
+          style={{ background: "linear-gradient(135deg, #2c49c8, #3f98d3)" }}
         >
           Export
         </Button>
       </Box>
 
       {/* Bảng hiển thị */}
-      {
-        loading ? (
-          <Box
+      {loading ? (
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -239,17 +229,16 @@ const MaterialHistory = () => {
         >
           <CircularWithValueLabel />
         </Box>
-
-          ):(
-            <Box
-            sx={{
-              border: "1px solid #f3eeee", // Viền màu xanh
-              borderRadius: "8px",         // Bo góc
-              padding: "16px",             // Khoảng cách bên trong
-              overflow: "hidden",          // Ẩn phần tràn
-            }}
-            >
-            <Table>
+      ) : (
+        <Box
+          sx={{
+            border: "1px solid #f3eeee", // Viền màu xanh
+            borderRadius: "8px", // Bo góc
+            padding: "16px", // Khoảng cách bên trong
+            overflow: "hidden", // Ẩn phần tràn
+          }}
+        >
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -261,63 +250,63 @@ const MaterialHistory = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.isArray(data) ? (data.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.id_machine}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.dateUse}</TableCell>
+              {Array.isArray(data) ? (
+                data.map((row) => (
+                  <TableRow key={row?.id}>
+                    <TableCell>{row?.id}</TableCell>
+                    <TableCell>{row?.id_machine}</TableCell>
+                    <TableCell>{row?.name}</TableCell>
+                    <TableCell>{row?.value}</TableCell>
+                    <TableCell>{row?.description}</TableCell>
+                    <TableCell>{row?.dateUse}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow key={data?.id}>
+                  <TableCell>{data?.id}</TableCell>
+                  <TableCell>{data?.id_machine}</TableCell>
+                  <TableCell>{data?.name}</TableCell>
+                  <TableCell>{data?.value}</TableCell>
+                  <TableCell>{data?.description}</TableCell>
+                  <TableCell>{data?.dateUse}</TableCell>
                 </TableRow>
-              ))):(
-                <TableRow key={data.id}>
-                  <TableCell>{data.id}</TableCell>
-                  <TableCell>{data.id_machine}</TableCell>
-                  <TableCell>{data.name}</TableCell>
-                  <TableCell>{data.value}</TableCell>
-                  <TableCell>{data.description}</TableCell>
-                  <TableCell>{data.dateUse}</TableCell>
-                </TableRow>
-              )
-            }
+              )}
             </TableBody>
           </Table>
-        {/*Pagination*/ }
-      <Box sx={{ marginTop: 2, display: "flex", justifyContent: "center" }}>
-      <div style={{alignContent:'center'}}>Rows per page</div>
+          {/*Pagination*/}
+          <Box sx={{ marginTop: 2, display: "flex", justifyContent: "center" }}>
+            <div style={{ alignContent: "center" }}>Rows per page</div>
 
-        <TextField
-            select
-
-            value={size}
-            onChange={changeSizeUpdatePage}
-            size="small"
-            sx={{ width: 150, marginRight: 2, marginLeft:2}}
-          >
-            { Array.isArray(data) ? ([4, 6, 8, 10].map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))):(
-              <MenuItem key={1} value={1}>
-                {1}
-              </MenuItem>
-            )
-          }
-          </TextField>
-          {   
-            (<Pagination
-            count={totalpage}
-            page={currentPage}
-            onChange={handleChangePage}
-            color="primary"
-          />)
-        }
-      </Box>
-      </Box>
-      )
-      }
+            <TextField
+              select
+              value={size}
+              onChange={changeSizeUpdatePage}
+              size="small"
+              sx={{ width: 150, marginRight: 2, marginLeft: 2 }}
+            >
+              {Array.isArray(data) ? (
+                [4, 6, 8, 10].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem key={1} value={1}>
+                  {1}
+                </MenuItem>
+              )}
+            </TextField>
+            {
+              <Pagination
+                count={totalpage}
+                page={currentPage}
+                onChange={handleChangePage}
+                color="primary"
+              />
+            }
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };
