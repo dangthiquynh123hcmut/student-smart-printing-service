@@ -231,7 +231,7 @@ const AdHistory = () => {
 
       //console.log("response getAllhistory:",response);
       setData(response.data.result?.data);
-      setTotalPage(response.data.result.totalPages);
+      setTotalPage(response.data.result.totalPage);
       //console.log(response.data.result?.totalPages)
     } catch (error) {
       //console.log("Can't get api", error.code)
