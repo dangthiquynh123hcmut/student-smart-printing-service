@@ -28,7 +28,6 @@ function UserInfo() {
       if (!response.ok) {
         throw new Error("Unable to delete token");
       } else {
-        // alert("Đã đăng xuất");
       }
     } catch (error) {
       console.error("Logout token failed", error);

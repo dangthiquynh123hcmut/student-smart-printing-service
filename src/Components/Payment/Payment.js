@@ -4,7 +4,7 @@ import { notification, Button, Pagination, DatePicker, Spin } from "antd";
 import vnpayimg from "../Assets/vnpay.png";
 import { getPaymentInfo, getBalanceHistory, getBalanceInfo } from "../../api/studentApi";
 import { parseISO, format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
 
@@ -17,7 +17,7 @@ function Payment() {
   const itemsPerPage = 5;
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  const [sortOrder, setSortOrder] = useState("asc"); 
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -67,12 +67,10 @@ function Payment() {
     setCurrentPage(1);
   }, [dateRange, sortOrder, bill]);
 
-
   const paginatedBills = filteredBill.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
 
   const handlePayment = (amount, bankCode) => {
     if (amount < 10000) {
@@ -121,7 +119,6 @@ function Payment() {
     }
   };
 
-
   const handleSortChange = (order) => {
     setSortOrder(order);
   };
@@ -129,9 +126,7 @@ function Payment() {
   return (
     <div id="wrapper">
       <div id="header">
-        <a href="/" className="back-button">
-          &larr; Trở về trang chủ
-        </a>
+         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Thanh toán</h1>
       </div>
 
@@ -179,7 +174,6 @@ function Payment() {
               </select>
             </div>
           </div>
-
 
           {loading ? (
             <Spin tip="Đang tải..." />

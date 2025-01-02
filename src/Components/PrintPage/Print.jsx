@@ -77,7 +77,6 @@ function Print() {
       console.error("Lỗi khi in tập tin:", error);
       notification.error({
         message: "Máy in chưa được chọn",
-        // description: error.message || "Something went wrong",
         placement: "topRight",
       });
       

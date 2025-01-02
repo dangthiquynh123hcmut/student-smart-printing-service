@@ -8,6 +8,7 @@ import { Pagination, Modal, Input, Select, Button, notification } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 import { SearchOutlined } from '@ant-design/icons';
 import "./PriceSetting.css";
+import { NavLink } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -35,7 +36,6 @@ const PriceSetting = () => {
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    // Lọc dữ liệu dựa trên từ khóa tìm kiếm
     const filteredPrices = price.filter(item =>
       (item.colorType && item.colorType.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (item.pageType && item.pageType.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -172,9 +172,7 @@ const PriceSetting = () => {
   return (
     <div id="wrapper">
       <div id="header">
-        <a href="/" className="back-button">
-          &larr; Trở về trang chủ
-        </a>
+         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Cập nhật giá in</h1>
       </div>
       <div className="outer">
@@ -185,7 +183,7 @@ const PriceSetting = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // Đặt lại trang hiện tại khi tìm kiếm
+              setCurrentPage(1); 
             }}
             style={{ marginBottom: "20px" }}
             prefix={<SearchOutlined />}
