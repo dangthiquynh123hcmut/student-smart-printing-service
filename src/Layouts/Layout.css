@@ -19,11 +19,10 @@
 
 }
 .layout-sidebar{
-  margin-top: 8vh;
+  margin-top: 65px;
   width: fit-content;
   background-color: white;
 }
-
 
 .logobk {
   background: url("../Components/Assets/logobk.png") no-repeat center;
@@ -61,7 +60,6 @@
   margin: 0;
   line-height: 1.5;
   font-size: 16px;
-  /* text-align: center; */
 }
 
 .user-icon {
@@ -94,7 +92,6 @@
   flex-direction: column;
 }
 
-
 .ant-layout {
   width: 100% !important;
 }
@@ -104,3 +101,8 @@ main {
   width: 99%; 
 }
 
+@media (max-width: 767px) {
+ .info-list  {
+    display: none;
+  }
+}

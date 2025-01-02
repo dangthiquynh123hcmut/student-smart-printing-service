@@ -26,9 +26,9 @@ const {SubMenu} =Menu
 function MenuList() {
   const { userData } = useContext(AuthContext);
   const location = useLocation();
-  const selectedKey = location.pathname; // Đồng bộ trạng thái mục được chọn
+  const selectedKey = location.pathname;
 
-  // Kiểm tra vai trò người dùng
+ 
   const isAdmin = userData?.result.role === "ADMIN";
 
   return (
@@ -81,19 +81,6 @@ function MenuList() {
           <Menu.Item key="/create-staff" icon={<TeamOutlined style={{ fontSize: 22 }} />}>
             <NavLink to="/create-staff">Thêm nhân viên</NavLink>
           </Menu.Item>
-          {/* <SubMenu
-            key="/report"
-            className="submenu"
-            icon={<BarChartOutlined style={{ fontSize: 22 }} />}
-            title="Quản lí báo cáo"
-          >
-            <Menu.Item key="/oldReport" icon={<EyeOutlined style={{ fontSize: 22 }} />}>
-              <NavLink to="/oldReport">Xem báo cáo cũ</NavLink>
-            </Menu.Item>
-            <Menu.Item key="/createReport" icon={<FileAddOutlined style={{ fontSize: 22 }} />}>
-              <NavLink to="/createReport">Tạo báo cáo mới</NavLink>
-            </Menu.Item>
-          </SubMenu> */}
         </>
       )}
     </Menu>

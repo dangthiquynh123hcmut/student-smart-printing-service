@@ -4,7 +4,9 @@
     margin-top: 0;
     background-color: #f0f2f5;  
     min-height: 100vh; 
+    overflow-y: auto; 
 }
+
 .back-button {
     color: gray; 
     text-decoration: none; 
@@ -69,3 +71,18 @@
 .user-table th:last-child {
     border-top-right-radius: 8px;
 }
+
+  @media (max-width: 1024px) {
+    .user-table th:nth-child(1), 
+    .user-table td:nth-child(1), 
+    .user-table th:nth-child(5),
+    .user-table td:nth-child(5) {
+      display: none;
+    }
+  }
+  
+  .containerr {
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+  }
+  

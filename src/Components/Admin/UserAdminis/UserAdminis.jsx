@@ -1,21 +1,22 @@
 import "./UserAdminis.css";
-import { Pagination, notification, Modal, Input, Spin } from "antd"; // Import Spin
+import { Pagination, notification, Modal, Input, Spin } from "antd";
 import { getAllUsers, deleteUserById } from "../../../api/adminApi";
 import { useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 
 export function UserAdminis() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isDelete, setIsDelete] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true); // Thêm trạng thái loading
+  const [loading, setLoading] = useState(true);
   const pageSize = 9;
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsers = () => {
-      setLoading(true); // Bắt đầu trạng thái loading
+      setLoading(true);
       getAllUsers(token, 0, 100)
         .then((res) => {
           if (res.status === 200) {
@@ -31,7 +32,7 @@ export function UserAdminis() {
           });
         })
         .finally(() => {
-          setLoading(false); // Kết thúc trạng thái loading
+          setLoading(false);
         });
     };
     fetchUsers();
@@ -83,9 +84,7 @@ export function UserAdminis() {
   return (
     <div id="wrapper">
       <div id="header">
-        <a href="/" className="back-button">
-          &larr; Trở về trang chủ
-        </a>
+        <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Quản lý người dùng</h1>
       </div>
 
@@ -152,6 +151,7 @@ export function UserAdminis() {
                   </tbody>
                 </table>
               </div>
+
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}

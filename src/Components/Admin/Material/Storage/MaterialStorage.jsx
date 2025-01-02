@@ -4,18 +4,16 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Select,Button, Modal,Form, Input, notification,  Flex, Spin } from 'antd';
 import { api } from '../../../../api/baseURL';
 import InkImage from '../../../Assets/ink-pic.jpeg'
+import { NavLink } from "react-router-dom";
 
 const {Option} = Select
 
 const contentStyle = {
   padding: 50,
-  // background: 'rgba(0, 0, 0, 0.05)',
   borderRadius: 4,
   marginLeft: 450,
 };
 const content = <div style={contentStyle} />;
-
-
 
 function MaterialStorage(){
   const {token} = useContext(AuthContext);
@@ -89,8 +87,8 @@ function MaterialStorage(){
         message: "Vui lòng chờ, đang cập nhật",
         description: "Updating"
       })
-      await modifiedMaterialApi(); // Chờ API chỉnh sửa hoàn tất
-      await getMaterialApi(); // Fetch dữ liệu mới sau khi chỉnh sửa
+      await modifiedMaterialApi(); 
+      await getMaterialApi(); 
       setModifiedValue(0)
       handleCloseModal();
     }
@@ -113,10 +111,8 @@ function MaterialStorage(){
           }
       );
   
-      // Nếu thành công
       console.log("Modified material success", response.data.result);
   } catch (error) {
-      // Bắt lỗi từ server hoặc lỗi mạng
       const errorMessage = error.response?.data?.message || error.message || "Unknown error occurred";
       console.error("Modified failed:", errorMessage);
   
@@ -136,18 +132,16 @@ function MaterialStorage(){
                   'Content-Type': 'application/json',
                   Authorization: `Bearer ${token}`,
               },
-              data: { // Dữ liệu gửi kèm với phương thức DELETE
+              data: { 
                   name: selectedMaterial.name,
               },
           }
       );
 
       console.log("Delete material success", response.data.result);
-
-      // Fetch lại dữ liệu mới sau khi xóa thành công
       await getMaterialApi(); 
       setSelectedMaterial(null)
-      handleCloseModal(); // Đóng modal sau khi xử lý xong
+      handleCloseModal(); 
   } catch (error) {
       console.error("Delete failed:", error.response?.data?.message || error.message);
       notification.error({
@@ -156,7 +150,6 @@ function MaterialStorage(){
       });
     }
   }
-
 
   const handleSelectAddMaterial = (e) => {
     if (typeof e === "string") {
@@ -180,16 +173,14 @@ function MaterialStorage(){
     console.log(addMaterial.value)
   };
   
-  
-  
   const handleAddMaterial = async () => {
     console.log(addMaterial.name,addMaterial.value)
     try {
       const response = await api.post(
         "/materialStorage/createMaterialRequest", 
         {
-          name: addMaterial.name,  // Sử dụng name từ state
-          value: addMaterial.value,  // Sử dụng value từ state
+          name: addMaterial.name,  
+          value: addMaterial.value,  
         },
         {
           headers: {
@@ -201,9 +192,8 @@ function MaterialStorage(){
   
       console.log("Add material success", response.data.result);
   
-      // Fetch lại dữ liệu mới sau khi thêm thành công
       await getMaterialApi();
-      handleCloseAddModal(); // Đóng modal sau khi xử lý xong
+      handleCloseAddModal();
     } catch (error) {
       console.error("Add failed:", error.response?.data?.message || error.message);
       notification.error({
@@ -213,7 +203,6 @@ function MaterialStorage(){
     }
   };
   
-
   const handleCloseAddModal =() =>{
     setIsAddModalVisible(false)
     setAddMaterial({ name: "", value: "" }); 
@@ -224,17 +213,13 @@ function MaterialStorage(){
   };
 
   useEffect(() =>{
-    
-      getMaterialApi();
-    
+      getMaterialApi();  
   },[]);
 
   return (
     <div className="wrap-report">
       <div >
-          <a href="/" className="back-button">
-              &larr; Trở về trang chủ
-          </a>
+          <NavLink to="/">&larr; Trở về trang chủ</NavLink>
           <h1>Vật liệu in</h1>
       </div>
 
@@ -249,13 +234,10 @@ function MaterialStorage(){
         {loading ? (
           <Flex gap="middle" vertical>
           <Flex gap="middle">
-            
-
             <Spin tip="Loading" size="large">
               {content}
             </Spin>
           </Flex>
-
         </Flex>
           ):
            (Array.isArray(materials) && materials.map((material) => (
@@ -272,15 +254,13 @@ function MaterialStorage(){
                 <p>Material value : {material.value}</p>
             </div>
         )))
-        }
-          
+        }    
       </div>
 
       <Modal title={selectedMaterial?.name}
                 visible={isModalVisible}
                 onCancel={handleCloseModal}
                 footer={[
-
                   <Button key="submit" type="primary" onClick={handleDeleteMaterial} danger>
                       Xóa
                   </Button>,
@@ -347,10 +327,7 @@ function MaterialStorage(){
         </Form.Item>
       </Form>
       </>
-
       </Modal>
-
-
     </div>
   );
 }

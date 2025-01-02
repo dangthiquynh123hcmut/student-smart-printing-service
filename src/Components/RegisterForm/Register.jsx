@@ -31,12 +31,11 @@ const RegisterPage = () => {
       });
 
       if (!response.ok) {
-        // Lấy chi tiết lỗi từ phản hồi API
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown error occurred");
       }
 
-      const data = await response.json();
+      await response.json();
       notification.success({
         message: "Register SUCCESS",
         description: "Success",
@@ -45,8 +44,6 @@ const RegisterPage = () => {
       navigate("/login");
     } catch (error) {
       console.error("Error:", error);
-
-      // Hiển thị thông báo lỗi cụ thể từ API hoặc lỗi mặc định
       notification.error({
         message: "Register Failed",
         description: error.message || "Try Again, @hcmut.edu.vn",
@@ -57,13 +54,6 @@ const RegisterPage = () => {
   return (
     <div
       className="register"
-      // style={{
-      //   height: "100vh",
-      //   display: "flex",
-      //   alignItems: "center",
-      //   justifyContent: "center",
-      //   // overflowY: "auto",
-      // }}
       style={{
         height: "100vh",
         display: "flex",
@@ -77,20 +67,18 @@ const RegisterPage = () => {
       <Row
         className="wrapper-register"
         style={{
-          height: "80vh", // Chiếm 80% chiều cao
+          height: "80vh",
           width: "70%",
           maxWidth: "1200px",
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Bóng mờ
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", 
           overflowY: "auto",
         }}
       >
-        {/* Cột bên trái */}
         <Col
           xs={24}
           sm={24}
           md={12}
           style={{
-            // display: "flex",
             paddingTop: "12vh",
             flexDirection: "column",
             alignItems: "center",
@@ -107,8 +95,8 @@ const RegisterPage = () => {
           <h1
             style={{
               textAlign: "center",
-              fontSize: "2.5rem", // Tăng kích thước chữ
-              color: "#007BFF", // Màu xanh dương
+              fontSize: "2.5rem", 
+              color: "#007BFF", 
               fontWeight: "bold",
               margin: "8px",
             }}
@@ -117,7 +105,6 @@ const RegisterPage = () => {
           </h1>
         </Col>
 
-        {/* Cột bên phải */}
         <Col
           xs={24}
           sm={24}
@@ -131,7 +118,7 @@ const RegisterPage = () => {
             overflowY: "auto",
           }}
         >
-          <h1 style={{ textAlign: "center", fontSize: "2.5rem" }}>Đăng kí</h1>
+          <h1 style={{ textAlign: "center", fontSize: "2.5rem",  color: "#007BFF"}}>Đăng kí</h1>
           <Form
             name="basic"
             style={{

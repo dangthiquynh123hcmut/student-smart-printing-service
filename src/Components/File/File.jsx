@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FolderOutlined, UploadOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  FolderOutlined,
+  UploadOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { uploadFile, getAllFile, deleteFile } from "../../api/studentApi";
-import { Modal, notification, Pagination } from "antd";
+import { Modal, notification, Pagination, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import "./File.css";
@@ -11,13 +15,15 @@ function File() {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1); 
-  const [totalFiles, setTotalFiles] = useState(0); 
+  const [page, setPage] = useState(1);
+  const [totalFiles, setTotalFiles] = useState(0);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const fetchFiles = async () => {
     try {
+      setLoading(true);
       const pageReal = page - 1;
       const data = await getAllFile(token, pageReal);
       setTotalFiles(data.totalElements);
@@ -26,6 +32,7 @@ function File() {
       console.error("Không thể lấy danh sách file:", error);
       setUploadedFiles([]);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -68,9 +75,9 @@ function File() {
         const response = await uploadFile(token, file);
         console.log(`File ${file.name} uploaded successfully:`, response);
         notification.success({
-           message:`File ${file.name} tải lên thành công`,
+          message: `File ${file.name} tải lên thành công`,
         });
-        await fetchFiles(); 
+        await fetchFiles();
       } catch (error) {
         notification.error({
           message: "Tải file thất bại",
@@ -91,10 +98,7 @@ function File() {
       cancelText: "Không",
       onOk: async () => {
         try {
-           await deleteFile(token, fileId);
-          // notification.success({
-          //   message:  "File đã được xóa thành công.",
-          // });
+          await deleteFile(token, fileId);
           await fetchFiles();
         } catch (error) {
           notification.error({
@@ -139,7 +143,9 @@ function File() {
             <button
               onClick={handleUpload}
               className="upload-button"
-              disabled={!Array.isArray(files) || files.length === 0 || uploading}
+              disabled={
+                !Array.isArray(files) || files.length === 0 || uploading
+              }
             >
               {uploading ? "Đang tải lên..." : "Tải lên"}
             </button>
@@ -192,7 +198,18 @@ function File() {
             </div>
           </div>
 
-          {filteredFiles.length > 0 ? (
+          {loading ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+              }}
+            >
+              <Spin tip="Đang tải..." />
+            </div>
+          ) : filteredFiles.length > 0 ? (
             <table className="file-table">
               <thead>
                 <tr>
@@ -206,7 +223,7 @@ function File() {
               <tbody>
                 {filteredFiles.map((file, index) => (
                   <tr key={file.id}>
-                    <td>{(index + 1) + (page - 1) * 10}</td>
+                    <td>{index + 1 + (page - 1) * 10}</td>
                     <td>{file.name}</td>
                     <td>{(file.fileSize / 1024).toFixed(2)}</td>
                     <td>{new Date(file.uploadDate).toLocaleDateString()}</td>
@@ -232,7 +249,6 @@ function File() {
             <p>Không tìm thấy file nào khớp với lựa chọn.</p>
           )}
         </div>
-
         <div className="pagination">
           <Pagination
             current={page}
@@ -241,7 +257,6 @@ function File() {
             onChange={(current) => setPage(current)}
           />
         </div>
-        
       </div>
     </div>
   );
