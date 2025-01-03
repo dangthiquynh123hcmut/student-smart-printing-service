@@ -136,7 +136,7 @@ function StatusBadge({ status }) {
 const AdHistory = () => {
   const token = localStorage.getItem("token");
   const [currentPage, setCurrentPage] = useState(1);
-  const [size, setSize] = useState(10); 
+  const [size, setSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [data, setData] = useState();
   const [totalpage, setTotalPage] = useState();
@@ -167,7 +167,7 @@ const AdHistory = () => {
       setData(sortedDataAsc);
     }
     setLoading(false);
-    setAnchorEl(null); 
+    setAnchorEl(null);
   };
 
   const handleMenuOpen = (event) => {
@@ -180,16 +180,14 @@ const AdHistory = () => {
 
   const handleChangePage = async (event, page) => {
     setCurrentPage(page);
-    setLoading(true);
-    await getAllHistory();
   };
 
   const changeSizeUpdatePage = async (e) => {
-    setLoading(true);
     setSize(Number(e.target.value));
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
   const getAllHistory = async () => {
+    setLoading(true);
     try {
       const response = await api.get("/history/adminSearch", {
         params: {
@@ -207,11 +205,11 @@ const AdHistory = () => {
       });
 
       setData(response.data.result?.data);
-      setTotalPage(response.data.result.totalPage);
+      setTotalPage(response.data.result?.totalPage);
       //console.log(response.data.result?.totalPages)
     } catch (error) {
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -228,7 +226,7 @@ const AdHistory = () => {
 
       await getAllHistory();
     } else {
-      setAnchorElFilter(null); 
+      setAnchorElFilter(null);
     }
   };
 
@@ -258,7 +256,7 @@ const AdHistory = () => {
 
   useEffect(() => {
     getAllHistory();
-  }, [currentPage, size]); 
+  }, [currentPage, size, startDate, endDate]);
 
   return (
     <Box className="wrap-report">
@@ -371,7 +369,7 @@ const AdHistory = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "300px", 
+            minHeight: "300px",
           }}
         >
           <CircularWithValueLabel />
@@ -379,10 +377,10 @@ const AdHistory = () => {
       ) : (
         <Box
           sx={{
-            border: "1px solid #f3eeee", 
-            borderRadius: "8px", 
-            padding: "16px", 
-            overflow: "hidden", 
+            border: "1px solid #f3eeee",
+            borderRadius: "8px",
+            padding: "16px",
+            overflow: "hidden",
           }}
         >
           <Table>

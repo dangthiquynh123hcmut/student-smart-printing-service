@@ -22,6 +22,7 @@ import { AuthContext } from "../../../Authentication/Authenticate";
 import "./MaterialHistory.css";
 import { NavLink } from "react-router-dom";
 import { alignProperty } from "@mui/material/styles/cssUtils";
+import { set } from "date-fns";
 
 function CircularProgressWithLabel(props) {
   return (
@@ -89,19 +90,16 @@ const MaterialHistory = () => {
   // Hàm thay đổi trang
   const handleChangePage = async (event, page) => {
     setCurrentPage(page);
-    setLoading(true);
-    await getAllHistoryMat();
   };
 
   const changeSizeUpdatePage = async (e) => {
-    setLoading(true);
     setSize(Number(e.target.value));
-    setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số hàng
-    // await getAllHistoryMat();
+    setCurrentPage(1);
   };
   // Hàm tìm kiếm
 
   const getHistoryById = async (e) => {
+    setLoading(true);
     if (e.key === "Enter") {
       try {
         setLoading(true);
@@ -119,8 +117,8 @@ const MaterialHistory = () => {
           });
 
           // console.log("get history by id",response);
-          setCurrentPage(1)
-          setTotalPage(1)
+          setCurrentPage(1);
+          setTotalPage(1);
           setData(response.data.result);
         }
       } catch (error) {
@@ -133,6 +131,7 @@ const MaterialHistory = () => {
 
   //api get history
   const getAllHistoryMat = async () => {
+    setLoading(true);
     try {
       const response = await api.get("/HistoryMaterial", {
         headers: {
@@ -146,7 +145,7 @@ const MaterialHistory = () => {
       });
       //console.log("response getAllhistorymat:",response);
       setData(response.data.result?.content);
-      setTotalPage(response.data.result.totalPages);
+      setTotalPage(response.data.result?.totalPages);
       //console.log(response.data.result?.totalPages)
     } catch (error) {
       //console.log("Can't get api", error.code)
