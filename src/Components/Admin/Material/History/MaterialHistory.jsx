@@ -118,7 +118,9 @@ const MaterialHistory = () => {
             },
           });
 
-          //console.log("get history by id",response);
+          // console.log("get history by id",response);
+          setCurrentPage(1)
+          setTotalPage(1)
           setData(response.data.result);
         }
       } catch (error) {

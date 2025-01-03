@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
-import SearchIcon from "@mui/icons-material/Search";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { saveAs } from "file-saver";
 import { api } from "../../../api/baseURL";
@@ -24,7 +23,6 @@ import { AuthContext } from "../../Authentication/Authenticate";
 import "../Material/History/MaterialHistory.css";
 import "../Material/Storage/MaterialStorage.css";
 import { NavLink } from "react-router-dom";
-import { alignProperty } from "@mui/material/styles/cssUtils";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SortIcon from "@mui/icons-material/Sort";
 
@@ -57,11 +55,6 @@ function CircularProgressWithLabel(props) {
 }
 
 CircularProgressWithLabel.propTypes = {
-  /**
-   * The value of the progress indicator for the determinate variant.
-   * Value between 0 and 100.
-   * @default 0
-   */
   value: PropTypes.number.isRequired,
 };
 
@@ -107,7 +100,6 @@ function HighlightedMachine({ machineName }) {
 }
 
 function StatusBadge({ status }) {
-  // Định nghĩa màu và text dựa trên trạng thái
   const getStatus = () => {
     switch (status) {
       case "Completed":
@@ -125,7 +117,6 @@ function StatusBadge({ status }) {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      {/* Chấm tròn biểu thị trạng thái */}
       <Box
         sx={{
           width: 10,
@@ -135,7 +126,6 @@ function StatusBadge({ status }) {
           marginRight: 1,
         }}
       />
-      {/* Text trạng thái */}
       <Typography variant="body2" sx={{ color }}>
         {text}
       </Typography>
@@ -146,13 +136,11 @@ function StatusBadge({ status }) {
 const AdHistory = () => {
   const token = localStorage.getItem("token");
   const [currentPage, setCurrentPage] = useState(1);
-  const [size, setSize] = useState(10); //number item per page
+  const [size, setSize] = useState(10); 
   const [searchQuery, setSearchQuery] = useState("");
   const [data, setData] = useState();
   const [totalpage, setTotalPage] = useState();
   const [loading, setLoading] = useState(true);
-
-  //
   const [anchorEl, setAnchorEl] = useState(null);
   const [filterData, setFilterData] = useState(false);
   const [anchorElFilter, setAnchorElFilter] = useState(null);
@@ -165,27 +153,21 @@ const AdHistory = () => {
       const sortedDataDesc = data.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
-
-        // Đảo ngược kết quả để sắp xếp giảm dần
         return dateB - dateA;
       });
 
       setData(sortedDataDesc);
     } else {
       const sortedDataAsc = data.sort((a, b) => {
-        // Chuyển đổi ngày tháng từ chuỗi thành đối tượng Date
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
-
-        // So sánh ngày tháng
         return dateA - dateB;
       });
 
       setData(sortedDataAsc);
     }
     setLoading(false);
-
-    setAnchorEl(null); // Đóng menu
+    setAnchorEl(null); 
   };
 
   const handleMenuOpen = (event) => {
@@ -196,7 +178,6 @@ const AdHistory = () => {
     setAnchorEl(null);
   };
 
-  // Hàm thay đổi trang
   const handleChangePage = async (event, page) => {
     setCurrentPage(page);
     setLoading(true);
@@ -206,12 +187,8 @@ const AdHistory = () => {
   const changeSizeUpdatePage = async (e) => {
     setLoading(true);
     setSize(Number(e.target.value));
-    setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số hàng
-    // await getAllHistoryMat();
+    setCurrentPage(1); 
   };
-  // Hàm tìm kiếm
-
-  //api get history
   const getAllHistory = async () => {
     try {
       const response = await api.get("/history/adminSearch", {
@@ -229,18 +206,15 @@ const AdHistory = () => {
         },
       });
 
-      //console.log("response getAllhistory:",response);
       setData(response.data.result?.data);
-      setTotalPage(response.data.result.totalPages);
+      setTotalPage(response.data.result.totalPage);
       //console.log(response.data.result?.totalPages)
     } catch (error) {
-      //console.log("Can't get api", error.code)
     } finally {
-      setLoading(false); // Ẩn trạng thái loading
+      setLoading(false); 
     }
   };
 
-  // Open Filter Popover
   const handleFilterOpen = (event) => {
     setAnchorElFilter(event.currentTarget);
   };
@@ -248,28 +222,24 @@ const AdHistory = () => {
   const handleFilterClose = () => {
     setAnchorElFilter(null);
   };
-  // Filter handler
   const handleFilterApply = async () => {
     if (startDate && endDate) {
       setLoading(true);
 
       await getAllHistory();
     } else {
-      // Nếu không có startDate và endDate, không làm gì
-      setAnchorElFilter(null); // Đóng filter popover
+      setAnchorElFilter(null); 
     }
   };
 
   const resetFilter = async () => {
     setStartDate("");
     setEndDate("");
-    //use get all api
     setLoading(true);
 
     await getAllHistory();
   };
 
-  // Hàm xuất dữ liệu
   const handleExport = () => {
     if (loading) {
       return;
@@ -286,10 +256,9 @@ const AdHistory = () => {
     saveAs(blob, "store_data.csv");
   };
 
-  //   every click/load page get api
   useEffect(() => {
     getAllHistory();
-  }, [currentPage, size]); // Gọi lại API mỗi khi currentPage hoặc size thay đổi
+  }, [currentPage, size]); 
 
   return (
     <Box className="wrap-report">
@@ -297,7 +266,6 @@ const AdHistory = () => {
         <NavLink to="/">&larr; Trở về trang chủ</NavLink>
         <h1>Lịch sử in</h1>
       </Typography>
-      {/* Thanh tìm kiếm, xuất dữ liệu và số hàng mỗi trang */}
       <Box
         sx={{
           display: "flex",
@@ -307,8 +275,6 @@ const AdHistory = () => {
           marginTop: 2,
         }}
       >
-        {/* Filter Form */}
-        {/* Filter Button */}
         <div
           style={{
             display: "flex",
@@ -324,7 +290,6 @@ const AdHistory = () => {
             Filter
           </Button>
 
-          {/* Filter Popover */}
           <Popover
             open={Boolean(anchorElFilter)}
             anchorEl={anchorElFilter}
@@ -400,14 +365,13 @@ const AdHistory = () => {
         </Button>
       </Box>
 
-      {/* Bảng hiển thị */}
       {loading ? (
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "300px", // Chiều cao tối thiểu để căn giữa trong vùng hiển thị
+            minHeight: "300px", 
           }}
         >
           <CircularWithValueLabel />
@@ -415,22 +379,20 @@ const AdHistory = () => {
       ) : (
         <Box
           sx={{
-            border: "1px solid #f3eeee", // Viền màu xanh
-            borderRadius: "8px", // Bo góc
-            padding: "16px", // Khoảng cách bên trong
-            overflow: "hidden", // Ẩn phần tràn
+            border: "1px solid #f3eeee", 
+            borderRadius: "8px", 
+            padding: "16px", 
+            overflow: "hidden", 
           }}
         >
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Date</TableCell>
+                <TableCell>Ngày</TableCell>
                 <TableCell>File</TableCell>
-                <TableCell>Process</TableCell>
-                <TableCell>MSSV</TableCell>
-                <TableCell>Machine</TableCell>
-
-                {/* <TableCell></TableCell> */}
+                <TableCell>Trạng thái</TableCell>
+                <TableCell className="id-student">MSSV</TableCell>
+                <TableCell>Máy in</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -448,7 +410,6 @@ const AdHistory = () => {
                         machineName={row?.printMachine.name}
                       />
                     </TableCell>
-                    {/* <TableCell></TableCell> */}
                   </TableRow>
                 ))
               ) : (
@@ -464,12 +425,10 @@ const AdHistory = () => {
                       machineName={data?.printMachine?.name}
                     />
                   </TableCell>
-                  {/* <TableCell>{row.dateUse}</TableCell> */}
                 </TableRow>
               )}
             </TableBody>
           </Table>
-          {/*Pagination*/}
           <Box sx={{ marginTop: 2, display: "flex", justifyContent: "center" }}>
             <div style={{ alignContent: "center" }}>Rows per page</div>
 

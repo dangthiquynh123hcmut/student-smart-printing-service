@@ -1,13 +1,13 @@
 .header-file{
-  margin-top: 20px;
-  margin-left: 20px;
+  margin-top: 2vh;
+  margin-left: 2vw;
 }
 .file-upload-container {
-    padding: 20px;
+    padding: 2%;
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 97%;
-    margin: 20px;
+    margin: 2%;
   }
   
   .file-upload-header {
@@ -41,7 +41,6 @@
     
   }
   .file-upload-container p {
-    /* text-align: center; */
     margin-top: 10px;
   }
   .file-dropzone {
@@ -68,13 +67,7 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-  .file-infomation {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fff;
-    padding:0 10px;
-  }
+
   .file-table {
     width: 100%;
     border-collapse: collapse;
@@ -86,7 +79,6 @@
     padding: 8px;
     text-align: left;
     text-align: center; 
-   
   }
   
   .file-table th {
@@ -124,15 +116,8 @@
     width: 50px; 
   }
   
-  .file-search-container {
-    margin: 20px;
-  }
-  .search-input-file{
-    width: 35vw;
-  }
-  
   .file-container {
-    width: 90%;
+    width: 98%;
     margin: 0 auto;
   }
   
@@ -141,13 +126,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
   }
   
   .search-input-wrapper {
     display: flex;
-    align-items: center;
-    
+    align-items: center; 
     border: 2px solid #395e94;
     border-radius: 5px;
     padding: 5px;
@@ -162,25 +145,22 @@
     margin-right: 10px;
     color: #888;
   }
-  
-  .search-input {
-    border: none;
-    outline: none;
-    font-size: 16px;
-    padding: 5px;
-    width: 300px;
+ 
+  @media (max-width: 767px){
+    .file-table th:nth-child(3), 
+    .file-table td:nth-child(3) {
+      display: none;
+    }
+    .search-input-file{
+      width: 55vw;
+    }
   }
-  
-  .pagination-controls {
-    margin: 15px 0;
+  @media (max-width: 767px){
+    .file-table th:nth-child(3), 
+    .file-table td:nth-child(3) {
+      display: none;
+    }
+    .search-input-wrapper{
+      width: 55vw;
+    }
   }
-  
-  .pagination-input {
-    width: 50px;
-    padding: 3px;
-    margin: 0 10px;
-    text-align: center;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-  }
-  

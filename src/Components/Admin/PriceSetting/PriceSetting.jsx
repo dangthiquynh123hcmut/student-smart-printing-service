@@ -179,7 +179,7 @@ const PriceSetting = () => {
         <div className="price-setting container">
           <h3>Thông tin giá in</h3>
           <Input
-            placeholder="Tìm kiếm theo tên loại giấy hoặc giá tiền..."
+            placeholder="Tìm kiếm theo tên loại giấy"
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
