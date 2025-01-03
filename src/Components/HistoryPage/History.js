@@ -198,20 +198,17 @@ const AdHistory = () => {
   // Hàm thay đổi trang
   const handleChangePage = async (event, page) => {
     setCurrentPage(page);
-    setLoading(true);
-    await getAllHistory();
   };
 
   const changeSizeUpdatePage = async (e) => {
-    setLoading(true);
     setSize(Number(e.target.value));
     setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số hàng
-    // await getAllHistoryMat();
   };
   // Hàm tìm kiếm
 
   //api get history
   const getAllHistory = async () => {
+    setLoading(true);
     try {
       const response = await api.get("/history/search", {
         params: {
