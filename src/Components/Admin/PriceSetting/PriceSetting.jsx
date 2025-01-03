@@ -56,7 +56,7 @@ const PriceSetting = () => {
         setPrice(res.data.result);
       })
       .catch((error) => {
-        console.error("Error fetching printers:", error);
+        ////console.error("Error fetching printers:", error);
       });
   };
 

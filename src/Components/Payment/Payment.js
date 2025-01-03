@@ -36,7 +36,7 @@ function Payment() {
         setFilteredBill(allBills);
       })
       .catch(error => {
-        console.error('Error fetching bill:', error);
+        //console.error('Error fetching bill:', error);
       })
       .finally(() => setLoading(false));
   };
@@ -97,7 +97,7 @@ function Payment() {
           message: "Lỗi kết nối",
           description: "Có lỗi xảy ra khi kết nối với API thanh toán.",
         });
-        console.error(error);
+        ////console.error(error);
       });
   };
 
@@ -107,7 +107,7 @@ function Payment() {
         setBalance(res.data.result.balance);
       })
       .catch((error) => {
-        console.error("Error getting balance:", error);
+        //console.error("Error getting balance:", error);
       });
   }, []);
 

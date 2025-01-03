@@ -12,7 +12,7 @@ const RegisterPage = () => {
   const onFinish = async (formValues) => {
     const { email, username, password, firstname, lastname, id, date } =
       formValues;
-    console.log(formValues);
+    //console.log(formValues);
     try {
       const response = await fetch("http://localhost:8080/users", {
         method: "POST",
@@ -43,7 +43,7 @@ const RegisterPage = () => {
 
       navigate("/login");
     } catch (error) {
-      console.error("Error:", error);
+      ////console.error("Error:", error);
       notification.error({
         message: "Register Failed",
         description: error.message || "Try Again, @hcmut.edu.vn",
