@@ -101,7 +101,7 @@ export const deleteFile = async (token, id) => {
 export const implementPrint = async (printData, token) => {
   try {
     const response = await axios.post(
-      `${API_URL}/printers/impementprint`,
+      `${API_URL}/printers/implementprint`,
       printData,
       {
         headers: {
