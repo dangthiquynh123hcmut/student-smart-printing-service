@@ -65,7 +65,7 @@ export const uploadFile = async (token, file) => {
 
 export const getAllFile = async (token, page, size = 10) => {
   try {
-    const response = await axios.get(`${API_URL}/files/get-al`, {
+    const response = await axios.get(`${API_URL}/files/get-all`, {
       params: { page, size },
       headers: {
         Authorization: `Bearer ${token}`,
