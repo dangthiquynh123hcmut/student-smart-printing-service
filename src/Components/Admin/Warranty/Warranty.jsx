@@ -132,7 +132,7 @@ function Warranty() {
               placeholder="Nhập từ khóa hoặc ID máy in..."
               value={searchID}
               onChange={handleSearch} // Sử dụng hàm handleSearch
-              className="search-input-file"
+              className="search-warranty"
             />
           </div>
           <button onClick={fetchReportByID} className="search-button">

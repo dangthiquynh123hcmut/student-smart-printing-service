@@ -9,6 +9,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     font-family: Arial, sans-serif;
   }
+  .search-warranty{
+    width: 25vw;
+  }
   .nav-link-warranty{
     background: #ffff;
     color:#007bff;
