@@ -68,7 +68,7 @@ export function UserProfile() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/users/${userData.result.id}`,
+        `${API_URL}/users/${userData.result.id}`,
         formData,
         {
           headers: {
@@ -93,13 +93,13 @@ export function UserProfile() {
       });
     }
   };
-
+  const API_URL = process.env.REACT_APP_DB_URL;
   const handleChangePassword = async () => {
     const token = localStorage.getItem("token");
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/users/${userData.result.id}/password`,
+        `${API_URL}/users/${userData.result.id}/password`,
         password,
         {
           headers: {

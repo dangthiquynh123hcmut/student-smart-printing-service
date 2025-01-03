@@ -8,13 +8,13 @@ import BKimg from "../Assets/login.jpg";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-
+  const API_URL = process.env.REACT_APP_DB_URL;
   const onFinish = async (formValues) => {
     const { email, username, password, firstname, lastname, id, date } =
       formValues;
     //console.log(formValues);
     try {
-      const response = await fetch("http://localhost:8080/users", {
+      const response = await fetch(`${API_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,8 +60,8 @@ const RegisterPage = () => {
         alignItems: "center",
         justifyContent: "center",
         backgroundImage: `url(${BKimg})`,
-        backgroundSize: "cover", 
-        backgroundPosition: "center", 
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <Row
@@ -70,7 +70,7 @@ const RegisterPage = () => {
           height: "80vh",
           width: "70%",
           maxWidth: "1200px",
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", 
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           overflowY: "auto",
         }}
       >
@@ -95,8 +95,8 @@ const RegisterPage = () => {
           <h1
             style={{
               textAlign: "center",
-              fontSize: "2.5rem", 
-              color: "#007BFF", 
+              fontSize: "2.5rem",
+              color: "#007BFF",
               fontWeight: "bold",
               margin: "8px",
             }}
@@ -118,7 +118,15 @@ const RegisterPage = () => {
             overflowY: "auto",
           }}
         >
-          <h1 style={{ textAlign: "center", fontSize: "2.5rem",  color: "#007BFF"}}>Đăng kí</h1>
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "2.5rem",
+              color: "#007BFF",
+            }}
+          >
+            Đăng kí
+          </h1>
           <Form
             name="basic"
             style={{

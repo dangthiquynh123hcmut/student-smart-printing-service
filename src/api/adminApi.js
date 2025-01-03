@@ -19,10 +19,10 @@ export const createStaff = (token, newStaff) => {
     },
   });
 };
-
+const API_URL = process.env.REACT_APP_DB_URL;
 export const GetAllReportWarranty = async (token, page) => {
   try {
-    const response = await axios.get("http://localhost:8080/reportWarranty", {
+    const response = await axios.get(`${API_URL}/reportWarranty`, {
       params: { page },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -38,16 +38,13 @@ export const GetAllReportWarranty = async (token, page) => {
 
 export const GetReportWarrantyByMachineID = async (token, id, page) => {
   try {
-    const response = await axios.get(
-      `http://localhost:8080/reportWarranty/${id}`,
-      {
-        params: { page },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(`${API_URL}/reportWarranty/${id}`, {
+      params: { page },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     //console.log("Data fetched successfully api:", response.data.result);
     return response.data.result;
   } catch (error) {

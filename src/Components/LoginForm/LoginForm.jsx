@@ -23,13 +23,13 @@ const LoginForm = () => {
       [name]: value,
     }));
   };
-
+  const API_URL = process.env.REACT_APP_DB_URL;
   const onFinish = async (e) => {
     e.preventDefault();
     const { email, password } = formValues;
 
     try {
-      const response = await fetch("http://localhost:8080/auth/token", {
+      const response = await fetch(`${API_URL}/auth/token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [userData, setUserData] = useState( 
+  const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("userData")) || null // Lấy userData từ localStorage nếu có
   );
   // const isTokenExpired = (token) => {
@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
   //       return true; // Nếu giải mã không thành công, coi như token hết hạn
   //     }
   // }
-
+  const API_URL = process.env.REACT_APP_DB_URL;
   const refreshToken = async () => {
     try {
-      const response = await fetch("http://localhost:8080/auth/refresh", {
+      const response = await fetch(`${API_URL}/auth/refresh`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
       // const userDataHashed = await getMyInfoApi(token);
       // setUserData(userDataHashed);
       try {
-        const response = await fetch("http://localhost:8080/users/myInfo", {
+        const response = await fetch(`${API_URL}/users/myInfo`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

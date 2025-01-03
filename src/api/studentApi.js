@@ -42,22 +42,18 @@ export const getBalanceHistory = (token, page, size) => {
     },
   });
 };
-
+const API_URL = process.env.REACT_APP_DB_URL;
 export const uploadFile = async (token, file) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await axios.post(
-      "http://localhost:8080/files/upload",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.post(`${API_URL}/files/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     //console.log(response)
 
     return response.result;
@@ -69,7 +65,7 @@ export const uploadFile = async (token, file) => {
 
 export const getAllFile = async (token, page, size = 10) => {
   try {
-    const response = await axios.get("http://localhost:8080/files/get-all", {
+    const response = await axios.get(`${API_URL}/files/get-al`, {
       params: { page, size },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -85,7 +81,7 @@ export const getAllFile = async (token, page, size = 10) => {
 
 export const deleteFile = async (token, id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/files/delete`, {
+    const response = await axios.delete(`${API_URL}/files/delete`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -105,7 +101,7 @@ export const deleteFile = async (token, id) => {
 export const implementPrint = async (printData, token) => {
   try {
     const response = await axios.post(
-      `http://localhost:8080/printers/implementprint`,
+      `${API_URL}/printers/impementprint`,
       printData,
       {
         headers: {

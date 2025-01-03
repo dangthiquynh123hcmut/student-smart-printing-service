@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 function UserInfo() {
   const { setToken, userData, fetchUserData } = useContext(AuthContext);
-
+  const API_URL = process.env.REACT_APP_DB_URL;
   const handleLogout = async () => {
     logOutApi();
     localStorage.removeItem("token");
@@ -17,7 +17,7 @@ function UserInfo() {
   const logOutApi = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8080/auth/logout", {
+      const response = await fetch(`${API_URL}/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
